@@ -8,9 +8,15 @@ def loginClick():
     frameLogo.destroy()
     frameLogin.pack()
 
-def submitClick(user, password):
-    print(user.get() + " " + password.get())
-    
+def submitClick(user, passWord):
+    username = user.get()
+    password = passWord.get()
+    print(username + " " + password)
+    if username == "Brandon" and password == "Yau":
+        frameLogin.destroy()
+        frameProfile.pack(side=("left"))
+
+
 #Welcome Frame
 frameLogo = Frame(root)
 appName = Label(frameLogo, text="UGAnutrition")
@@ -36,6 +42,11 @@ passwordInput.pack()
 password.pack()
 submit = Button(frameLogin, text="Submit",command=lambda:submitClick(user,password))
 submit.pack()
+
+#Profile Frame
+frameProfile = Frame(root)
+txt = Label(frameProfile, text="My Profile")
+txt.pack(side="left")
 
 
 frameRegister = Frame(root)
