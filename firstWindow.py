@@ -1,5 +1,6 @@
-import tkinter
+import tkinter as tk
 from tkinter import *
+
 
 root = Tk()
 root.title("UGA Nutrition")
@@ -50,4 +51,7 @@ txt.pack(side="left")
 frameRegister = Frame(root)
 
 
+
 root.mainloop(0)
+
+
