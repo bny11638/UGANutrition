@@ -2,6 +2,7 @@ import tkinter
 from tkinter import *
 
 root = Tk()
+root.title("UGA Nutrition")
 root.geometry("450x300")
 
 def loginClick():
@@ -19,16 +20,13 @@ def submitClick(user, passWord):
 
 #Welcome Frame
 frameLogo = Frame(root)
-appName = Label(frameLogo, text="UGAnutrition")
-welcomeMess = Message(appName, text="Welcome to UGANutrition!")
+welcomeMess = Message(frameLogo, text="Welcome to UGANutrition!",width = 100)
 logIn = Button(frameLogo, text= "Log In", command=loginClick)
 register = Button(frameLogo, text="Register")
-logIn.pack()
-register.pack()
-appName.pack()
 welcomeMess.pack()
 frameLogo.pack()
-
+logIn.pack()
+register.pack()
 
 #Login Frame
 frameLogin = Frame(root)
