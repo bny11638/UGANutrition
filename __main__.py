@@ -9,22 +9,15 @@ import mysql.connector
 class NutritionApp(Tk):
     def __init__(self):
         Tk.__init__(self)
-        #LOAD ALL IMAGES HERE
-        imguh = Image.open("resources/login.png")
-        imguh = imguh.resize((250, 60), Image.ANTIALIAS) ## The (250, 250) is (height, width
-        im_login = ImageTk.PhotoImage(imguh)
-        self.loginButtonImg = im_login
-        self.logo = ImageTk.PhotoImage(file="resources/logosmall.png")
-
-        #^^ IN THAT SPOT UP THERE
+        self.initImage()
         self.resizable(False,False)
         self.frame = None #Frame shown in window
-        self.switch_frame(frameWelcome)
         self.geometry("360x740")
         self.title("UGA Nutrition")
         self.connection = None #MySql Connection
         self.cursor = None #MySql stuff
         self.Profile = None
+        self.switch_frame(frameWelcome)
     #Switches frame on window
     def switch_frame(self, frameClass):
         newFrame = frameClass(self)
@@ -47,7 +40,12 @@ class NutritionApp(Tk):
         self.cursor.close()
         self.connection.commit()
         self.connection.close()
-
+    def initImage(self):
+        imguh = Image.open("resources/login.png")
+        imguh = imguh.resize((250, 60), Image.ANTIALIAS) ## The (250, 250) is (height, width
+        im_login = ImageTk.PhotoImage(imguh)
+        self.loginButtonImg = im_login
+        self.logo = ImageTk.PhotoImage(file="resources/logosmall.png")
         
 #Welcome Screen DESIGN IS FOR MATTHEW
 class frameWelcome(Frame):
