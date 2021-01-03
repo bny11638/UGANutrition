@@ -49,10 +49,8 @@ class frameWelcome(Frame):
         im_tmp = PhotoImage(file="resources/logosmall.png")
         Label(self,image=im_tmp).place(x=125,y=70)
         Label.image = im_tmp
-        logImage = PhotoImage(file="resources/loginButton.png")
         Message(self, text="Smarter eating starts here.",width = 350, bg="#6B081F", fg="white", font=('century gothic', '18', 'bold')).place(x=20,y=270)
-        Button(self, text= "Log In",bg = "#6B081f",image=logImage, command=lambda:master.switch_frame(frameLogin)).pack()
-        Button.image = logImage
+        Button(self, text= "Log In",bg = "#6B081f", command=lambda:master.switch_frame(frameLogin)).pack()
         Button(self, text="Register",command=lambda:master.switch_frame(frameRegister)).pack()
         Button(self, text="Continue as Guest",command=lambda:master.switch_frame(frameHome)).pack()
 
