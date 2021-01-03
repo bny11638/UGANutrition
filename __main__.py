@@ -1,15 +1,18 @@
 import tkinter as tk
 from tkinter import *
+from PIL import ImageTk, Image
 import mysql.connector
+
+
 
 #App Class
 class NutritionApp(Tk):
     def __init__(self):
         Tk.__init__(self)
+        self.resizable(False,False)
         self.frame = None #Frame shown in window
         self.switch_frame(frameWelcome)
-        self.config(bg="#6B081F")   # added by matzo
-        self.geometry("450x300")
+        self.geometry("360x740")
         self.title("UGA Nutrition")
         self.connection = None #MySql Connection
         self.cursor = None #MySql stuff
@@ -21,7 +24,7 @@ class NutritionApp(Tk):
         if self.frame is not None:
             self.frame.destroy()
         self.frame = newFrame
-        self.frame.pack()
+        self.frame.pack(fill=BOTH, expand=True)
     
     #Sets up DB Stuff
     def establishCursor(self):
@@ -90,7 +93,7 @@ class frameRegister(Frame):
         Label(self,text="Enter Password",pady=10).pack()
         passInput.pack()
         Button(self,text="Submit",pady=5,command=lambda:self.submitRegister(userInput,passInput,master)).pack()
-        Button(self,text="Back",pady=5,command=lambda:master.switch_frame(frameLogin)).pack()
+        Button(self,text="Back",pady=5,command=lambda:master.switch_frame(frameWelcome)).pack()
 
     def submitRegister(self,user,password,master):
         username = user.get()
@@ -111,17 +114,25 @@ class frameRegister(Frame):
                 master.closeCursor()
 
 class frameHome(Frame):
+    
     def __init__(self,master):
         guestAcc = False
+        addButtonPhoto = PhotoImage(file='redPlusButton.png')
         Frame.__init__(self,master)
         if master.Profile is None:
             master.Profile = Profile("Guest")
             guestAcc = True
-        Label(self,text="Hello " + master.Profile.user + "!").grid(row=0,column=0)
-        Button(self,text="Track Meals",command=lambda:master.switch_frame(frameTrackMeals)).grid(row=1,column=0)
-        goals = Button(self,text="Goals")
-        goals.grid(row=1,column=1)
-        Button(self,text="Favorite Meals").grid(row=2,column=0)
+        Label(self,text="Hello " + master.Profile.user + "!",font=("Calibri",18),padx=5,pady=5).place(x=0,y=0)
+        home = Button(self,text="Home",font=("Calibri",11),width=11,height=2)
+        goals = Button(self,text="Goals",font=("Calibri",11),width=11,height=2)
+        foodLog = Button(self,text="Food Log",font=("Calibri",11),width=11,height=2)
+        addButton = Button(self,image=addButtonPhoto)
+        addButton.image = addButtonPhoto
+        addButton.pack()
+        home.place(x=0,y=690)
+        goals.place(x=120,y=690)
+        foodLog.place(x=240,y=690)
+        addButton.place(x=280,y=600)
         if guestAcc:
             goals["state"] = DISABLED
 
