@@ -1,3 +1,5 @@
+from attributes.FoodClass import Food
+
 class Profile():
     def __init__(self,user):
         self.user = user

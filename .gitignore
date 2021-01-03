@@ -1,3 +1,5 @@
 venv
 .vscode
 nutritionApp/__pycache__
+__pycache__/
+*.py[cod]
