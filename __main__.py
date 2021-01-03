@@ -9,15 +9,15 @@ import mysql.connector
 class NutritionApp(Tk):
     def __init__(self):
         Tk.__init__(self)
+        self.initImage()
         self.resizable(False,False)
         self.frame = None #Frame shown in window
-        self.switch_frame(frameWelcome)
         self.geometry("360x740")
         self.title("UGA Nutrition")
         self.connection = None #MySql Connection
         self.cursor = None #MySql stuff
         self.Profile = None
-
+        self.switch_frame(frameWelcome)
     #Switches frame on window
     def switch_frame(self, frameClass):
         newFrame = frameClass(self)
@@ -25,7 +25,7 @@ class NutritionApp(Tk):
             self.frame.destroy()
         self.frame = newFrame
         self.frame.pack(fill=BOTH, expand=True)
-    
+        
     #Sets up DB Stuff
     def establishCursor(self):
         self.connection = mysql.connector.connect (
@@ -40,19 +40,34 @@ class NutritionApp(Tk):
         self.cursor.close()
         self.connection.commit()
         self.connection.close()
+    #initializes all images
+    def initImage(self):
+        imguh = Image.open("resources/login.png")
+        imguh = imguh.resize((250, 60), Image.ANTIALIAS) ## The (250, 250) is (height, width
+        im_login = ImageTk.PhotoImage(imguh)
+        self.loginButtonImg = im_login
+        self.logo = ImageTk.PhotoImage(file="resources/logosmall.png")
 
+        register = Image.open("resources/register.png")
+        register = register.resize((250, 60), Image.ANTIALIAS)
+        im_register = ImageTk.PhotoImage(register)
+        self.registerButtonImg = im_register
+
+        use_guest = Image.open("resources/guest.png")
+        use_guest = use_guest.resize((250, 60), Image.ANTIALIAS)
+        im_guest = ImageTk.PhotoImage(use_guest)
+        self.guestButtonImg = im_guest
+            
 #Welcome Screen DESIGN IS FOR MATTHEW
 class frameWelcome(Frame):
     def __init__(self, master):
-        Frame.__init__(self,master, bg="#6B081F")
-        #Message(self, text="Welcome to UGANutrition!",width = 100, bg="#6B081F").pack()
-        im_tmp = PhotoImage(file="resources/logosmall.png")
-        Label(self,image=im_tmp).place(x=125,y=70)
-        Label.image = im_tmp
+        Frame.__init__(self,master,bg="#6B081F")
+        Label(self,image=master.logo,bg="#6B081F").place(x=125,y=70)
         Message(self, text="Smarter eating starts here.",width = 350, bg="#6B081F", fg="white", font=('century gothic', '18', 'bold')).place(x=20,y=270)
-        Button(self, text= "Log In",bg = "#6B081f", command=lambda:master.switch_frame(frameLogin)).pack()
-        Button(self, text="Register",command=lambda:master.switch_frame(frameRegister)).pack()
-        Button(self, text="Continue as Guest",command=lambda:master.switch_frame(frameHome)).pack()
+        Button(self, image=master.loginButtonImg, bg="#6B081F", borderwidth=0, activebackground="#6B081F", command=lambda:master.switch_frame(frameLogin)).place(x=55,y=360)
+        Button(self, image=master.registerButtonImg, bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameRegister)).place(x=55, y=450)
+        Button(self, image=master.guestButtonImg, bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameHome)).place(x=55, y=540)
+
 
 #Login Screen
 class frameLogin(Frame):
