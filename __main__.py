@@ -6,14 +6,15 @@ import mysql.connector
 class NutritionApp(Tk):
     def __init__(self):
         Tk.__init__(self)
-        self.frame = None
+        self.frame = None #Frame shown in window
         self.switch_frame(frameWelcome)
         self.geometry("450x300")
         self.title("UGA Nutrition")
-        self.connection = None
-        self.cursor = None
+        self.connection = None #MySql Connection
+        self.cursor = None #MySql stuff
         self.Profile = None
 
+    #Switches frame on window
     def switch_frame(self, frameClass):
         newFrame = frameClass(self)
         if self.frame is not None:
@@ -21,6 +22,7 @@ class NutritionApp(Tk):
         self.frame = newFrame
         self.frame.pack()
     
+    #Sets up DB Stuff
     def establishCursor(self):
         self.connection = mysql.connector.connect (
         host="localHost",
@@ -35,7 +37,7 @@ class NutritionApp(Tk):
         self.connection.commit()
         self.connection.close()
 
-#Welcome Screen
+#Welcome Screen DESIGN IS FOR MATTHEW
 class frameWelcome(Frame):
     def __init__(self, master):
         Frame.__init__(self,master)
@@ -46,7 +48,7 @@ class frameWelcome(Frame):
 
 #Login Screen
 class frameLogin(Frame):
-    def submitLogin(user,password,master):
+    def submitLogin(self,user,password,master):
         username = user.get()
         password = password.get()
         #Establishing a cursor to execute query
@@ -73,7 +75,7 @@ class frameLogin(Frame):
         passInput = Entry(self,width=30)
         Label(self,text="Password",pady=10).pack()
         passInput.pack()
-        Button(self,text="Submit",command=lambda:frameLogin.submitLogin(userInput,passInput,master)).pack()
+        Button(self,text="Submit",command=lambda:self.submitLogin(userInput,passInput,master)).pack()
         Button(self,text="Back",command=lambda:master.switch_frame(frameWelcome)).pack()
 
 #Register Screen
@@ -86,10 +88,10 @@ class frameRegister(Frame):
         passInput = Entry(self,width=30)
         Label(self,text="Enter Password",pady=10).pack()
         passInput.pack()
-        Button(self,text="Submit",pady=5,command=lambda:frameRegister.submitRegister(userInput,passInput,master)).pack()
+        Button(self,text="Submit",pady=5,command=lambda:self.submitRegister(userInput,passInput,master)).pack()
         Button(self,text="Back",pady=5,command=lambda:master.switch_frame(frameLogin)).pack()
 
-    def submitRegister(user,password,master):
+    def submitRegister(self,user,password,master):
         username = user.get()
         password = password.get()
         if username != "" and password != "":
@@ -115,23 +117,53 @@ class frameHome(Frame):
             master.Profile = Profile("Guest")
             guestAcc = True
         Label(self,text="Hello " + master.Profile.user + "!").grid(row=0,column=0)
-        Button(self,text="Add Food").grid(row=1,column=0)
-        goals = Button(self,text="Change Goals")
+        Button(self,text="Track Meals",command=lambda:master.switch_frame(frameTrackMeals)).grid(row=1,column=0)
+        goals = Button(self,text="Goals")
         goals.grid(row=1,column=1)
+        Button(self,text="Favorite Meals").grid(row=2,column=0)
         if guestAcc:
             goals["state"] = DISABLED
 
-class frameAddFood(Frame):
+class frameTrackMeals(Frame):
     def __init__(self,master):
-        return
+        Frame.__init__(self,master)
+        Label(self,text="Track your meals!").pack(side="left")
+        self.add = Button(self,text="Add Meal",command=lambda:self.showSearchbar())
+        self.searchBar = Entry(self)
+        self.search = Button(self,text="Search",command=lambda:self.execute(self.searchBar.get(),master))
+        self.add.pack()
+    
+    def showSearchbar(self):
+        self.add.pack_forget()
+        self.searchBar.pack()
+        self.search.pack()
+    
+    def execute(self,query,master):
+        self.searchBar.forget()
+        self.search.forget()
+        master.establishCursor()
+        master.cursor.execute('SELECT * FROM Food where Name = %s',(query,))
+        tmp = master.cursor.fetchone()
+        master.Profile.addFood(Food(tmp))
 
 
 class Profile():
     def __init__(self,user):
         self.user = user
-
+        self.foodList = []
     
+    def addFood(self,Food):
+        self.foodList.append(Food)
 
+class Food():
+    def __init__(self,list):
+        self.name = list[0]
+        self.cal = list[1]
+        self.fat = list[2]
+        self.carb = list[3]
+        self.protein = list[4]
+    
+    
  #:) starting the app
 if __name__ == "__main__":
     app = NutritionApp()
