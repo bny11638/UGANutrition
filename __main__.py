@@ -40,6 +40,7 @@ class NutritionApp(Tk):
         self.cursor.close()
         self.connection.commit()
         self.connection.close()
+    #initializes all images
     def initImage(self):
         imguh = Image.open("resources/login.png")
         imguh = imguh.resize((250, 60), Image.ANTIALIAS) ## The (250, 250) is (height, width
@@ -63,11 +64,10 @@ class frameWelcome(Frame):
         Frame.__init__(self,master,bg="#6B081F")
         Label(self,image=master.logo,bg="#6B081F").place(x=125,y=70)
         Message(self, text="Smarter eating starts here.",width = 350, bg="#6B081F", fg="white", font=('century gothic', '18', 'bold')).place(x=20,y=270)
-       # Button(self, text= "Log In", command=lambda:master.switch_frame(frameLogin)).pack()
         Button(self, image=master.loginButtonImg, bg="#6B081F", borderwidth=0, activebackground="#6B081F", command=lambda:master.switch_frame(frameLogin)).place(x=55,y=360)
-        #Button(self, image=im_login, bg="#6B081F", borderwidth=0, activebackground="#6B081F", command=lambda:master.switch_frame(frameLogin)).pack()
         Button(self, image=master.registerButtonImg, bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameRegister)).place(x=55, y=450)
         Button(self, image=master.guestButtonImg, bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameHome)).place(x=55, y=540)
+
 
 #Login Screen
 class frameLogin(Frame):
@@ -135,7 +135,7 @@ class frameRegister(Frame):
 class frameHome(Frame):
     def __init__(self,master):
         guestAcc = False
-        addButtonPhoto = PhotoImage(file='redPlusButton.png')
+        addButtonPhoto = PhotoImage(file='resources/redPlusButton.png')
         Frame.__init__(self,master)
         if master.Profile is None:
             master.Profile = Profile("Guest")
