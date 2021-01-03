@@ -12,7 +12,7 @@ class NutritionApp(Tk):
         self.title("UGA Nutrition")
         self.connection = None
         self.cursor = None
-        self.user = None
+        self.Profile = None
 
     def switch_frame(self, frameClass):
         newFrame = frameClass(self)
@@ -61,8 +61,8 @@ class frameLogin(Frame):
             master.closeCursor()
         else:
             #need to replace with my profile frame
-            master.user = username
-            master.switch_frame(frameWelcome)
+            master.Profile = Profile(username)
+            master.switch_frame(frameHome)
             master.closeCursor()
 
     def __init__(self,master):
@@ -74,7 +74,7 @@ class frameLogin(Frame):
         Label(self,text="Password",pady=10).pack()
         passInput.pack()
         Button(self,text="Submit",command=lambda:frameLogin.submitLogin(userInput,passInput,master)).pack()
-        Button(self,text="Back",command=lambda:master.switch_frame(frameHome)).pack()
+        Button(self,text="Back",command=lambda:master.switch_frame(frameWelcome)).pack()
 
 #Register Screen
 class frameRegister(Frame):
@@ -111,18 +111,24 @@ class frameHome(Frame):
     def __init__(self,master):
         guestAcc = False
         Frame.__init__(self,master)
-        if master.user is None:
-            master.user = "Guest"
+        if master.Profile is None:
+            master.Profile = Profile("Guest")
             guestAcc = True
-        Label(self,text="Hello " + master.user + "!").grid(row=0,column=0)
+        Label(self,text="Hello " + master.Profile.user + "!").grid(row=0,column=0)
         Button(self,text="Add Food").grid(row=1,column=0)
         goals = Button(self,text="Change Goals")
         goals.grid(row=1,column=1)
         if guestAcc:
             goals["state"] = DISABLED
 
-        
+class frameAddFood(Frame):
+    def __init__(self,master):
+        return
 
+
+class Profile():
+    def __init__(self,user):
+        self.user = user
 
     
 
