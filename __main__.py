@@ -6,9 +6,10 @@ import mysql.connector
 class NutritionApp(Tk):
     def __init__(self):
         Tk.__init__(self)
+        self.resizable(False,False)
         self.frame = None #Frame shown in window
         self.switch_frame(frameWelcome)
-        self.geometry("450x300")
+        self.geometry("360x740")
         self.title("UGA Nutrition")
         self.connection = None #MySql Connection
         self.cursor = None #MySql stuff
@@ -20,7 +21,7 @@ class NutritionApp(Tk):
         if self.frame is not None:
             self.frame.destroy()
         self.frame = newFrame
-        self.frame.pack()
+        self.frame.pack(fill=BOTH, expand=True)
     
     #Sets up DB Stuff
     def establishCursor(self):
@@ -116,7 +117,7 @@ class frameHome(Frame):
         if master.Profile is None:
             master.Profile = Profile("Guest")
             guestAcc = True
-        Label(self,text="Hello " + master.Profile.user + "!").grid(row=0,column=0)
+        Label(self,text="Hello " + master.Profile.user + "!",font=("Calibri",18),padx=5,pady=5).place(x=0,y=0)
         Button(self,text="Track Meals",command=lambda:master.switch_frame(frameTrackMeals)).grid(row=1,column=0)
         goals = Button(self,text="Goals")
         goals.grid(row=1,column=1)
