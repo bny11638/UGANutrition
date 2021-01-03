@@ -46,7 +46,17 @@ class NutritionApp(Tk):
         im_login = ImageTk.PhotoImage(imguh)
         self.loginButtonImg = im_login
         self.logo = ImageTk.PhotoImage(file="resources/logosmall.png")
-        
+
+        register = Image.open("resources/register.png")
+        register = register.resize((250, 60), Image.ANTIALIAS)
+        im_register = ImageTk.PhotoImage(register)
+        self.registerButtonImg = im_register
+
+        use_guest = Image.open("resources/guest.png")
+        use_guest = use_guest.resize((250, 60), Image.ANTIALIAS)
+        im_guest = ImageTk.PhotoImage(use_guest)
+        self.guestButtonImg = im_guest
+            
 #Welcome Screen DESIGN IS FOR MATTHEW
 class frameWelcome(Frame):
     def __init__(self, master):
@@ -54,10 +64,10 @@ class frameWelcome(Frame):
         Label(self,image=master.logo,bg="#6B081F").place(x=125,y=70)
         Message(self, text="Smarter eating starts here.",width = 350, bg="#6B081F", fg="white", font=('century gothic', '18', 'bold')).place(x=20,y=270)
        # Button(self, text= "Log In", command=lambda:master.switch_frame(frameLogin)).pack()
-        Button(self, image=master.loginButtonImg, bg="#6B081F", borderwidth=0, activebackground="#6B081F", command=lambda:master.switch_frame(frameLogin)).place(x=50,y=360)
+        Button(self, image=master.loginButtonImg, bg="#6B081F", borderwidth=0, activebackground="#6B081F", command=lambda:master.switch_frame(frameLogin)).place(x=55,y=360)
         #Button(self, image=im_login, bg="#6B081F", borderwidth=0, activebackground="#6B081F", command=lambda:master.switch_frame(frameLogin)).pack()
-        Button(self, text="Register",command=lambda:master.switch_frame(frameRegister)).pack()
-        Button(self, text="Continue as Guest",command=lambda:master.switch_frame(frameHome)).pack()
+        Button(self, image=master.registerButtonImg, bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameRegister)).place(x=55, y=450)
+        Button(self, image=master.guestButtonImg, bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameHome)).place(x=55, y=540)
 
 #Login Screen
 class frameLogin(Frame):
