@@ -9,6 +9,14 @@ import mysql.connector
 class NutritionApp(Tk):
     def __init__(self):
         Tk.__init__(self)
+        #LOAD ALL IMAGES HERE
+        imguh = Image.open("resources/login.png")
+        imguh = imguh.resize((250, 60), Image.ANTIALIAS) ## The (250, 250) is (height, width
+        im_login = ImageTk.PhotoImage(imguh)
+        self.loginButtonImg = im_login
+        self.logo = ImageTk.PhotoImage(file="resources/logosmall.png")
+
+        #^^ IN THAT SPOT UP THERE
         self.resizable(False,False)
         self.frame = None #Frame shown in window
         self.switch_frame(frameWelcome)
@@ -17,13 +25,6 @@ class NutritionApp(Tk):
         self.connection = None #MySql Connection
         self.cursor = None #MySql stuff
         self.Profile = None
-       # self.initImages()
-        imguh = Image.open("resources/login.png")
-        imguh = imguh.resize((250, 60), Image.ANTIALIAS) ## The (250, 250) is (height, width
-        im_login = ImageTk.PhotoImage(imguh)
-        self.loginButtonImg = im_login
-        self.logo = ImageTk.PhotoImage(file="resources/logosmall.png")
-
     #Switches frame on window
     def switch_frame(self, frameClass):
         newFrame = frameClass(self)
@@ -51,11 +52,11 @@ class NutritionApp(Tk):
 #Welcome Screen DESIGN IS FOR MATTHEW
 class frameWelcome(Frame):
     def __init__(self, master):
-        Frame.__init__(self,master, bg="#6B081F")
+        Frame.__init__(self,master,bg="#6B081F")
         Label(self,image=master.logo,bg="#6B081F").place(x=125,y=70)
         Message(self, text="Smarter eating starts here.",width = 350, bg="#6B081F", fg="white", font=('century gothic', '18', 'bold')).place(x=20,y=270)
        # Button(self, text= "Log In", command=lambda:master.switch_frame(frameLogin)).pack()
-        Button(self, image=master.loginButtonImg, bg="#6B081F", borderwidth=0, activebackground="#6B081F", command=lambda:master.switch_frame(frameLogin)).place(x=50,y=342)
+        Button(self, image=master.loginButtonImg, bg="#6B081F", borderwidth=0, activebackground="#6B081F", command=lambda:master.switch_frame(frameLogin)).place(x=50,y=360)
         #Button(self, image=im_login, bg="#6B081F", borderwidth=0, activebackground="#6B081F", command=lambda:master.switch_frame(frameLogin)).pack()
         Button(self, text="Register",command=lambda:master.switch_frame(frameRegister)).pack()
         Button(self, text="Continue as Guest",command=lambda:master.switch_frame(frameHome)).pack()
