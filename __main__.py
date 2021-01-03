@@ -114,7 +114,6 @@ class frameRegister(Frame):
                 master.closeCursor()
 
 class frameHome(Frame):
-    
     def __init__(self,master):
         guestAcc = False
         addButtonPhoto = PhotoImage(file='redPlusButton.png')
@@ -122,42 +121,19 @@ class frameHome(Frame):
         if master.Profile is None:
             master.Profile = Profile("Guest")
             guestAcc = True
-        Label(self,text="Hello " + master.Profile.user + "!",font=("Calibri",18),padx=5,pady=5).place(x=0,y=0)
-        home = Button(self,text="Home",font=("Calibri",11),width=11,height=2)
-        goals = Button(self,text="Goals",font=("Calibri",11),width=11,height=2)
-        foodLog = Button(self,text="Food Log",font=("Calibri",11),width=11,height=2)
-        addButton = Button(self,image=addButtonPhoto)
+        Label(self,text=master.Profile.user + "'s Profile:",font=("Calibri",18),padx=5,pady=5).place(x=0,y=0)
+        home = Button(self,text="Home",font=("Calibri",13),width=9,height=2)
+        goals = Button(self,text="Goals",font=("Calibri",13),width=9,height=2)
+        foodLog = Button(self,text="Food Log",font=("Calibri",13),width=9,height=2)
+        addButton = Button(self,image=addButtonPhoto,command=lambda:master.switch_frame("NOT SURE WHAT I'M DOING YET"))
         addButton.image = addButtonPhoto
         addButton.pack()
-        home.place(x=0,y=690)
-        goals.place(x=120,y=690)
-        foodLog.place(x=240,y=690)
+        home.place(x=0,y=685)
+        goals.place(x=120,y=685)
+        foodLog.place(x=240,y=685)
         addButton.place(x=280,y=600)
         if guestAcc:
             goals["state"] = DISABLED
-
-class frameTrackMeals(Frame):
-    def __init__(self,master):
-        Frame.__init__(self,master)
-        Label(self,text="Track your meals!").pack(side="left")
-        self.add = Button(self,text="Add Meal",command=lambda:self.showSearchbar())
-        self.searchBar = Entry(self)
-        self.search = Button(self,text="Search",command=lambda:self.execute(self.searchBar.get(),master))
-        self.add.pack()
-    
-    def showSearchbar(self):
-        self.add.pack_forget()
-        self.searchBar.pack()
-        self.search.pack()
-    
-    def execute(self,query,master):
-        self.searchBar.forget()
-        self.search.forget()
-        master.establishCursor()
-        master.cursor.execute('SELECT * FROM Food where Name = %s',(query,))
-        tmp = master.cursor.fetchone()
-        master.Profile.addFood(Food(tmp))
-
 
 class Profile():
     def __init__(self,user):
