@@ -12,6 +12,7 @@ class NutritionApp(Tk):
         self.title("UGA Nutrition")
         self.connection = None
         self.cursor = None
+        self.user = None
 
     def switch_frame(self, frameClass):
         newFrame = frameClass(self)
@@ -41,6 +42,7 @@ class frameWelcome(Frame):
         Message(self, text="Welcome to UGANutrition!",width = 100).pack()
         Button(self, text= "Log In", command=lambda:master.switch_frame(frameLogin)).pack()
         Button(self, text="Register",command=lambda:master.switch_frame(frameRegister)).pack()
+        Button(self, text="Continue as Guest",command=lambda:master.switch_frame(frameHome)).pack()
 
 #Login Screen
 class frameLogin(Frame):
@@ -59,6 +61,7 @@ class frameLogin(Frame):
             master.closeCursor()
         else:
             #need to replace with my profile frame
+            master.user = username
             master.switch_frame(frameWelcome)
             master.closeCursor()
 
@@ -71,7 +74,7 @@ class frameLogin(Frame):
         Label(self,text="Password",pady=10).pack()
         passInput.pack()
         Button(self,text="Submit",command=lambda:frameLogin.submitLogin(userInput,passInput,master)).pack()
-        Button(self,text="Back",command=lambda:master.switch_frame(frameWelcome)).pack()
+        Button(self,text="Back",command=lambda:master.switch_frame(frameHome)).pack()
 
 #Register Screen
 class frameRegister(Frame):
@@ -84,7 +87,7 @@ class frameRegister(Frame):
         Label(self,text="Enter Password",pady=10).pack()
         passInput.pack()
         Button(self,text="Submit",pady=5,command=lambda:frameRegister.submitRegister(userInput,passInput,master)).pack()
-        Button(self,text="Back",pady=5,command=lambda:master.switch_frame(frameWelcome)).pack()
+        Button(self,text="Back",pady=5,command=lambda:master.switch_frame(frameLogin)).pack()
 
     def submitRegister(user,password,master):
         username = user.get()
@@ -103,6 +106,24 @@ class frameRegister(Frame):
             else:
                 print("Username is already taken")
                 master.closeCursor()
+
+class frameHome(Frame):
+    def __init__(self,master):
+        guestAcc = False
+        Frame.__init__(self,master)
+        if master.user is None:
+            master.user = "Guest"
+            guestAcc = True
+        Label(self,text="Hello " + master.user + "!").grid(row=0,column=0)
+        Button(self,text="Add Food").grid(row=1,column=0)
+        goals = Button(self,text="Change Goals")
+        goals.grid(row=1,column=1)
+        if guestAcc:
+            goals["state"] = DISABLED
+
+        
+
+
     
 
  #:) starting the app
