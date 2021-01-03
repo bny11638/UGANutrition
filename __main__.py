@@ -44,8 +44,8 @@ class NutritionApp(Tk):
 #Welcome Screen DESIGN IS FOR MATTHEW
 class frameWelcome(Frame):
     def __init__(self, master):
-        Frame.__init__(self,master)
-        Message(self, text="Welcome to UGANutrition!",width = 100).pack()
+        Frame.__init__(self,master, bg="red")
+        Message(self, text="Welcome to UGANutrition!",width = 100, bg="red").pack()
         Button(self, text= "Log In", command=lambda:master.switch_frame(frameLogin)).pack()
         Button(self, text="Register",command=lambda:master.switch_frame(frameRegister)).pack()
         Button(self, text="Continue as Guest",command=lambda:master.switch_frame(frameHome)).pack()
