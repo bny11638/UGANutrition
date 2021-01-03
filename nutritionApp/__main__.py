@@ -1,5 +1,8 @@
 import tkinter as tk
 from tkinter import *
+from attributes.ProfileClass import Profile
+from attributes.FoodClass import Food
+from frames.frameHomeClass import frameHome
 import mysql.connector
 
 #App Class
@@ -109,6 +112,7 @@ class frameRegister(Frame):
                 print("Username is already taken")
                 master.closeCursor()
 
+"""
 class frameHome(Frame):
     def __init__(self,master):
         guestAcc = False
@@ -123,6 +127,7 @@ class frameHome(Frame):
         Button(self,text="Favorite Meals").grid(row=2,column=0)
         if guestAcc:
             goals["state"] = DISABLED
+"""
 
 class frameTrackMeals(Frame):
     def __init__(self,master):
@@ -146,24 +151,6 @@ class frameTrackMeals(Frame):
         tmp = master.cursor.fetchone()
         master.Profile.addFood(Food(tmp))
 
-
-class Profile():
-    def __init__(self,user):
-        self.user = user
-        self.foodList = []
-    
-    def addFood(self,Food):
-        self.foodList.append(Food)
-
-class Food():
-    def __init__(self,list):
-        self.name = list[0]
-        self.cal = list[1]
-        self.fat = list[2]
-        self.carb = list[3]
-        self.protein = list[4]
-    
-    
  #:) starting the app
 if __name__ == "__main__":
     app = NutritionApp()
