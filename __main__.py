@@ -108,8 +108,10 @@ class frameLogin(Frame):
       
         Label(self,text="Username",pady=10,bg="#6B081F", fg="white", font=('century gothic', '12', 'bold')).place(x=90,y=345)
         Label(self,text="Password",pady=10,bg="#6B081F", fg="white", font=('century gothic', '12', 'bold')).place(x=90,y=395)
-        userInput = Entry(self,width=30).place(x=90,y=380)
-        passInput = Entry(self,width=30).place(x=90,y=430)
+        userInput = Entry(self,width=30)
+        userInput.place(x=90,y=380)
+        passInput = Entry(self,width=30)
+        passInput.place(x=90,y=430)
         Button(self,text="Submit",image=master.submitButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:self.submitLogin(userInput,passInput,master)).place(x=190, y=460)
         Button(self,text="Back",image=master.backButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameWelcome)).place(x=90,y=460)
 
@@ -122,8 +124,10 @@ class frameRegister(Frame):
         Message(self, text="Smarter eating starts here.",width = 350, bg="#6B081F", fg="white", font=('century gothic', '18', 'bold')).place(relx=0.5,rely=0.4, anchor=CENTER)
         Label(self,text="Create Username",pady=10,bg="#6B081F", fg="white", font=('century gothic', '12', 'bold')).place(x=90,y=345)
         Label(self,text="Create Password",pady=10,bg="#6B081F", fg="white", font=('century gothic', '12', 'bold')).place(x=90,y=395)
-        userInput = Entry(self,width=30).place(x=90,y=380)
-        passInput = Entry(self,width=30).place(x=90,y=430)
+        userInput = Entry(self,width=30)
+        userInput.place(x=90,y=380)
+        passInput = Entry(self,width=30)
+        passInput.place(x=90,y=430)
         Button(self,text="Submit",image=master.submitButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:self.submitRegister(userInput,passInput,master)).place(x=190, y=460)
         Button(self,text="Back",image=master.backButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameWelcome)).place(x=90,y=460)
 
