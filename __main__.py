@@ -116,15 +116,16 @@ class frameLogin(Frame):
 #Register Screen
 class frameRegister(Frame):
     def __init__(self,master):
-        Frame.__init__(self,master)
-        Label(self,text="Enter Username",pady=10).pack()
-        userInput = Entry(self,width=30)
-        userInput.pack()
-        passInput = Entry(self,width=30)
-        Label(self,text="Enter Password",pady=10).pack()
-        passInput.pack()
-        Button(self,text="Submit",pady=5,command=lambda:self.submitRegister(userInput,passInput,master)).pack()
-        Button(self,text="Back",pady=5,command=lambda:master.switch_frame(frameWelcome)).pack()
+        Frame.__init__(self,master,bg="#6B081F")
+
+        Label(self,image=master.logo,bg="#6B081F").place(x=125,y=70)
+        Message(self, text="Smarter eating starts here.",width = 350, bg="#6B081F", fg="white", font=('century gothic', '18', 'bold')).place(x=20,y=270)
+        Label(self,text="Create Username",pady=10,bg="#6B081F", fg="white", font=('century gothic', '12', 'bold')).place(x=90,y=345)
+        Label(self,text="Create Password",pady=10,bg="#6B081F", fg="white", font=('century gothic', '12', 'bold')).place(x=90,y=395)
+        userInput = Entry(self,width=30).place(x=90,y=380)
+        passInput = Entry(self,width=30).place(x=90,y=430)
+        Button(self,text="Submit",image=master.submitButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:self.submitRegister(userInput,passInput,master)).place(x=190, y=460)
+        Button(self,text="Back",image=master.backButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameWelcome)).place(x=90,y=460)
 
     def submitRegister(self,user,password,master):
         username = user.get()
