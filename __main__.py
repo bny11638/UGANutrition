@@ -161,7 +161,7 @@ class frameHome(Frame):
         home = Button(self,text="Home",font=("Calibri",13),width=9,height=2)
         goals = Button(self,text="Goals",font=("Calibri",13),width=9,height=2)
         foodLog = Button(self,text="Food Log",font=("Calibri",13),width=9,height=2)
-        addButton = Button(self,image=addButtonPhoto,command=lambda:master.switch_frame("NOT SURE WHAT I'M DOING YET"))
+        addButton = Button(self,image=addButtonPhoto,command=lambda:master.switch_frame(frameFoodAdd))
         addButton.image = addButtonPhoto
         addButton.pack()
         home.place(x=0,y=685)
@@ -171,21 +171,59 @@ class frameHome(Frame):
         if guestAcc:
             goals["state"] = DISABLED
 
+class frameFoodAdd(Frame):
+    def __init__(self,master):
+        Frame.__init__(self,master)
+        Button(self,text="add chicken",command=lambda:self.addFoodSQL(master)).pack()
+
+    def addFoodSQL(self,master):
+        chicken = Food(("Chicken",85,5,5,5))
+        master.Profile.addFood(chicken)
+
 class Profile():
     def __init__(self,user):
         self.user = user
         self.foodList = []
-    
     def addFood(self,Food):
         self.foodList.append(Food)
+    def getTotProtein(self):
+        count = 0
+        for x in self.foodList:
+            count = count + x.getProtein()
+        return count
+    def getTotCarb(self):
+        count = 0
+        for x in self.foodList:
+            count = count + x.getCarb()
+        return count
+    def getTotFat(self):
+        count = 0
+        for x in self.foodList:
+            count = count + x.getFat()
+        return count
+    def getTotCal(self):
+        count = 0
+        for x in self.foodList:
+            count = count + x.getCal()
+        return count
 
 class Food():
     def __init__(self,list):
         self.name = list[0]
-        self.cal = list[1]
-        self.fat = list[2]
-        self.carb = list[3]
-        self.protein = list[4]
+        self.cal = int(list[1])
+        self.fat = int(list[2])
+        self.carb = int(list[3])
+        self.protein = int(list[4])
+    def getProtein(self):
+        return self.protein
+    def getCarb(self):
+        return self.carb
+    def getFat(self):
+        return self.fat
+    def getFoodID(self):
+        return self.name
+    def getCal(self):
+        return self.cal
     
     
  #:) starting the app
