@@ -2,7 +2,9 @@ import tkinter as tk
 from tkinter import *
 from PIL import ImageTk, Image
 import mysql.connector
-
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure 
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 
 
 #App Class
@@ -157,6 +159,7 @@ class frameHome(Frame):
         if master.Profile is None:
             master.Profile = Profile("Guest")
             guestAcc = True
+        self.getMacroPlot(master)
         Label(self,text=master.Profile.user + "'s Profile:",font=("Calibri",18),padx=5,pady=5).place(x=0,y=0)
         home = Button(self,text="Home",font=("Calibri",13),width=9,height=2)
         goals = Button(self,text="Goals",font=("Calibri",13),width=9,height=2)
@@ -170,11 +173,24 @@ class frameHome(Frame):
         addButton.place(x=280,y=600)
         if guestAcc:
             goals["state"] = DISABLED
+    #Creates macro plot
+    def getMacroPlot(self,master):
+        #Figure containing plot
+        fig = Figure(figsize=(2.5,3.5))
+        axe = fig.add_subplot()
+        fig.tight_layout()
+        axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],width=.35,bottom=0)
+        canvas = FigureCanvasTkAgg(fig, master=self)
+        canvas.draw()
+        canvas.get_tk_widget().place(x=0,y=200)
+        
+
 
 class frameFoodAdd(Frame):
     def __init__(self,master):
         Frame.__init__(self,master)
         Button(self,text="add chicken",command=lambda:self.addFoodSQL(master)).pack()
+        Button(self,text="Back",command=lambda:master.switch_frame(frameHome)).pack()
 
     def addFoodSQL(self,master):
         chicken = Food(("Chicken",85,5,5,5))
@@ -190,6 +206,7 @@ class Profile():
         count = 0
         for x in self.foodList:
             count = count + x.getProtein()
+        print(count)
         return count
     def getTotCarb(self):
         count = 0
