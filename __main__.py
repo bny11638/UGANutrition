@@ -155,7 +155,7 @@ class frameHome(Frame):
     def __init__(self,master):
         guestAcc = False
         addButtonPhoto = PhotoImage(file='resources/redPlusButton.png')
-        Frame.__init__(self,master)
+        Frame.__init__(self,master,bg="white")
         if master.Profile is None:
             master.Profile = Profile("Guest")
             guestAcc = True
@@ -164,7 +164,7 @@ class frameHome(Frame):
         home = Button(self,text="Home",font=("Calibri",13),width=9,height=2)
         goals = Button(self,text="Goals",font=("Calibri",13),width=9,height=2)
         foodLog = Button(self,text="Food Log",font=("Calibri",13),width=9,height=2)
-        addButton = Button(self,image=addButtonPhoto,command=lambda:master.switch_frame(frameFoodAdd))
+        addButton = Button(self,image=addButtonPhoto,command=lambda:master.switch_frame(frameFoodAdd),borderwidth=0)
         addButton.image = addButtonPhoto
         addButton.pack()
         home.place(x=0,y=685)
@@ -176,13 +176,16 @@ class frameHome(Frame):
     #Creates macro plot
     def getMacroPlot(self,master):
         #Figure containing plot
-        fig = Figure(figsize=(2.5,3.5))
+        fig = Figure(figsize=(2.5,3))
         axe = fig.add_subplot()
+        axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],width=.6,bottom=0)
+        axe.set_title("Macronutrients",fontsize=12,loc='left')
+        axe.set_ylabel('Nutrients Consumed (g)',fontsize=8)
+        axe.set_ylim(bottom=0)
         fig.tight_layout()
-        axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],width=.35,bottom=0)
         canvas = FigureCanvasTkAgg(fig, master=self)
         canvas.draw()
-        canvas.get_tk_widget().place(x=0,y=200)
+        canvas.get_tk_widget().place(x=0,y=280)
         
 
 
@@ -193,7 +196,7 @@ class frameFoodAdd(Frame):
         Button(self,text="Back",command=lambda:master.switch_frame(frameHome)).pack()
 
     def addFoodSQL(self,master):
-        chicken = Food(("Chicken",85,5,5,5))
+        chicken = Food(("Chicken",85,10,5,7))
         master.Profile.addFood(chicken)
 
 class Profile():
