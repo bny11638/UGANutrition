@@ -160,16 +160,14 @@ class frameHome(Frame):
             guestAcc = True
         self.getMacroPlot(master)
         Label(self,text=master.Profile.user + "'s Profile:",font=("Calibri",18),padx=5,pady=5).place(x=0,y=0)
-        home = Button(self,text="Home",font=("Calibri",13),width=9,height=2)
-        goals = Button(self,text="Goals",font=("Calibri",13),width=9,height=2)
-        foodLog = Button(self,text="Food Log",font=("Calibri",13),width=9,height=2)
         addButton = Button(self,image=addButtonPhoto,command=lambda:master.switch_frame(frameFoodAdd),borderwidth=0)
-        addButton.image = addButtonPhoto
         addButton.pack()
-        home.place(x=0,y=685)
-        goals.place(x=120,y=685)
-        foodLog.place(x=240,y=685)
-        addButton.place(x=280,y=600)
+        buttonBar = Frame(self)
+        Button(buttonBar,text="Home",height=2).pack(side="left",expand=True,fill=tk.X)
+        goals = Button(buttonBar,text="Goals",height=2)
+        goals.pack(side="left",expand=True,fill=tk.X)
+        Button(buttonBar,text="Food Log",height=2).pack(side="left",expand=True,fill=tk.X)
+        buttonBar.pack(fill=tk.X,side="bottom")
         if guestAcc:
             goals["state"] = DISABLED
     #Creates macro plot
