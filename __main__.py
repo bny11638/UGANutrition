@@ -68,6 +68,9 @@ class NutritionApp(Tk):
         submit = submit.resize((80, 25), Image.ANTIALIAS)
         im_submit = ImageTk.PhotoImage(submit)
         self.submitButtomImg = im_submit
+
+        self.addButtonPhoto = PhotoImage(file='resources/redPlusButton.png')
+        
             
 #Welcome Screen DESIGN IS FOR MATTHEW
 class frameWelcome(Frame):
@@ -148,37 +151,72 @@ class frameRegister(Frame):
 
 class frameHome(Frame):
     def __init__(self,master):
-        guestAcc = False
-        addButtonPhoto = PhotoImage(file='resources/redPlusButton.png')
-        Frame.__init__(self,master,bg="white")
         if master.Profile is None:
             master.Profile = Profile("Guest")
             guestAcc = True
-        self.getMacroPlot(master)
-        Label(self,text=master.Profile.user + "'s Profile:",font=("Calibri",18),padx=5,pady=5).place(x=0,y=0)
-        addButton = Button(self,image=addButtonPhoto,command=lambda:master.switch_frame(frameFoodAdd),borderwidth=0)
-        addButton.pack()
+        Frame.__init__(self,master,bg="white")
         buttonBar = Frame(self)
-        Button(buttonBar,text="Home",height=2).pack(side="left",expand=True,fill=tk.X)
-        goals = Button(buttonBar,text="Goals",height=2)
+        addButton = Button(buttonBar,text="Add Food",fg="white",bg="gray",command=lambda:master.switch_frame(frameFoodAdd)).pack(side="right",expand=True,fill=BOTH)
+        Button(buttonBar,text="Home",height=3,bg="gray",fg="white").pack(side="left",expand=True,fill=tk.X)
+        goals = Button(buttonBar,text="Goals",height=3,bg="gray",fg="white")
         goals.pack(side="left",expand=True,fill=tk.X)
-        Button(buttonBar,text="Food Log",height=2).pack(side="left",expand=True,fill=tk.X)
-        buttonBar.pack(fill=tk.X,side="bottom")
-        if guestAcc:
-            goals["state"] = DISABLED
+        Button(buttonBar,text="Food Log",height=3,bg="gray",fg="white").pack(side="left",expand=True,fill=tk.X)
+        buttonBar.pack(side="bottom",fill=tk.X)
+        Label(self,text=master.Profile.user + "'s Profile:",font=("Calibri",18),padx=5,pady=5,anchor='w').pack(side="top",expand=False,fill=tk.X)
+        
+        macroFrame = Frame(self,bg="white")
+        calorieFrame = Frame(self,bg="white")
+        self.initMacroPlot(macroFrame,master)
+        self.initCalPlot(calorieFrame,master)
+        self.initLinePlot(calorieFrame,master)
+        macroFrame.pack(side="right",expand=1)
+        calorieFrame.pack(side="right",expand=1)
+        
+        
+        
+        #if guestAcc:        
+        goals["state"] = DISABLED
+        
     #Creates macro plot
-    def getMacroPlot(self,master):
+    def initMacroPlot(self,frame,master):
         #Figure containing plot
-        fig = Figure(figsize=(2.5,3))
-        axe = fig.add_subplot()
+        figMacroPlot = Figure(figsize=(3,4))
+        axe = figMacroPlot.add_subplot()
         axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],width=.6,bottom=0)
         axe.set_title("Macronutrients",fontsize=12,loc='left')
         axe.set_ylabel('Nutrients Consumed (g)',fontsize=8)
         axe.set_ylim(bottom=0)
-        fig.tight_layout()
-        canvas = FigureCanvasTkAgg(fig, master=self)
+        figMacroPlot.set_tight_layout(True)
+        canvasMacro = FigureCanvasTkAgg(figMacroPlot, master=frame)
+        canvasMacro.draw()
+        canvasMacro.get_tk_widget().pack()
+    #Create Calorie Bar
+    def initCalPlot(self,frame,master):
+        #Figure containing cal
+        figCalPlot = Figure(figsize=(6,1.5))
+        axe = figCalPlot.add_subplot()
+        axe.barh([""],[master.Profile.getTotCal()] ,height = .005, color = '#6B081F')
+        axe.set_ylabel("Calories (kj)")
+        axe.axvline(x=master.Profile.calGoal)
+        axe.set_title("Calories Consumed")
+        axe.set_xlim(0)
+        figCalPlot.set_tight_layout(True)
+        canvasCal = FigureCanvasTkAgg(figCalPlot, master=frame)
+        canvasCal.draw()
+        canvasCal.get_tk_widget().pack(fill=tk.X)
+    def initLinePlot(self,frame,master):
+        fig = Figure(figsize=(6,2.5))
+        axe = fig.add_subplot()
+        axe.plot(["Jan","Feb","Mar","April","May","June","July","Aug","Sept","Oct","Nov","Dec"],[150,155,160,155,150,145,140,135,130,133,128,130])
+        axe.set_title("Progress")
+        axe.set_ylabel("Weight in Pounds (lbs)")
+        fig.set_tight_layout(True)
+        canvas = FigureCanvasTkAgg(fig, master=frame)
         canvas.draw()
-        canvas.get_tk_widget().place(x=0,y=280)
+        canvas.get_tk_widget().pack(fill=tk.X)
+
+        
+
         
 
 
@@ -196,6 +234,7 @@ class Profile():
     def __init__(self,user):
         self.user = user
         self.foodList = []
+        self.calGoal = 1750
     def addFood(self,Food):
         self.foodList.append(Food)
     def getTotProtein(self):
