@@ -11,9 +11,9 @@ class NutritionApp(Tk):
     def __init__(self):
         Tk.__init__(self)
         self.initImage()
-        self.resizable(False,False)
+        #self.resizable(False,False)
         self.frame = None #Frame shown in window
-        self.geometry("360x740")
+        self.geometry("1024x768")
         self.title("UGA Nutrition")
         self.connection = None #MySql Connection
         self.cursor = None #MySql stuff
@@ -73,12 +73,11 @@ class NutritionApp(Tk):
 class frameWelcome(Frame):
     def __init__(self, master):
         Frame.__init__(self,master,bg="#6B081F")
-        Label(self,image=master.logo,bg="#6B081F").place(relx=0.5,rely=0.2,anchor=CENTER)
-        Message(self, text="Smarter eating starts here.",width = 350, bg="#6B081F", fg="white", font=('century gothic', '18', 'bold')).place(relx=0.5,rely=0.4, anchor=CENTER)
-        Button(self, image=master.loginButtonImg, bg="#6B081F", borderwidth=0, activebackground="#6B081F", command=lambda:master.switch_frame(frameLogin)).place(x=55,y=360)
-        Button(self, image=master.registerButtonImg, bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameRegister)).place(x=55, y=435)
-        Button(self, image=master.guestButtonImg, bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameHome)).place(x=55, y=510)
-
+        Label(self,image=master.logo,bg="#6B081F").pack(pady=40)
+        Message(self, text="Smarter eating starts here.",width = 350, bg="#6B081F", fg="white", font=('century gothic', '18', 'bold')).pack()
+        Button(self, image=master.loginButtonImg, bg="#6B081F", borderwidth=0, activebackground="#6B081F", command=lambda:master.switch_frame(frameLogin)).pack(pady=10)
+        Button(self, image=master.registerButtonImg, bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameRegister)).pack(pady=10)
+        Button(self, image=master.guestButtonImg, bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameHome)).pack(pady=10)
 
 #Login Screen
 class frameLogin(Frame):
@@ -103,34 +102,31 @@ class frameLogin(Frame):
 
     def __init__(self,master):
         Frame.__init__(self,master,bg="#6B081F")
-
-        Label(self,image=master.logo,bg="#6B081F").place(relx=0.5,rely=0.2,anchor=CENTER)
-        Message(self, text="Smarter eating starts here.",width = 350, bg="#6B081F", fg="white", font=('century gothic', '18', 'bold')).place(relx=0.5,rely=0.4, anchor=CENTER)
-      
-        Label(self,text="Username",pady=10,bg="#6B081F", fg="white", font=('century gothic', '12', 'bold')).place(x=90,y=345)
-        Label(self,text="Password",pady=10,bg="#6B081F", fg="white", font=('century gothic', '12', 'bold')).place(x=90,y=395)
+        Label(self,image=master.logo,bg="#6B081F").pack(pady=40)
+        Message(self, text="Smarter eating starts here.",width = 350, bg="#6B081F", fg="white", font=('century gothic', '18', 'bold')).pack()
+        Label(self,text="Username",pady=10,bg="#6B081F", fg="white", font=('century gothic', '12', 'bold')).pack(pady=2)
         userInput = Entry(self,width=30)
-        userInput.place(x=90,y=380)
+        userInput.pack()
+        Label(self,text="Password",pady=10,bg="#6B081F", fg="white", font=('century gothic', '12', 'bold')).pack(pady=2)
         passInput = Entry(self,width=30)
-        passInput.place(x=90,y=430)
-        Button(self,text="Submit",image=master.submitButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:self.submitLogin(userInput,passInput,master)).place(x=190, y=460)
-        Button(self,text="Back",image=master.backButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameWelcome)).place(x=90,y=460)
+        passInput.pack()
+        Button(self,text="Submit",image=master.submitButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:self.submitLogin(userInput,passInput,master)).pack(pady=(20,10))
+        Button(self,text="Back",image=master.backButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameWelcome)).pack()
 
 #Register Screen
 class frameRegister(Frame):
     def __init__(self,master):
         Frame.__init__(self,master,bg="#6B081F")
-
-        Label(self,image=master.logo,bg="#6B081F").place(relx=0.5,rely=0.2,anchor=CENTER)
-        Message(self, text="Smarter eating starts here.",width = 350, bg="#6B081F", fg="white", font=('century gothic', '18', 'bold')).place(relx=0.5,rely=0.4, anchor=CENTER)
-        Label(self,text="Create Username",pady=10,bg="#6B081F", fg="white", font=('century gothic', '12', 'bold')).place(x=90,y=345)
-        Label(self,text="Create Password",pady=10,bg="#6B081F", fg="white", font=('century gothic', '12', 'bold')).place(x=90,y=395)
+        Label(self,image=master.logo,bg="#6B081F").pack(pady=40)
+        Message(self, text="Smarter eating starts here.",width = 350, bg="#6B081F", fg="white", font=('century gothic', '18', 'bold')).pack()
+        Label(self,text="Create Username",pady=10,bg="#6B081F", fg="white", font=('century gothic', '12', 'bold')).pack(pady=2)
         userInput = Entry(self,width=30)
-        userInput.place(x=90,y=380)
+        userInput.pack()
+        Label(self,text="Create Password",pady=10,bg="#6B081F", fg="white", font=('century gothic', '12', 'bold')).pack(pady=2)
         passInput = Entry(self,width=30)
-        passInput.place(x=90,y=430)
-        Button(self,text="Submit",image=master.submitButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:self.submitRegister(userInput,passInput,master)).place(x=190, y=460)
-        Button(self,text="Back",image=master.backButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameWelcome)).place(x=90,y=460)
+        passInput.pack()
+        Button(self,text="Submit",image=master.submitButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:self.submitRegister(userInput,passInput,master)).pack(pady=(20,10))
+        Button(self,text="Back",image=master.backButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameWelcome)).pack()
 
     def submitRegister(self,user,password,master):
         username = user.get()
