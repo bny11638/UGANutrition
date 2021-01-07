@@ -212,18 +212,27 @@ class frameFoodAdd(Frame):
     def __init__(self,master):
         Frame.__init__(self,master)
         searchFrame = Frame(self,bg="gray")
-        Button(searchFrame,text="Submit",bg="#6B081F",fg="white",command=lambda:addFoodSQl(self,master)).pack(side="left")
+        Button(searchFrame,text="Submit",bg="#6B081F",fg="white",command=lambda:addFoodSQl(self,master,self.search.get())).pack(side="left")
         self.search = Entry(searchFrame,width=100)
         self.search.pack(pady=25,fill=tk.Y,expand=1,side="left")
         searchFrame.pack(fill=tk.X)
+        self.resultFrame = Frame(self,bg="gray")
         
         bar = ButtonBar(self,master)
         bar.pack(side="bottom",fill=tk.X)
         bar.addButton['state']='disable'
-        
-    def addFoodSQL(self,master):
-        chicken = Food(("Chicken",85,10,5,7))
-        master.Profile.addFood(chicken)
+
+    def addFoodSQL(self,master,food):
+        #chicken = Food(("Chicken",85,10,5,7))
+        #master.Profile.addFood(chicken)
+        master.establishCursor()
+        master.cursor.execute("SELECT * FROM nutrition.Food WHERE foodID LIKE \'" + food + "%\'")
+        results = master.cursor.fetchall()
+        self.initSearchFrame(master,results)
+    
+    def initSearchFrame(self,master,results):
+        for line in results:
+            Button(self.resultFrame,text=line[0]).pack()
 
 class Profile():
     def __init__(self,user):
