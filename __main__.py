@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import *
 from PIL import ImageTk, Image
+import threading
 import mysql.connector
 from matplotlib.figure import Figure 
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
@@ -23,7 +24,8 @@ class NutritionApp(Tk):
     def switch_frame(self, frameClass):
         newFrame = frameClass(self)
         if self.frame is not None:
-            self.frame.destroy()
+            self.frame.pack_forget()
+            x = threading.Thread(target=self.frame.destroy, args=())
         self.frame = newFrame
         self.frame.pack(fill=BOTH, expand=True)
         
@@ -212,6 +214,7 @@ class frameFoodAdd(Frame):
     def __init__(self,master):
         Frame.__init__(self,master)
         self.buttonList = []
+        self.figMacroPlot = None
         #top part -- search bar
         searchFrame = Frame(self,bg="gray")
         Button(searchFrame,text="Submit",bg="#6B081F",fg="white",command=lambda:self.addFoodSQL(master,self.search.get())).pack(side="left")
@@ -232,8 +235,6 @@ class frameFoodAdd(Frame):
         Label(self.displayFrame,text="Nutrition:").pack(fill=tk.X)
 
     def addFoodSQL(self,master,food):
-        #chicken = Food(("Chicken",85,10,5,7))
-        #master.Profile.addFood(chicken)
         master.establishCursor()
         master.cursor.execute("SELECT * FROM nutrition.Food WHERE name LIKE \'%" + food + "%\'")
         results = master.cursor.fetchall()
@@ -241,14 +242,34 @@ class frameFoodAdd(Frame):
     
     def initSearchFrame(self,master,results):
         for line in results:
-            self.buttonList.append(Button(self.resultFrame,text=line[0].title(),anchor='w',command=lambda food=line:self.clickFood(Food(food))))
+            self.buttonList.append(Button(self.resultFrame,text=line[0].title(),anchor='w',command=lambda food=line:self.clickFood(Food(food),master)))
         for button in self.buttonList:
             button.pack(fill=tk.X)
         
-    def clickFood(self,food):
-        #print("Food Name: " + str(self.foodDict[food].getFoodID()) + "\nFood Calories: " + str(self.foodDict[food].getCal()))
-        print(food.getFoodID())
+    def clickFood(self,food,master):
+        self.initMacroBar(food,master,self.displayFrame)
+        Button(self.displayFrame,text="Add Food",command=lambda:self.addFood(food,master)).pack()
+
+    def addFood(self,food,master):
+        master.Profile.addFood(food)
     
+    def initMacroBar(self,food,master,frame):
+        #Figure containing plot
+        FF6666=(255,102,102,)
+        FFA152=(.255,.160,.82,)
+        FFE666=(.255,.230,.102)
+        self.figMacroPlot = Figure(figsize=(3,4))
+        axe = self.figMacroPlot.add_subplot()
+        axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],color=['#FF6666','#FFA152','#FFE666'],width=.6,bottom=0,label="Today's Macros")
+        axe.bar(["Protein","Carbs","Fats"],[food.getProtein(),food.getCarb(),food.getFat()],bottom=[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],width=.6,label="Food's Macros")
+        axe.set_title("Macronutrients",fontsize=12,loc='left')
+        axe.set_ylabel('Nutrients Consumed (g)',fontsize=8)
+        axe.set_ylim(bottom=0)
+        axe.legend()
+        self.figMacroPlot.set_tight_layout(True)
+        canvasMacro = FigureCanvasTkAgg(self.figMacroPlot, master=self.displayFrame)
+        canvasMacro.draw()
+        canvasMacro.get_tk_widget().pack(side='right')
 
 class Profile():
     def __init__(self,user):
