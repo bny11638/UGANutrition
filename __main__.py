@@ -211,28 +211,40 @@ class frameHome(Frame):
 class frameFoodAdd(Frame):
     def __init__(self,master):
         Frame.__init__(self,master)
+        self.buttonList = []
         searchFrame = Frame(self,bg="gray")
-        Button(searchFrame,text="Submit",bg="#6B081F",fg="white",command=lambda:addFoodSQl(self,master,self.search.get())).pack(side="left")
+        Button(searchFrame,text="Submit",bg="#6B081F",fg="white",command=lambda:self.addFoodSQL(master,self.search.get())).pack(side="left")
         self.search = Entry(searchFrame,width=100)
         self.search.pack(pady=25,fill=tk.Y,expand=1,side="left")
         searchFrame.pack(fill=tk.X)
-        self.resultFrame = Frame(self,bg="gray")
-        
         bar = ButtonBar(self,master)
         bar.pack(side="bottom",fill=tk.X)
         bar.addButton['state']='disable'
+        self.resultFrame = Frame(self,bg="gray")
+        Label(self.resultFrame,text="Results").pack(fill=tk.X)
+        self.resultFrame.pack(side='left',fill=BOTH,expand=1,padx=(0,5))
+        self.displayFrame = Frame(self,bg="gray")
+        self.displayFrame.pack(side='left',fill=BOTH,expand=1,padx=(0,5))
+        Label(self.displayFrame,text="Nutrition:").pack(fill=tk.X)
 
     def addFoodSQL(self,master,food):
         #chicken = Food(("Chicken",85,10,5,7))
         #master.Profile.addFood(chicken)
         master.establishCursor()
-        master.cursor.execute("SELECT * FROM nutrition.Food WHERE foodID LIKE \'" + food + "%\'")
+        master.cursor.execute("SELECT * FROM nutrition.Food WHERE name LIKE \'" + food + "%\'")
         results = master.cursor.fetchall()
         self.initSearchFrame(master,results)
     
     def initSearchFrame(self,master,results):
         for line in results:
-            Button(self.resultFrame,text=line[0]).pack()
+            self.buttonList.append(Button(self.resultFrame,text=line[0].title(),anchor='w',command=lambda food=line:self.clickFood(Food(food))))
+        for button in self.buttonList:
+            button.pack(fill=tk.X)
+        
+    def clickFood(self,food):
+        #print("Food Name: " + str(self.foodDict[food].getFoodID()) + "\nFood Calories: " + str(self.foodDict[food].getCal()))
+        print(food.getFoodID())
+    
 
 class Profile():
     def __init__(self,user):
