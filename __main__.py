@@ -212,17 +212,21 @@ class frameFoodAdd(Frame):
     def __init__(self,master):
         Frame.__init__(self,master)
         self.buttonList = []
+        #top part -- search bar
         searchFrame = Frame(self,bg="gray")
         Button(searchFrame,text="Submit",bg="#6B081F",fg="white",command=lambda:self.addFoodSQL(master,self.search.get())).pack(side="left")
         self.search = Entry(searchFrame,width=100)
         self.search.pack(pady=25,fill=tk.Y,expand=1,side="left")
         searchFrame.pack(fill=tk.X)
+        #bottom part -- bottom bar
         bar = ButtonBar(self,master)
         bar.pack(side="bottom",fill=tk.X)
         bar.addButton['state']='disable'
+        #left hand result search barh
         self.resultFrame = Frame(self,bg="gray")
         Label(self.resultFrame,text="Results").pack(fill=tk.X)
         self.resultFrame.pack(side='left',fill=BOTH,expand=1,padx=(0,5))
+        #right hand display plots
         self.displayFrame = Frame(self,bg="gray")
         self.displayFrame.pack(side='left',fill=BOTH,expand=1,padx=(0,5))
         Label(self.displayFrame,text="Nutrition:").pack(fill=tk.X)
@@ -231,7 +235,7 @@ class frameFoodAdd(Frame):
         #chicken = Food(("Chicken",85,10,5,7))
         #master.Profile.addFood(chicken)
         master.establishCursor()
-        master.cursor.execute("SELECT * FROM nutrition.Food WHERE name LIKE \'" + food + "%\'")
+        master.cursor.execute("SELECT * FROM nutrition.Food WHERE name LIKE \'%" + food + "%\'")
         results = master.cursor.fetchall()
         self.initSearchFrame(master,results)
     
