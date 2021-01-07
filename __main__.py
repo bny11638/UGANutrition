@@ -154,17 +154,21 @@ class frameHome(Frame):
         if master.Profile is None:
             master.Profile = Profile("Guest")
             guestAcc = True
-        Frame.__init__(self,master,bg="white")
-        ButtonBar(self,master).pack(side="bottom",fill=tk.X)
+        Frame.__init__(self,master,bg="#6B081F")
         Label(self,text=master.Profile.user + "'s Profile:",font=("Calibri",18),padx=5,pady=5,anchor='w').pack(side="top",expand=False,fill=tk.X)
-        macroFrame = Frame(self,bg="white")
+        userFrame = Frame(self,bg="gray")
+        userFrame.pack(side="top",expand=1,fill=BOTH)
+        bar = ButtonBar(self,master)
+        bar.pack(side="bottom",fill=tk.X)
+        bar.homeButton['state']='disable'
         calorieFrame = Frame(self,bg="white")
-        self.initMacroPlot(macroFrame,master)
+        self.initMacroPlot(calorieFrame,master)
         self.initCalPlot(calorieFrame,master)
         self.initLinePlot(calorieFrame,master)
-        macroFrame.pack(side="right",expand=1)
-        calorieFrame.pack(side="right",expand=1)
+        calorieFrame.pack(side='bottom',expand=0,fill=tk.X)
         
+
+
     #Creates macro plot
     def initMacroPlot(self,frame,master):
         #Figure containing plot
@@ -180,7 +184,7 @@ class frameHome(Frame):
         figMacroPlot.set_tight_layout(True)
         canvasMacro = FigureCanvasTkAgg(figMacroPlot, master=frame)
         canvasMacro.draw()
-        canvasMacro.get_tk_widget().pack()
+        canvasMacro.get_tk_widget().pack(side='right')
     #Create Calorie Bar
     def initCalPlot(self,frame,master):
         #Figure containing cal
@@ -211,8 +215,9 @@ class frameFoodAdd(Frame):
     def __init__(self,master):
         Frame.__init__(self,master)
         Button(self,text="add chicken",command=lambda:self.addFoodSQL(master)).pack()
-        Button(self,text="Back",command=lambda:master.switch_frame(frameHome)).pack()
-
+        bar = ButtonBar(self,master)
+        bar.pack(side="bottom",fill=tk.X)
+        bar.addButton['state']='disable'
     def addFoodSQL(self,master):
         chicken = Food(("Chicken",85,10,5,7))
         master.Profile.addFood(chicken)
@@ -228,7 +233,6 @@ class Profile():
         count = 0
         for x in self.foodList:
             count = count + x.getProtein()
-        print(count)
         return count
     def getTotCarb(self):
         count = 0
@@ -266,15 +270,15 @@ class Food():
 
 class ButtonBar(Frame):
     def __init__(self,frame,master):
-        Frame.__init__(self,frame)
-        addButton = Button(self,text="Add Food",fg="white",bg="gray",command=lambda:master.switch_frame(frameFoodAdd))
-        addButton.pack(side="right",expand=True,fill=BOTH)
-        homeButton= Button(self,text="Home",height=3,bg="gray",fg="white")
-        homeButton.pack(side="left",expand=True,fill=tk.X)
-        goals = Button(self,text="Edit Goals",height=3,bg="gray",fg="white")
-        goals.pack(side="left",expand=True,fill=tk.X)
-        diaryButton = Button(self,text="Food Diary",height=3,bg="gray",fg="white")
-        diaryButton.pack(side="left",expand=True,fill=tk.X)
+        Frame.__init__(self,frame,bg="#6B081F")
+        self.addButton = Button(self,text="Add Food",fg="white",bg="gray",height=3,command=lambda:master.switch_frame(frameFoodAdd))
+        self.addButton.pack(side="right",expand=True,fill=tk.X)
+        self.homeButton= Button(self,text="Home",height=3,bg="gray",fg="white",command=lambda:master.switch_frame(frameHome))
+        self.homeButton.pack(side="left",expand=True,fill=tk.X)
+        self.goals = Button(self,text="Edit Goals",height=3,bg="gray",fg="white")
+        self.goals.pack(side="left",expand=True,fill=tk.X)
+        self.diaryButton = Button(self,text="Food Diary",height=3,bg="gray",fg="white")
+        self.diaryButton.pack(side="left",expand=True,fill=tk.X)
         #buttonBar.pack(side="bottom",fill=tk.X)
     
     
