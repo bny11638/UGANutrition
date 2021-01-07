@@ -155,15 +155,8 @@ class frameHome(Frame):
             master.Profile = Profile("Guest")
             guestAcc = True
         Frame.__init__(self,master,bg="white")
-        buttonBar = Frame(self)
-        addButton = Button(buttonBar,text="Add Food",fg="white",bg="gray",command=lambda:master.switch_frame(frameFoodAdd)).pack(side="right",expand=True,fill=BOTH)
-        Button(buttonBar,text="Home",height=3,bg="gray",fg="white").pack(side="left",expand=True,fill=tk.X)
-        goals = Button(buttonBar,text="Goals",height=3,bg="gray",fg="white")
-        goals.pack(side="left",expand=True,fill=tk.X)
-        Button(buttonBar,text="Food Log",height=3,bg="gray",fg="white").pack(side="left",expand=True,fill=tk.X)
-        buttonBar.pack(side="bottom",fill=tk.X)
+        ButtonBar(self,master).pack(side="bottom",fill=tk.X)
         Label(self,text=master.Profile.user + "'s Profile:",font=("Calibri",18),padx=5,pady=5,anchor='w').pack(side="top",expand=False,fill=tk.X)
-        
         macroFrame = Frame(self,bg="white")
         calorieFrame = Frame(self,bg="white")
         self.initMacroPlot(macroFrame,master)
@@ -172,17 +165,15 @@ class frameHome(Frame):
         macroFrame.pack(side="right",expand=1)
         calorieFrame.pack(side="right",expand=1)
         
-        
-        
-        #if guestAcc:        
-        goals["state"] = DISABLED
-        
     #Creates macro plot
     def initMacroPlot(self,frame,master):
         #Figure containing plot
+        FF6666=(255,102,102,)
+        FFA152=(.255,.160,.82,)
+        FFE666=(.255,.230,.102)
         figMacroPlot = Figure(figsize=(3,4))
         axe = figMacroPlot.add_subplot()
-        axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],width=.6,bottom=0)
+        axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],color=['#FF6666','#FFA152','#FFE666'],width=.6,bottom=0)
         axe.set_title("Macronutrients",fontsize=12,loc='left')
         axe.set_ylabel('Nutrients Consumed (g)',fontsize=8)
         axe.set_ylim(bottom=0)
@@ -195,7 +186,7 @@ class frameHome(Frame):
         #Figure containing cal
         figCalPlot = Figure(figsize=(6,1.5))
         axe = figCalPlot.add_subplot()
-        axe.barh([""],[master.Profile.getTotCal()] ,height = .005, color = '#6B081F')
+        axe.barh([""],[master.Profile.getTotCal()] ,height = .005, color = '#52BE80')
         axe.set_ylabel("Calories (kj)")
         axe.axvline(x=master.Profile.calGoal)
         axe.set_title("Calories Consumed")
@@ -214,10 +205,6 @@ class frameHome(Frame):
         canvas = FigureCanvasTkAgg(fig, master=frame)
         canvas.draw()
         canvas.get_tk_widget().pack(fill=tk.X)
-
-        
-
-        
 
 
 class frameFoodAdd(Frame):
@@ -276,6 +263,19 @@ class Food():
         return self.name
     def getCal(self):
         return self.cal
+
+class ButtonBar(Frame):
+    def __init__(self,frame,master):
+        Frame.__init__(self,frame)
+        addButton = Button(self,text="Add Food",fg="white",bg="gray",command=lambda:master.switch_frame(frameFoodAdd))
+        addButton.pack(side="right",expand=True,fill=BOTH)
+        homeButton= Button(self,text="Home",height=3,bg="gray",fg="white")
+        homeButton.pack(side="left",expand=True,fill=tk.X)
+        goals = Button(self,text="Edit Goals",height=3,bg="gray",fg="white")
+        goals.pack(side="left",expand=True,fill=tk.X)
+        diaryButton = Button(self,text="Food Diary",height=3,bg="gray",fg="white")
+        diaryButton.pack(side="left",expand=True,fill=tk.X)
+        #buttonBar.pack(side="bottom",fill=tk.X)
     
     
  #:) starting the app
