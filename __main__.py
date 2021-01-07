@@ -165,10 +165,7 @@ class frameHome(Frame):
         self.initMacroPlot(calorieFrame,master)
         self.initCalPlot(calorieFrame,master)
         self.initLinePlot(calorieFrame,master)
-        calorieFrame.pack(side='bottom',expand=0,fill=tk.X)
-        
-
-
+        calorieFrame.pack(side='bottom',expand=0,fill=tk.X,padx=5)
     #Creates macro plot
     def initMacroPlot(self,frame,master):
         #Figure containing plot
@@ -214,10 +211,16 @@ class frameHome(Frame):
 class frameFoodAdd(Frame):
     def __init__(self,master):
         Frame.__init__(self,master)
-        Button(self,text="add chicken",command=lambda:self.addFoodSQL(master)).pack()
+        searchFrame = Frame(self,bg="gray")
+        Button(searchFrame,text="Submit",bg="#6B081F",fg="white",command=lambda:addFoodSQl(self,master)).pack(side="left")
+        self.search = Entry(searchFrame,width=100)
+        self.search.pack(pady=25,fill=tk.Y,expand=1,side="left")
+        searchFrame.pack(fill=tk.X)
+        
         bar = ButtonBar(self,master)
         bar.pack(side="bottom",fill=tk.X)
         bar.addButton['state']='disable'
+        
     def addFoodSQL(self,master):
         chicken = Food(("Chicken",85,10,5,7))
         master.Profile.addFood(chicken)
