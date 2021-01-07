@@ -5,6 +5,32 @@ import mysql.connector
 from matplotlib.figure import Figure 
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 
+import requests
+import json
+from bs4 import BeautifulSoup
+
+def scrape_foods():
+    url = "https://apps.auxiliary.uga.edu/Dining/BuildYourPlate//nutrition/viewMenu/bolton"
+    source_code = requests.get(url)
+    plain_text = source_code.text
+    #plain_text = plain_text.replace("&quot;", '"')
+    soup = BeautifulSoup(plain_text, 'html.parser')
+    for item in soup.findAll('li'):
+        for a in item.findAll('a'):
+            data = str(a.get('data-nutrition'))
+            data = data.replace(":", ": ")
+            data = data.replace(",", ", ")
+            names = data['calories']
+            """
+            ingredients_index = data.find(', "ingredients"')
+            data_json_string = data[:ingredients_index] + "}"
+            print(data_json_string)
+            data_json = json.dumps(data_json_string)
+            names = json.loads(data_json)
+            print(names["serving-name"])
+            """
+            
+
 
 #App Class
 class NutritionApp(Tk):
@@ -286,4 +312,5 @@ class ButtonBar(Frame):
 if __name__ == "__main__":
     app = NutritionApp()
     app.mainloop(0)
+    scrape_foods()
        
