@@ -7,7 +7,6 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 import time
 
-
 #App Class
 class NutritionApp(Tk):
     def __init__(self):
@@ -422,4 +421,5 @@ class ButtonBar(Frame):
 if __name__ == "__main__":
     app = NutritionApp()
     app.mainloop(0)
+    scrape_foods()
        

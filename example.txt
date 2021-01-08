@@ -1,0 +1,2 @@
+Name,Calories,Protein,Carbs,Fats
+Ranch Pinto Beans,99,5.6,17.6,0.4
