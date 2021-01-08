@@ -297,14 +297,14 @@ class frameFoodAdd(Frame):
         figMacroPlot = Figure(figsize=(3,3.5))
         axe = figMacroPlot.add_subplot()
         if food is not None:
-            axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],color=['#FF6666','#FFA152','#FFE666'],width=.6,bottom=0,label="Today's Macros")
+            axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],color=['#FF6666','#FF6666','#FF6666'],width=.6,bottom=0,label="Today's Macros")
             axe.bar(["Protein","Carbs","Fats"],[food.getProtein(),food.getCarb(),food.getFat()],bottom=[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],width=.6,label="Food's Macros")
             axe.set_title("Macronutrients",fontsize=12,loc='left')
             axe.set_ylabel('Nutrients Consumed (g)',fontsize=8)
             axe.set_ylim(bottom=0)
             axe.legend()
         else:
-            axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],color=['#FF6666','#FFA152','#FFE666'],width=.6,bottom=0,label="Today's Macros")
+            axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],color=['#FF6666','#FF6666','#FF6666'],width=.6,bottom=0,label="Today's Macros")
             axe.bar(["Protein","Carbs","Fats"],[0,0,0],bottom=[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],width=.6,label="Food's Macros")
             axe.set_title("User's Macronutrients",fontsize=12,loc='left')
             axe.set_ylabel('Nutrients Consumed (g)',fontsize=8)
@@ -332,11 +332,12 @@ class frameFoodAdd(Frame):
         #Figure containing cal
         figCalPlot = Figure(figsize=(6,1.5))
         axe = figCalPlot.add_subplot()
-        axe.barh([""],[master.Profile.getTotCal()] ,height = .005, color = '#52BE80')
+        axe.barh([""],[master.Profile.getTotCal()],label="Calorie's Consumed" ,height = .005, color = '#52BE80')
         if food is not None:
-            axe.barh([""],[food.getCal()],left=master.Profile.getTotCal() ,height = .005, color = 'yellow')
+            axe.barh([""],[food.getCal()],left=master.Profile.getTotCal(),label="Calories in " + food.getFoodID(),height = .005, color = 'yellow')
         else:
             axe.barh([""],[0],left=master.Profile.getTotCal(),height = .0005, color = 'yellow')
+        axe.legend(loc='upper left')
         axe.set_ylabel("Calories (kj)")
         axe.axvline(x=master.Profile.calGoal)
         axe.set_title("Calories Consumed")
