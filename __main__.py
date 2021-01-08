@@ -5,6 +5,7 @@ import threading
 import mysql.connector
 from matplotlib.figure import Figure 
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
+import time
 
 
 #App Class
@@ -158,8 +159,15 @@ class frameHome(Frame):
             guestAcc = True
         Frame.__init__(self,master,bg="#6B081F")
         Label(self,text=master.Profile.user + "'s Profile:",font=("Calibri",18),padx=5,pady=5,anchor='w').pack(side="top",expand=False,fill=tk.X)
+        #matthews frame to design and develop
         userFrame = Frame(self,bg="gray")
         userFrame.pack(side="top",expand=1,fill=BOTH)
+        #Put your code in this blank spot
+
+
+
+
+        ####
         bar = ButtonBar(self,master)
         bar.pack(side="bottom",fill=tk.X)
         bar.homeButton['state']='disable'
@@ -214,7 +222,9 @@ class frameFoodAdd(Frame):
     def __init__(self,master):
         Frame.__init__(self,master)
         self.buttonList = []
-        self.figMacroPlot = None
+        self.figMacroCanvas = None
+        self.figPieCanvas = None
+        self.figCalCanvas = None
         #top part -- search bar
         searchFrame = Frame(self,bg="gray")
         Button(searchFrame,text="Submit",bg="#6B081F",fg="white",command=lambda:self.addFoodSQL(master,self.search.get())).pack(side="left")
@@ -227,49 +237,122 @@ class frameFoodAdd(Frame):
         bar.addButton['state']='disable'
         #left hand result search barh
         self.resultFrame = Frame(self,bg="gray")
-        Label(self.resultFrame,text="Results").pack(fill=tk.X)
+        Label(self.resultFrame,text="Results",width=5).pack(fill=tk.X)
         self.resultFrame.pack(side='left',fill=BOTH,expand=1,padx=(0,5))
         #right hand display plots
         self.displayFrame = Frame(self,bg="gray")
-        self.displayFrame.pack(side='left',fill=BOTH,expand=1,padx=(0,5))
-        Label(self.displayFrame,text="Nutrition:").pack(fill=tk.X)
+        self.displayFrame.pack(side='left',fill=BOTH,expand=1)
+        self.topFrame = Frame(self.displayFrame,bg="gray")
+        self.topFrame.pack(fill=BOTH,expand=1)
+        Label(self.topFrame,text="Nutrition:").pack(fill=BOTH)
+        ###DESIGN SPOT FOR MATTHEW###
+
+
+
+        ###
+        self.bottomFrame = Frame(self.displayFrame,bg="gray")
+        self.bottomFrame.pack(fill=BOTH,expand=1)
+        self.initCalPlot(None,master,self.bottomFrame)
+        self.initMacroBar(None,master,self.bottomFrame)
+        self.initPieGraph(None,master,self.bottomFrame)
+        
 
     def addFoodSQL(self,master,food):
         master.establishCursor()
         master.cursor.execute("SELECT * FROM nutrition.Food WHERE name LIKE \'%" + food + "%\'")
         results = master.cursor.fetchall()
         self.initSearchFrame(master,results)
-    
     def initSearchFrame(self,master,results):
         for line in results:
-            self.buttonList.append(Button(self.resultFrame,text=line[0].title(),anchor='w',command=lambda food=line:self.clickFood(Food(food),master)))
+            self.buttonList.append(Button(self.resultFrame,text=line[0].title(),anchor='w',width=4,command=lambda food=line:self.clickFood(Food(food),master)))
         for button in self.buttonList:
             button.pack(fill=tk.X)
-        
     def clickFood(self,food,master):
-        self.initMacroBar(food,master,self.displayFrame)
-        Button(self.displayFrame,text="Add Food",command=lambda:self.addFood(food,master)).pack()
-
+        self.refreshGraphs(food,master)
+        try:
+            self.topFrame.winfo_children()[1].destroy()
+        except:
+            Button(self.topFrame,text="Add Food",command=lambda:self.addFood(food,master)).pack()
+        else:
+            Button(self.topFrame,text="Add Food",command=lambda:self.addFood(food,master)).pack()
+        self.topFrame.winfo_children()[1].destroy()
+        Button(self.topFrame,text="Add Food",command=lambda:self.addFood(food,master)).pack()
     def addFood(self,food,master):
         master.Profile.addFood(food)
-    
+        self.topFrame.winfo_children()[1].destroy()
+        self.clearGraph(master)
+    def clearGraph(self,master):
+        self.clear(self.figMacroCanvas)
+        self.clear(self.figPieCanvas)
+        self.clear(self.figCalCanvas)
+        self.initCalPlot(None,master,self.bottomFrame)
+        self.initMacroBar(None,master,self.bottomFrame)
+        self.initPieGraph(None,master,self.bottomFrame)
+        
     def initMacroBar(self,food,master,frame):
         #Figure containing plot
         FF6666=(255,102,102,)
         FFA152=(.255,.160,.82,)
         FFE666=(.255,.230,.102)
-        self.figMacroPlot = Figure(figsize=(3,4))
-        axe = self.figMacroPlot.add_subplot()
-        axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],color=['#FF6666','#FFA152','#FFE666'],width=.6,bottom=0,label="Today's Macros")
-        axe.bar(["Protein","Carbs","Fats"],[food.getProtein(),food.getCarb(),food.getFat()],bottom=[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],width=.6,label="Food's Macros")
-        axe.set_title("Macronutrients",fontsize=12,loc='left')
-        axe.set_ylabel('Nutrients Consumed (g)',fontsize=8)
-        axe.set_ylim(bottom=0)
-        axe.legend()
-        self.figMacroPlot.set_tight_layout(True)
-        canvasMacro = FigureCanvasTkAgg(self.figMacroPlot, master=self.displayFrame)
-        canvasMacro.draw()
-        canvasMacro.get_tk_widget().pack(side='right')
+        figMacroPlot = Figure(figsize=(3,3.5))
+        axe = figMacroPlot.add_subplot()
+        if food is not None:
+            axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],color=['#FF6666','#FFA152','#FFE666'],width=.6,bottom=0,label="Today's Macros")
+            axe.bar(["Protein","Carbs","Fats"],[food.getProtein(),food.getCarb(),food.getFat()],bottom=[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],width=.6,label="Food's Macros")
+            axe.set_title("Macronutrients",fontsize=12,loc='left')
+            axe.set_ylabel('Nutrients Consumed (g)',fontsize=8)
+            axe.set_ylim(bottom=0)
+            axe.legend()
+        else:
+            axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],color=['#FF6666','#FFA152','#FFE666'],width=.6,bottom=0,label="Today's Macros")
+            axe.bar(["Protein","Carbs","Fats"],[0,0,0],bottom=[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],width=.6,label="Food's Macros")
+            axe.set_title("Macronutrients",fontsize=12,loc='left')
+            axe.set_ylabel('Nutrients Consumed (g)',fontsize=8)
+            axe.set_ylim(bottom=0)
+            axe.legend()
+        figMacroPlot.set_tight_layout(True)
+        self.figMacroCanvas = FigureCanvasTkAgg(figMacroPlot, master=frame)
+        self.figMacroCanvas.draw()
+        self.figMacroCanvas.get_tk_widget().pack(side="right",fill=BOTH,expand=1)
+    def initPieGraph(self,food,master,frame):
+        figPieGraph = Figure(figsize=(3,3.5))
+        axe = figPieGraph.add_subplot()
+        if food is not None:
+            axe.pie([food.getProtein(),food.getCarb(),food.getFat()])
+        else:
+            axe.pie([100],labels=["No Food Selected"])
+        figPieGraph.set_tight_layout(True)
+        self.figPieCanvas = FigureCanvasTkAgg(figPieGraph, master=frame)
+        self.figPieCanvas.draw()
+        self.figPieCanvas.get_tk_widget().pack(side="right",fill=BOTH,expand=1)
+    def initCalPlot(self,food,master,frame):
+        #Figure containing cal
+        figCalPlot = Figure(figsize=(6,1.5))
+        axe = figCalPlot.add_subplot()
+        axe.barh([""],[master.Profile.getTotCal()] ,height = .005, color = '#52BE80')
+        if food is not None:
+            axe.barh([""],[food.getCal()],left=master.Profile.getTotCal() ,height = .005, color = 'yellow')
+        else:
+            axe.barh([""],[0],left=master.Profile.getTotCal(),height = .0005, color = 'yellow')
+        axe.set_ylabel("Calories (kj)")
+        axe.axvline(x=master.Profile.calGoal)
+        axe.set_title("Calories Consumed")
+        axe.set_xlim(0)
+        figCalPlot.set_tight_layout(True)
+        self.figCalCanvas = FigureCanvasTkAgg(figCalPlot, master=frame)
+        self.figCalCanvas.draw()
+        self.figCalCanvas.get_tk_widget().pack(fill=BOTH)
+    def refreshGraphs(self,food,master):
+        self.clear(self.figMacroCanvas)
+        self.clear(self.figPieCanvas)
+        self.clear(self.figCalCanvas)
+        self.initCalPlot(food,master,self.bottomFrame)
+        self.initMacroBar(food,master,self.bottomFrame)
+        self.initPieGraph(food,master,self.bottomFrame)
+    def clear(self,canvas):
+        for item in canvas.get_tk_widget().find_all():
+            canvas.get_tk_widget().pack_forget()
+            canvas.get_tk_widget().delete(item)
 
 class Profile():
     def __init__(self,user):
