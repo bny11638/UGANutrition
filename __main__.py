@@ -306,7 +306,7 @@ class frameFoodAdd(Frame):
         else:
             axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],color=['#FF6666','#FFA152','#FFE666'],width=.6,bottom=0,label="Today's Macros")
             axe.bar(["Protein","Carbs","Fats"],[0,0,0],bottom=[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],width=.6,label="Food's Macros")
-            axe.set_title("Macronutrients",fontsize=12,loc='left')
+            axe.set_title("User's Macronutrients",fontsize=12,loc='left')
             axe.set_ylabel('Nutrients Consumed (g)',fontsize=8)
             axe.set_ylim(bottom=0)
             axe.legend()
@@ -318,9 +318,12 @@ class frameFoodAdd(Frame):
         figPieGraph = Figure(figsize=(3,3.5))
         axe = figPieGraph.add_subplot()
         if food is not None:
-            axe.pie([food.getProtein(),food.getCarb(),food.getFat()])
+            axe.pie([food.getProtein(),food.getCarb(),food.getFat()],labels=["Proteins","Carbs","Fats"],radius=.75)
+            axe.set_title("Macronutrients of " + food.getFoodID())
+            axe.legend()
         else:
             axe.pie([100],labels=["No Food Selected"])
+            axe.set_title("Macronutrients Pie Graph")
         figPieGraph.set_tight_layout(True)
         self.figPieCanvas = FigureCanvasTkAgg(figPieGraph, master=frame)
         self.figPieCanvas.draw()
