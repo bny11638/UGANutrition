@@ -32,11 +32,10 @@ class NutritionApp(Tk):
     #Sets up DB Stuff
     def establishCursor(self):
         self.connection = mysql.connector.connect (
-        host="localHost",
-        user="root",
-        password="insert_password",
-        database="nutrition",
-        auth_plugin='mysql_native_password'
+        host="35.224.143.155",
+        user="guest",
+        password="password",
+        database="nutrition_app",
         )
         self.cursor = self.connection.cursor()
     def closeCursor(self):
@@ -91,7 +90,7 @@ class frameLogin(Frame):
         password = password.get()
         #Establishing a cursor to execute query
         master.establishCursor()
-        master.cursor.execute('SELECT * from nutrition.profiles where user = %s',(username,))
+        master.cursor.execute('SELECT * from profiles where user = %s',(username,))
         profile = master.cursor.fetchone()
         if profile is None:
             print("Invalid Username")
@@ -259,7 +258,7 @@ class frameFoodAdd(Frame):
 
     def addFoodSQL(self,master,food):
         master.establishCursor()
-        master.cursor.execute("SELECT * FROM nutrition.Food WHERE name LIKE \'%" + food + "%\'")
+        master.cursor.execute("SELECT * FROM food_table WHERE name LIKE \'%" + food + "%\'")
         results = master.cursor.fetchall()
         self.clearSearchFrame(master)
         self.initSearchFrame(master,results)

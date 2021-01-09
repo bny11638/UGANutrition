@@ -7,12 +7,13 @@ import mysql.connector
 import csv
 from csv import reader
 
+password = input()
+
 connection = mysql.connector.connect (
-        host="localHost",
+        host="35.224.143.155",
         user="root",
-        password="insert_password",
-        database="nutrition",
-        auth_plugin='mysql_native_password'
+        password=password,
+        database="nutrition_app",
 )
 
 diningHallList = ["bolton","snelling","the-niche","village-summit","oglethorpe"]
@@ -39,7 +40,7 @@ def loadFood(diningHall):
                 fat = re.sub("g","",names['total-fat'])
                 val = [food_id,calories,fat,carb,protein]
                 print(val)
-                cursor.execute('INSERT INTO nutrition.Food VALUES (%s,%s,%s,%s,%s)',val)
+                cursor.execute('INSERT IGNORE INTO food_table VALUES (%s,%s,%s,%s,%s)',val)
                 cursor.close() #NEED THIS TO CLEAR CURSOR
                 connection.commit() #NEED THIS LINE TO SAVE DATABASE
                 #fileHandle.write(food_id + "," + names['calories'] + "," + protein + "," + carb + "," + fat + "\n")
