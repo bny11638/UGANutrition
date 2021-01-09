@@ -421,5 +421,3 @@ class ButtonBar(Frame):
 if __name__ == "__main__":
     app = NutritionApp()
     app.mainloop(0)
-    scrape_foods()
-       
