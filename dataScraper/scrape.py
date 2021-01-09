@@ -37,7 +37,7 @@ def loadFood(diningHall):
                 protein = re.sub("g","",names['protein'])
                 carb = re.sub("g","",names['total-carb'])
                 fat = re.sub("g","",names['total-fat'])
-                val = [food_id,calories,protein,carb,fat]
+                val = [food_id,calories,fat,carb,protein]
                 print(val)
                 cursor.execute('INSERT INTO nutrition.Food VALUES (%s,%s,%s,%s,%s)',val)
                 cursor.close() #NEED THIS TO CLEAR CURSOR

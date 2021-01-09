@@ -325,9 +325,14 @@ class frameFoodAdd(Frame):
         figPieGraph = Figure(figsize=(3,3.5))
         axe = figPieGraph.add_subplot()
         if food is not None:
-            axe.pie([food.getProtein(),food.getCarb(),food.getFat()],labels=["Proteins","Carbs","Fats"],radius=.75)
-            axe.set_title("Macronutrients of " + food.getFoodID())
-            axe.legend()
+            if food.getCal() == 0:
+                axe.pie([100],labels=["No Info Available"])
+                axe.set_title("Macronutrients Pie Graph")
+                axe.legend(loc="upper left")
+            else:
+                axe.pie([food.getProtein(),food.getCarb(),food.getFat()],labels=["Proteins","Carbs","Fats"],radius=.75)
+                axe.set_title("Macronutrients of " + food.getFoodID())
+                axe.legend()
         else:
             axe.pie([100],labels=["No Food Selected"])
             axe.set_title("Macronutrients Pie Graph")
