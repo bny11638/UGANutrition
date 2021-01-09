@@ -90,7 +90,7 @@ class frameLogin(Frame):
         password = password.get()
         #Establishing a cursor to execute query
         master.establishCursor()
-        master.cursor.execute('SELECT * from profiles where user = %s',(username,))
+        master.cursor.execute('SELECT * from user_data where username = %s',(username,))
         profile = master.cursor.fetchone()
         if profile is None:
             print("Invalid Username")
@@ -138,12 +138,12 @@ class frameRegister(Frame):
         if username != "" and password != "":
             #Establishing a cursor to execute query
             master.establishCursor()
-            master.cursor.execute('SELECT * from nutrition.profiles where user = %s',(username,))
+            master.cursor.execute('SELECT * from user_data where username = %s',(username,))
             profile = master.cursor.fetchone()
             if profile is None:
                 master.closeCursor()
                 master.establishCursor()
-                master.cursor.execute('INSERT INTO profiles VALUES (%s,%s)',(username,password))
+                master.cursor.execute('INSERT INTO user_data VALUES (%s,%s,%s)',(username,password,None))
                 master.closeCursor()
                 master.switch_frame(frameWelcome)
             else:
