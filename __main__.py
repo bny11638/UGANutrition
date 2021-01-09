@@ -183,7 +183,7 @@ class frameHome(Frame):
         FFE666=(.255,.230,.102)
         figMacroPlot = Figure(figsize=(3,4))
         axe = figMacroPlot.add_subplot()
-        axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],color=['#FF6666','#FFA152','#FFE666'],width=.6,bottom=0)
+        axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotProtein(),master.Profile.getTotCarb(),master.Profile.getTotFat()],color=['#FF6666','#FFA152','#FFE666'],width=.6,bottom=0)
         axe.set_title("Macronutrients",fontsize=12,loc='left')
         axe.set_ylabel('Nutrients Consumed (g)',fontsize=8)
         axe.set_ylim(bottom=0)
@@ -226,7 +226,8 @@ class frameFoodAdd(Frame):
         self.figCalCanvas = None
         #top part -- search bar
         searchFrame = Frame(self,bg="gray")
-        Button(searchFrame,text="Submit",bg="#6B081F",fg="white",command=lambda:self.addFoodSQL(master,self.search.get())).pack(side="left")
+        self.submitButton = Button(searchFrame,text="Submit",bg="#6B081F",fg="white",command=lambda:self.addFoodSQL(master,self.search.get()))
+        self.submitButton.pack(side="left")
         self.search = Entry(searchFrame,width=100)
         self.search.pack(pady=25,fill=tk.Y,expand=1,side="left")
         searchFrame.pack(fill=tk.X)
@@ -260,10 +261,17 @@ class frameFoodAdd(Frame):
         master.establishCursor()
         master.cursor.execute("SELECT * FROM nutrition.Food WHERE name LIKE \'%" + food + "%\'")
         results = master.cursor.fetchall()
+        self.clearSearchFrame(master)
         self.initSearchFrame(master,results)
+    def clearSearchFrame(self,master):
+        buttonCount = 0
+        for button in self.buttonList:
+            button.destroy()
+        self.buttonList.clear()
     def initSearchFrame(self,master,results):
         for line in results:
-            self.buttonList.append(Button(self.resultFrame,text=line[0].title(),anchor='w',width=4,command=lambda food=line:self.clickFood(Food(food),master)))
+            x = Button(self.resultFrame,text=line[0].title(),anchor='w',width=4,command=lambda food=line:self.clickFood(Food(food),master))
+            self.buttonList.append(x)
         for button in self.buttonList:
             button.pack(fill=tk.X)
     def clickFood(self,food,master):
@@ -271,9 +279,9 @@ class frameFoodAdd(Frame):
         try:
             self.topFrame.winfo_children()[1].destroy()
         except:
-            Button(self.topFrame,text="Add Food",command=lambda:self.addFood(food,master)).pack()
+            Button(self.topFrame,text="Add Food",command=lambda x=food:self.addFood(x,master)).pack()
         else:
-            Button(self.topFrame,text="Add Food",command=lambda:self.addFood(food,master)).pack()
+            Button(self.topFrame,text="Add Food",command=lambda x=food:self.addFood(x,master)).pack()
         self.topFrame.winfo_children()[1].destroy()
         Button(self.topFrame,text="Add Food",command=lambda:self.addFood(food,master)).pack()
     def addFood(self,food,master):
@@ -296,15 +304,15 @@ class frameFoodAdd(Frame):
         figMacroPlot = Figure(figsize=(3,3.5))
         axe = figMacroPlot.add_subplot()
         if food is not None:
-            axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],color=['#FF6666','#FF6666','#FF6666'],width=.6,bottom=0,label="Today's Macros")
-            axe.bar(["Protein","Carbs","Fats"],[food.getProtein(),food.getCarb(),food.getFat()],bottom=[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],width=.6,label="Food's Macros")
+            axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotProtein(),master.Profile.getTotCarb(),master.Profile.getTotFat()],color=['#FF6666','#FF6666','#FF6666'],width=.6,bottom=0,label="Today's Macros")
+            axe.bar(["Protein","Carbs","Fats"],[food.getProtein(),food.getCarb(),food.getFat()],bottom=[master.Profile.getTotProtein(),master.Profile.getTotCarb(),master.Profile.getTotFat()],width=.6,label="Food's Macros")
             axe.set_title("Macronutrients",fontsize=12,loc='left')
             axe.set_ylabel('Nutrients Consumed (g)',fontsize=8)
             axe.set_ylim(bottom=0)
             axe.legend()
         else:
-            axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],color=['#FF6666','#FF6666','#FF6666'],width=.6,bottom=0,label="Today's Macros")
-            axe.bar(["Protein","Carbs","Fats"],[0,0,0],bottom=[master.Profile.getTotCarb(),master.Profile.getTotFat(),master.Profile.getTotProtein()],width=.6,label="Food's Macros")
+            axe.bar(["Protein","Carbs","Fats"],[master.Profile.getTotProtein(),master.Profile.getTotCarb(),master.Profile.getTotFat()],color=['#FF6666','#FF6666','#FF6666'],width=.6,bottom=0,label="Today's Macros")
+            axe.bar(["Protein","Carbs","Fats"],[0,0,0],bottom=[master.Profile.getTotProtein(),master.Profile.getTotCarb(),master.Profile.getTotFat()],width=.6,label="Food's Macros")
             axe.set_title("User's Macronutrients",fontsize=12,loc='left')
             axe.set_ylabel('Nutrients Consumed (g)',fontsize=8)
             axe.set_ylim(bottom=0)
