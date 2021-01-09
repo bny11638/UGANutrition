@@ -37,7 +37,7 @@ class NutritionApp(Tk):
         password="password",
         database="nutrition_app",
         )
-        self.cursor = self.connection.cursor()
+        self.cursor = self.connection.cursor(buffered=True)
     def closeCursor(self):
         self.cursor.close()
         self.connection.commit()
@@ -100,7 +100,7 @@ class frameLogin(Frame):
             master.closeCursor()
         else:
             #need to replace with my profile frame
-            master.Profile = Profile(username)
+            master.Profile = Profile(username,master)
             master.switch_frame(frameHome)
             master.closeCursor()
 
@@ -133,7 +133,7 @@ class frameRegister(Frame):
         Button(self,text="Back",image=master.backButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameWelcome)).pack()
 
     def submitRegister(self,user,password,master):
-        username = user.get()
+        username = user.get().lower()
         password = password.get()
         if username != "" and password != "":
             #Establishing a cursor to execute query
@@ -143,7 +143,7 @@ class frameRegister(Frame):
             if profile is None:
                 master.closeCursor()
                 master.establishCursor()
-                master.cursor.execute('INSERT INTO user_data VALUES (%s,%s,%s)',(username,password,None))
+                master.cursor.execute('INSERT INTO user_data VALUES (%s,%s,%s,%s)',(username,password,None,None))
                 master.closeCursor()
                 master.switch_frame(frameWelcome)
             else:
@@ -153,10 +153,10 @@ class frameRegister(Frame):
 class frameHome(Frame):
     def __init__(self,master):
         if master.Profile is None:
-            master.Profile = Profile("Guest")
+            master.Profile = Profile("Guest",master)
             guestAcc = True
         Frame.__init__(self,master,bg="#6B081F")
-        Label(self,text=master.Profile.user + "'s Profile:",font=("Calibri",18),padx=5,pady=5,anchor='w').pack(side="top",expand=False,fill=tk.X)
+        Label(self,text=master.Profile.user.title() + "'s Profile:",font=("Calibri",18),padx=5,pady=5,anchor='w').pack(side="top",expand=False,fill=tk.X)
         #matthews frame to design and develop
         userFrame = Frame(self,bg="gray")
         userFrame.pack(side="top",expand=1,fill=BOTH)
@@ -197,7 +197,10 @@ class frameHome(Frame):
         axe = figCalPlot.add_subplot()
         axe.barh([""],[master.Profile.getTotCal()] ,height = .005, color = '#52BE80')
         axe.set_ylabel("Calories (kj)")
-        axe.axvline(x=master.Profile.calGoal)
+        if master.Profile.calGoal is not None:
+            axe.axvline(x=master.Profile.calGoal)
+        else:
+            axe.axvline(x=2000)
         axe.set_title("Calories Consumed")
         axe.set_xlim(0)
         figCalPlot.set_tight_layout(True)
@@ -350,7 +353,10 @@ class frameFoodAdd(Frame):
             axe.barh([""],[0],left=master.Profile.getTotCal(),height = .0005, color = 'yellow')
         axe.legend(loc='upper left')
         axe.set_ylabel("Calories (kj)")
-        axe.axvline(x=master.Profile.calGoal)
+        if master.Profile.calGoal is not None:
+            axe.axvline(x=master.Profile.calGoal)
+        else:
+            axe.axvline(x=2000)
         axe.set_title("Calories Consumed")
         axe.set_xlim(0)
         figCalPlot.set_tight_layout(True)
@@ -370,10 +376,21 @@ class frameFoodAdd(Frame):
             canvas.get_tk_widget().delete(item)
 
 class Profile():
-    def __init__(self,user):
-        self.user = user
+    def __init__(self,user,master):
+        self.user = user.lower()
         self.foodList = []
-        self.calGoal = 1750
+        self.calGoal = None
+        if user == 'Guest':
+            self.calGoal = 2000
+        else:
+            master.establishCursor()
+            master.cursor.execute('SELECT goal_calories from user_data where username = %s',(self.user,))
+            results = master.cursor.fetchone()
+            if results is not None:
+                self.calGoal = results[0]
+            else:
+                self.calGoal = 2000
+        print(self.calGoal)
     def addFood(self,Food):
         self.foodList.append(Food)
     def getTotProtein(self):
@@ -422,12 +439,31 @@ class ButtonBar(Frame):
         self.addButton.pack(side="right",expand=True,fill=tk.X)
         self.homeButton= Button(self,text="Home",height=3,bg="gray",fg="white",command=lambda:master.switch_frame(frameHome))
         self.homeButton.pack(side="left",expand=True,fill=tk.X)
-        self.goals = Button(self,text="Edit Goals",height=3,bg="gray",fg="white")
+        self.goals = Button(self,text="Edit Goals",height=3,bg="gray",fg="white",command=lambda:master.switch_frame(frameEditGoals))
         self.goals.pack(side="left",expand=True,fill=tk.X)
         self.diaryButton = Button(self,text="Food Diary",height=3,bg="gray",fg="white")
         self.diaryButton.pack(side="left",expand=True,fill=tk.X)
+        if master.Profile.user == 'Guest':
+            self.goals['state'] = 'disabled'
         #buttonBar.pack(side="bottom",fill=tk.X)
     
+class frameEditGoals(Frame):
+    def __init__(self,master):
+        Frame.__init__(self,master)
+        Message(self,text="Edit Calorie Goal").pack()
+        calorieGoal = Entry(self,width=30)
+        calorieGoal.pack()
+        calorieButton = Button(self,text="Save",command=lambda:self.setCalorieGoal(calorieGoal.get(),master)).pack()
+        bar = ButtonBar(self,master)
+        bar.pack(side='bottom',fill=tk.X)
+        bar.goals['state'] = 'disabled'
+
+    def setCalorieGoal(self,calorie,master):
+        master.Profile.calGoal = int(calorie)
+        master.establishCursor()
+        master.cursor.execute("UPDATE user_data \n SET goal_calories = %s \n WHERE username = %s",(master.Profile.calGoal,master.Profile.user))
+        master.closeCursor()
+
     
  #:) starting the app
 if __name__ == "__main__":
