@@ -244,7 +244,7 @@ class frameFoodAdd(Frame):
         #right hand display plots
         self.displayFrame = Frame(self,bg="gray")
         self.displayFrame.pack(side='left',fill=BOTH,expand=1)
-        self.topFrame = Frame(self.displayFrame,bg="gray")
+        self.topFrame = Frame(self.displayFrame,bg="white")
         self.topFrame.pack(fill=BOTH,expand=1)
         Label(self.topFrame,text="Nutrition:").pack(fill=BOTH)
         ###DESIGN SPOT FOR MATTHEW###
@@ -280,45 +280,18 @@ class frameFoodAdd(Frame):
         self.refreshGraphs(food,master)
         try:
             self.topFrame.winfo_children()[1].destroy()
-            """
             self.topFrame.winfo_children()[2].destroy()
-            self.topFrame.winfo_children()[3].destroy()
-            self.topFrame.winfo_children()[4].destroy()
-            self.topFrame.winfo_children()[5].destroy()
-            """
         except:
-            Button(self.topFrame,text="Add Food",command=lambda x=food:self.addFood(x,master)).pack(side=LEFT)
-            Label(self.topFrame,text="Calories: " + str(food.getCal()) + "\tProtein: " + str(food.getProtein()) + "\tCarbs: " + str(food.getCarb()) + "\tFat: " + str(food.getFat()), font=('century gothic', '18')).pack(fill=X,side=LEFT)
-            """
-            Label(self.topFrame,text="Calories: " + str(food.getCal()) + "\tProtein: " + str(food.getProtein()) + "\tCarbs: " + str(food.getCarb()) + "\tFat: " + str(food.getFat()), font=('century gothic', '18')).pack(fill=X,side=LEFT)
-            Label(self.topFrame,text="Protein: " + str(food.getProtein()), font=('century gothic', '18')).pack(fill=X,side=LEFT)
-            Label(self.topFrame,text="Carbs: " + str(food.getCarb()), font=('century gothic', '18')).pack(fill=X,side=LEFT)
-            Label(self.topFrame,text="\tFat: " + str(food.getFat()), font=('century gothic', '18')).pack(fill=X,side=LEFT)
-            """
+            Button(self.topFrame,text="Add Food",command=lambda x=food:self.addFood(x,master)).pack(side=BOTTOM)
+            Label(self.topFrame,text=food.getFoodID(),font=('century gothic', '18'),bg='white').pack(side=TOP,fill=tk.BOTH,expand=1)
+            Label(self.topFrame,text="Calories: " + str(food.getCal()) + "\tProtein: " + str(food.getProtein()) + "\tCarbs: " + str(food.getCarb()) + "\tFat: " + str(food.getFat()),font=('century gothic', '18'),bg='white').pack(fill=X,side=LEFT)
         else:
             self.topFrame.winfo_children()[1].destroy()
-            """
-            self.topFrame.winfo_children()[2].destroy()
-            self.topFrame.winfo_children()[3].destroy()
-            self.topFrame.winfo_children()[4].destroy()
-            self.topFrame.winfo_children()[5].destroy()
-            """
-            Button(self.topFrame,text="Add Food",command=lambda x=food:self.addFood(x,master)).pack(side=LEFT)
-        
-            Label(self.topFrame,text="Calories: " + str(food.getCal()) + "\tProtein: " + str(food.getProtein()) + "\tCarbs: " + str(food.getCarb()) + "\tFat: " + str(food.getFat()), font=('century gothic', '18')).pack(fill=X,side=LEFT)
-            """
-            Label(self.topFrame,text="Protein: " + str(food.getProtein()), font=('century gothic', '18')).pack(fill=X,side=LEFT)
-            Label(self.topFrame,text="Carbs: " + str(food.getCarb()), font=('century gothic', '18')).pack(fill=X,side=LEFT)
-            Label(self.topFrame,text="\tFat: " + str(food.getFat()), font=('century gothic', '18')).pack(fill=X,side=LEFT)
-            """
+            Button(self.topFrame,text="Add Food",command=lambda x=food:self.addFood(x,master)).pack(side=BOTTOM)
+            Label(self.topFrame,text=food.getFoodID(),font=('century gothic', '18'),bg='white').pack(side=TOP,fill=tk.BOTH,expand=1)
+            Label(self.topFrame,text="Calories: " + str(food.getCal()) + "\tProtein: " + str(food.getProtein()) + "\tCarbs: " + str(food.getCarb()) + "\tFat: " + str(food.getFat()),font=('century gothic', '18'),bg='white').pack(fill=X,side=BOTTOM)
         self.topFrame.winfo_children()[1].destroy()
-        """
-        self.topFrame.winfo_children()[2].destroy()
-        self.topFrame.winfo_children()[3].destroy()
-        self.topFrame.winfo_children()[4].destroy()
-        self.topFrame.winfo_children()[5].destroy()
-        """
-        Button(self.topFrame,text="Add Food",command=lambda:self.addFood(food,master)).pack(side=LEFT)
+        Button(self.topFrame,text="Add Food",command=lambda:self.addFood(food,master)).pack(side=BOTTOM)
     def addFood(self,food,master):
         master.Profile.addFood(food)
         self.topFrame.winfo_children()[1].destroy()
