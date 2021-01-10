@@ -171,13 +171,19 @@ class frameHome(Frame):
         weekday = calendar.day_name[today.weekday()]
         userFrame.columnconfigure(1, weight=1)
         Label(date_frame,text=weekday + ", " + the_date,font=("century gothic",18),bg='white').grid(column=1)
-        Label(userFrame,text="Calories Consumed:",font=("century gothic",18),anchor='w',bg='white').grid(row=1)
+        Label(userFrame,text="Calories Consumed:",font=("century gothic",18),anchor='w',bg='white').grid(row=1,sticky='w')
         # Calories consumed will be red if exceeding requirement needed by goal; green otherwise
         Label(userFrame,text=master.Profile.getTotCal(),font=("century gothic",18),anchor='e',bg='white').grid(row=1,column=1,sticky='e')
         # Calories remaining will be red if exceeding requirement needed by goal; green otherwise
-        Label(userFrame,text="Calories Remaining:",font=("century gothic",18),anchor='w',bg='white').grid(row=2)
+        Label(userFrame,text="Calories Remaining:",font=("century gothic",18),anchor='w',bg='white').grid(row=2,sticky='w')
         calories_remaining = Label(userFrame,text=abs(master.Profile.getTotCal() - master.Profile.calGoal),font=("century gothic",18),anchor='e',bg='white')
         calories_remaining.grid(row=2,column=1,sticky='e')
+        Label(userFrame,text="Today's Protein:",font=("century gothic",18),anchor='w',bg='white').grid(row=3,sticky='w')
+        Label(userFrame,text=master.Profile.getTotProtein(),font=("century gothic",18),anchor='e',bg='white').grid(row=3,column=1,sticky='e')
+        Label(userFrame,text="Today's Carbs:",font=("century gothic",18),anchor='w',bg='white').grid(row=4,sticky='w')
+        Label(userFrame,text=master.Profile.getTotCarb(),font=("century gothic",18),anchor='e',bg='white').grid(row=4,column=1,sticky='e')
+        Label(userFrame,text="Today's Fats:",font=("century gothic",18),anchor='w',bg='white').grid(row=5,sticky='w')
+        Label(userFrame,text=master.Profile.getTotFat(),font=("century gothic",18),anchor='e',bg='white').grid(row=5,column=1,sticky='e')
 
         # Following if-else statement does NOT account for user's goal of gaining or losing weight;
         if master.Profile.getTotCal() - master.Profile.calGoal < 0:
