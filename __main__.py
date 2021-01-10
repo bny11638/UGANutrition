@@ -282,8 +282,11 @@ class frameFoodAdd(Frame):
             self.topFrame.winfo_children()[1].destroy()
         except:
             Button(self.topFrame,text="Add Food",command=lambda x=food:self.addFood(x,master)).pack()
+            Label(self.topFrame,text="Calories: " + str(food.getCal()) + "\tProtein: " + str(food.getProtein()) + "\tCarbs: " + str(food.getCarb()) + "\tFat: " + str(food.getFat()), font=('century gothic', '18')).pack()
         else:
+            self.topFrame.winfo_children()[1].destroy()
             Button(self.topFrame,text="Add Food",command=lambda x=food:self.addFood(x,master)).pack()
+            Label(self.topFrame,text="Calories: " + str(food.getCal()) + "\tProtein: " + str(food.getProtein()) + "\tCarbs: " + str(food.getCarb()) + "\tFat: " + str(food.getFat()), font=('century gothic', '18')).pack()
         self.topFrame.winfo_children()[1].destroy()
         Button(self.topFrame,text="Add Food",command=lambda:self.addFood(food,master)).pack()
     def addFood(self,food,master):
