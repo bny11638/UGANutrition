@@ -157,8 +157,8 @@ class frameHome(Frame):
         if master.Profile is None:
             master.Profile = Profile("Guest",master)
             guestAcc = True
-        Frame.__init__(self,master,bg="#6B081F")
-        Label(self,text=master.Profile.user.title() + "'s Profile:",font=("Calibri",18),padx=5,pady=5,anchor='w').pack(side="top",expand=False,fill=tk.X)
+        Frame.__init__(self,master,bg="white")
+        Label(self,text=master.Profile.user.title() + "'s Profile:",font=("Calibri",18),padx=5,pady=5,anchor='w',bg="#6B081F",fg='white').pack(side="top",expand=False,fill=tk.X)
         #matthews frame to design and develop
         date_frame = Frame(self)
         date_frame.pack()
@@ -170,12 +170,12 @@ class frameHome(Frame):
         the_date = today.strftime('%B %d')
         weekday = calendar.day_name[today.weekday()]
         userFrame.columnconfigure(1, weight=1)
-        Label(date_frame,text=weekday + ", " + the_date,font=("century gothic",18, 'bold')).grid(column=1)
-        Label(userFrame,text="Calories Consumed:",font=("century gothic",18,'bold'),anchor='w',bg='white').grid(row=1)
+        Label(date_frame,text=weekday + ", " + the_date,font=("century gothic",18),bg='white').grid(column=1)
+        Label(userFrame,text="Calories Consumed:",font=("century gothic",18),anchor='w',bg='white').grid(row=1)
         # Calories consumed will be red if exceeding requirement needed by goal; green otherwise
         Label(userFrame,text=master.Profile.getTotCal(),font=("century gothic",18),anchor='e',bg='white').grid(row=1,column=1,sticky='e')
         # Calories remaining will be red if exceeding requirement needed by goal; green otherwise
-        Label(userFrame,text="Calories Remaining:",font=("century gothic",18,'bold'),anchor='w',bg='white').grid(row=2)
+        Label(userFrame,text="Calories Remaining:",font=("century gothic",18),anchor='w',bg='white').grid(row=2)
         calories_remaining = Label(userFrame,text=abs(master.Profile.getTotCal() - master.Profile.calGoal),font=("century gothic",18),anchor='e',bg='white')
         calories_remaining.grid(row=2,column=1,sticky='e')
 
