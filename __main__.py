@@ -308,7 +308,7 @@ class frameFoodAdd(Frame):
         self.buttonList.clear()
     def initSearchFrame(self,master,results):
         for line in results:
-            x = Button(self.resultFrame,text=line[0].title(),anchor='w',width=4,command=lambda food=line:self.clickFood(Food(food),master))
+            x = Button(self.resultFrame,text=line[0].title(),anchor='w',width=4,command=lambda food=line:self.clickFood(Food(food),master),font=('century gothic',8))
             self.buttonList.append(x)
         for button in self.buttonList:
             button.pack(fill=tk.X)
