@@ -6,6 +6,8 @@ import mysql.connector
 from matplotlib.figure import Figure 
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 import time
+from datetime import date
+import calendar
 
 #App Class
 class NutritionApp(Tk):
@@ -155,12 +157,46 @@ class frameHome(Frame):
         if master.Profile is None:
             master.Profile = Profile("Guest",master)
             guestAcc = True
-        Frame.__init__(self,master,bg="#6B081F")
-        Label(self,text=master.Profile.user.title() + "'s Profile:",font=("Calibri",18),padx=5,pady=5,anchor='w').pack(side="top",expand=False,fill=tk.X)
+        Frame.__init__(self,master,bg="white")
+        Label(self,text=master.Profile.user.title() + "'s Profile:",font=("Calibri",18),padx=5,pady=5,anchor='w',bg="#6B081F",fg='white').pack(side="top",expand=False,fill=tk.X)
         #matthews frame to design and develop
-        userFrame = Frame(self,bg="gray")
+        date_frame = Frame(self)
+        date_frame.pack()
+        userFrame = Frame(self,bg="white")
         userFrame.pack(side="top",expand=1,fill=BOTH)
+        rows, columns = userFrame.grid_size()
         #Put your code in this blank spot
+        today = date.today()
+        the_date = today.strftime('%B %d')
+        weekday = calendar.day_name[today.weekday()]
+        userFrame.columnconfigure(1, weight=1)
+        Label(date_frame,text=weekday + ", " + the_date,font=("century gothic",18),bg='white').grid(column=1)
+        Label(userFrame,text="Calories Consumed:",font=("century gothic",18),anchor='w',bg='white').grid(row=1,sticky='w')
+        # Calories consumed will be red if exceeding requirement needed by goal; green otherwise
+        Label(userFrame,text=master.Profile.getTotCal(),font=("century gothic",18),anchor='e',bg='white').grid(row=1,column=1,sticky='e')
+        # Calories remaining will be red if exceeding requirement needed by goal; green otherwise
+        Label(userFrame,text="Calories Remaining:",font=("century gothic",18),anchor='w',bg='white').grid(row=2,sticky='w')
+        calories_remaining = Label(userFrame,text=abs(master.Profile.getTotCal() - master.Profile.calGoal),font=("century gothic",18),anchor='e',bg='white')
+        calories_remaining.grid(row=2,column=1,sticky='e')
+        Label(userFrame,text="Today's Protein:",font=("century gothic",18),anchor='w',bg='white').grid(row=3,sticky='w')
+        Label(userFrame,text=master.Profile.getTotProtein(),font=("century gothic",18),anchor='e',bg='white').grid(row=3,column=1,sticky='e')
+        Label(userFrame,text="Today's Carbs:",font=("century gothic",18),anchor='w',bg='white').grid(row=4,sticky='w')
+        Label(userFrame,text=master.Profile.getTotCarb(),font=("century gothic",18),anchor='e',bg='white').grid(row=4,column=1,sticky='e')
+        Label(userFrame,text="Today's Fats:",font=("century gothic",18),anchor='w',bg='white').grid(row=5,sticky='w')
+        Label(userFrame,text=master.Profile.getTotFat(),font=("century gothic",18),anchor='e',bg='white').grid(row=5,column=1,sticky='e')
+
+        # Following if-else statement does NOT account for user's goal of gaining or losing weight;
+        if master.Profile.getTotCal() - master.Profile.calGoal < 0:
+            calories_remaining.config(fg="red")
+        else:
+            calories_remaining.config(fg="green")
+
+        # for setting minimum siszes of columns and rows
+       # col_count, row_count = userFrame.grid_size()
+      #  for col in range(col_count):
+       #     userFrame.grid_columnconfigure(col, minsize=20)
+       # for row in range(row_count):
+         #   userFrame.grid_rowconfigure(row, minsize=200)
 
 
 
@@ -227,31 +263,28 @@ class frameFoodAdd(Frame):
         self.figPieCanvas = None
         self.figCalCanvas = None
         #top part -- search bar
-        searchFrame = Frame(self,bg="gray")
-        self.submitButton = Button(searchFrame,text="Submit",bg="#6B081F",fg="white",command=lambda:self.addFoodSQL(master,self.search.get()))
-        self.submitButton.pack(side="left")
+        searchFrame = Frame(self,bg="#6B081F")
+        Label(searchFrame,text="Search Foods:",bg="#6B081F",fg="white",font=('century gothic', '14')).pack(side="left",expand=False,fill=X)
+        self.submitButton = Button(searchFrame,text="Submit",image=master.submitButtomImg,borderwidth=0,bg="#6B081F",activebackground="#6B081F",fg="white",command=lambda:self.addFoodSQL(master,self.search.get()))
+        self.submitButton.pack(side="right")
         self.search = Entry(searchFrame,width=100)
-        self.search.pack(pady=25,fill=tk.Y,expand=1,side="left")
+        self.search.pack(pady=10,fill=tk.X,expand=1,side="left") #testattu
         searchFrame.pack(fill=tk.X)
         #bottom part -- bottom bar
         bar = ButtonBar(self,master)
         bar.pack(side="bottom",fill=tk.X)
         bar.addButton['state']='disable'
         #left hand result search barh
-        self.resultFrame = Frame(self,bg="gray")
-        Label(self.resultFrame,text="Results",width=5).pack(fill=tk.X)
-        self.resultFrame.pack(side='left',fill=BOTH,expand=1,padx=(0,5))
+        self.resultFrame = Frame(self,bg="gray",width=3)
+        Label(self.resultFrame,text="Results",font=('century gothic', '10')).pack(fill=tk.X)
+        self.resultFrame.pack(side='left',fill=BOTH,padx=(0,5),expand=1)
         #right hand display plots
         self.displayFrame = Frame(self,bg="gray")
         self.displayFrame.pack(side='left',fill=BOTH,expand=1)
-        self.topFrame = Frame(self.displayFrame,bg="gray")
-        self.topFrame.pack(fill=BOTH,expand=1)
-        Label(self.topFrame,text="Nutrition:").pack(fill=BOTH)
-        ###DESIGN SPOT FOR MATTHEW###
-
-
-
-        ###
+        self.topFrame = Frame(self.displayFrame,bg="white")
+        self.topFrame.pack(fill=BOTH,expand=1,pady=(0,0.5))
+        Label(self.topFrame,text="Nutrition:",font=('century gothic', '10')).pack(fill=BOTH)
+        #Bottom Frame
         self.bottomFrame = Frame(self.displayFrame,bg="gray")
         self.bottomFrame.pack(fill=BOTH,expand=1)
         self.initCalPlot(None,master,self.bottomFrame)
@@ -272,23 +305,33 @@ class frameFoodAdd(Frame):
         self.buttonList.clear()
     def initSearchFrame(self,master,results):
         for line in results:
-            x = Button(self.resultFrame,text=line[0].title(),anchor='w',width=4,command=lambda food=line:self.clickFood(Food(food),master))
+            x = Button(self.resultFrame,text=line[0].title(),anchor='w',width=4,command=lambda food=line:self.clickFood(Food(food),master),font=('century gothic',8))
             self.buttonList.append(x)
         for button in self.buttonList:
             button.pack(fill=tk.X)
     def clickFood(self,food,master):
         self.refreshGraphs(food,master)
+        #Tries to clear top frame before initializing food stats
         try:
-            self.topFrame.winfo_children()[1].destroy()
-        except:
-            Button(self.topFrame,text="Add Food",command=lambda x=food:self.addFood(x,master)).pack()
+            for x in self.topFrame.winfo_children():
+                x.destroy()
+        except: 
+            Button(self.topFrame,text="Add Food",command=lambda x=food:self.addFood(x,master)).pack(side=BOTTOM)
+            Label(self.topFrame,text=food.getFoodID(),font=('century gothic', '18'),bg='white').pack(side=TOP,fill=tk.BOTH,expand=1)
+            Label(self.topFrame,text="Calories: " + str(food.getCal()) + "\tProtein: " + str(food.getProtein()) + "\tCarbs: " + str(food.getCarb()) + "\tFat: " + str(food.getFat()),font=('century gothic', '18'),bg='white').pack(fill=X,side=TOP)
         else:
-            Button(self.topFrame,text="Add Food",command=lambda x=food:self.addFood(x,master)).pack()
+            Button(self.topFrame,text="Add Food",command=lambda x=food:self.addFood(x,master)).pack(side=BOTTOM)
+            Label(self.topFrame,text=food.getFoodID(),font=('century gothic', '18'),bg='white').pack(side=TOP,fill=tk.BOTH,expand=1)
+            Label(self.topFrame,text="Calories: " + str(food.getCal()) + "\tProtein: " + str(food.getProtein()) + "\tCarbs: " + str(food.getCarb()) + "\tFat: " + str(food.getFat()),font=('century gothic', '18'),bg='white').pack(fill=X,side=TOP)
+        """
         self.topFrame.winfo_children()[1].destroy()
-        Button(self.topFrame,text="Add Food",command=lambda:self.addFood(food,master)).pack()
+        Button(self.topFrame,text="Add Food",command=lambda:self.addFood(food,master)).pack(side=BOTTOM)
+        """
     def addFood(self,food,master):
         master.Profile.addFood(food)
-        self.topFrame.winfo_children()[1].destroy()
+        #clears top frame after you add food
+        for x in self.topFrame.winfo_children():
+            x.destroy()
         self.clearGraph(master)
     def clearGraph(self,master):
         self.clear(self.figMacroCanvas)
@@ -333,7 +376,7 @@ class frameFoodAdd(Frame):
                 axe.legend(loc="upper left")
             else:
                 axe.pie([food.getProtein(),food.getCarb(),food.getFat()],labels=["Proteins","Carbs","Fats"],radius=.75)
-                axe.set_title("Macronutrients of " + food.getFoodID())
+                axe.set_title("Macronutrients of \n" + food.getFoodID())
                 axe.legend()
         else:
             axe.pie([100],labels=["No Food Selected"])
