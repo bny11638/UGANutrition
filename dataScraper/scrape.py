@@ -7,12 +7,10 @@ import mysql.connector
 import csv
 from csv import reader
 
-password = input()
-
 connection = mysql.connector.connect (
         host="35.224.143.155",
         user="root",
-        password=password,
+        password='Thursdays5$',
         database="nutrition_app",
 )
 
