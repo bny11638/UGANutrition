@@ -6,6 +6,8 @@ import mysql.connector
 from matplotlib.figure import Figure 
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 import time
+from datetime import date
+import calendar
 
 #App Class
 class NutritionApp(Tk):
@@ -158,9 +160,37 @@ class frameHome(Frame):
         Frame.__init__(self,master,bg="#6B081F")
         Label(self,text=master.Profile.user.title() + "'s Profile:",font=("Calibri",18),padx=5,pady=5,anchor='w').pack(side="top",expand=False,fill=tk.X)
         #matthews frame to design and develop
-        userFrame = Frame(self,bg="gray")
+        date_frame = Frame(self)
+        date_frame.pack()
+        userFrame = Frame(self,bg="white")
         userFrame.pack(side="top",expand=1,fill=BOTH)
+        rows, columns = userFrame.grid_size()
         #Put your code in this blank spot
+        today = date.today()
+        the_date = today.strftime('%B %d')
+        weekday = calendar.day_name[today.weekday()]
+        userFrame.columnconfigure(1, weight=1)
+        Label(date_frame,text=weekday + ", " + the_date,font=("century gothic",18, 'bold')).grid(column=1)
+        Label(userFrame,text="Calories Consumed:",font=("century gothic",18,'bold'),anchor='w',bg='white').grid(row=1)
+        # Calories consumed will be red if exceeding requirement needed by goal; green otherwise
+        Label(userFrame,text=master.Profile.getTotCal(),font=("century gothic",18),anchor='e',bg='white').grid(row=1,column=1,sticky='e')
+        # Calories remaining will be red if exceeding requirement needed by goal; green otherwise
+        Label(userFrame,text="Calories Remaining:",font=("century gothic",18,'bold'),anchor='w',bg='white').grid(row=2)
+        calories_remaining = Label(userFrame,text=abs(master.Profile.getTotCal() - master.Profile.calGoal),font=("century gothic",18),anchor='e',bg='white')
+        calories_remaining.grid(row=2,column=1,sticky='e')
+
+        # Following if-else statement does NOT account for user's goal of gaining or losing weight;
+        if master.Profile.getTotCal() - master.Profile.calGoal < 0:
+            calories_remaining.config(fg="red")
+        else:
+            calories_remaining.config(fg="green")
+
+        # for setting minimum siszes of columns and rows
+       # col_count, row_count = userFrame.grid_size()
+      #  for col in range(col_count):
+       #     userFrame.grid_columnconfigure(col, minsize=20)
+       # for row in range(row_count):
+         #   userFrame.grid_rowconfigure(row, minsize=200)
 
 
 
