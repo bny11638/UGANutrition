@@ -145,7 +145,7 @@ class frameRegister(Frame):
             if profile is None:
                 master.closeCursor()
                 master.establishCursor()
-                master.cursor.execute('INSERT INTO user_data VALUES (%s,%s,%s,%s)',(username,password,None,None))
+                master.cursor.execute('INSERT INTO user_data VALUES (%s,%s,%s,%s)',(username,password,None,2000))
                 master.closeCursor()
                 master.switch_frame(frameWelcome)
             else:
