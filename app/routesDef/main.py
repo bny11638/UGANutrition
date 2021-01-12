@@ -28,7 +28,7 @@ def insert(request):
         table_name = "user_data"
         table_field="username,password"
         table_field_value = name + "," + password
-        stmt = (insert(table_name).values(name=nameJ,password=passwordJ))
+        stmt = (insert(table_name).values(username=nameJ,password=passwordJ))
     db = sqlalchemy.create_engine(
       sqlalchemy.engine.url.URL(
         drivername=driver_name,
