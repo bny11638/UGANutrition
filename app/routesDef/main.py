@@ -1,5 +1,5 @@
 from flask import escape
-import localPackage.mysql.connector
+from localPackage import mysql.connector
 
 conn = mysql.connector.connect (
         host="35.224.143.155",
