@@ -1,7 +1,7 @@
 from flask import escape
 import localPackage.mysql.connector
 
-conn = localPacakge.mysql.connector.connect (
+conn = localPackage.mysql.connector.connect (
         host="35.224.143.155",
         user="guest",
         password="password",
