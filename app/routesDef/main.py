@@ -23,12 +23,12 @@ def insert(request):
 
     request_json = request.get_json()
     if request_json and 'name' and 'password' in request_json:
-        name = request_json['name']
-        password = request_json['password']
+        nameJ = request_json['name']
+        passwordJ = request_json['password']
         table_name = "user_data"
         table_field="username,password"
         table_field_value = name + "," + password
-        stmt = sqlalchemy.text('INSERT INTO table_name (table_field) VALUES (table_field_value)')
+        stmt = (insert(table_name).values(name=nameJ,password=passwordJ))
     db = sqlalchemy.create_engine(
       sqlalchemy.engine.url.URL(
         drivername=driver_name,
