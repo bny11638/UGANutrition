@@ -27,7 +27,7 @@ def insert(request):
         passwordJ = request_json['password']
         table_name = "user_data"
         table_field="username,password"
-        table_field_value = name + "," + password
+        table_field_value = nameJ + "," + passwordJ
         stmt = (insert(table_name).values(username=nameJ,password=passwordJ))
     db = sqlalchemy.create_engine(
       sqlalchemy.engine.url.URL(
