@@ -21,6 +21,16 @@ query_string = dict({"unix_socket": "/cloudsql/{}".format(connection_name)})
 # If the type of your table_field value is a string, surround it with double quotes.
 
 def insert(request):
+    request_json = request.get_json()
+    request_args = request.args
+    if request_json and 'name' in request_json:
+        name = request_json['name']
+    elif request_args and 'name' in request_args:
+        name = request_args['name']
+    else:
+        name = 'World'
+    return 'It worked ! Hello {}!'.format(escape(name))
+    """
     print(str(request))
     try:
         request_json = request.get_json(force=True)
@@ -33,7 +43,8 @@ def insert(request):
         table_name = "user_data"
         table_field="username,password"
         table_field_value = nameJ + "," + passwordJ
-        stmt = (insert(table_name).values(username=nameJ,password=passwordJ))
+        #stmt = (insert(table_name).values(username=nameJ,password=passwordJ))
+    """
     """
     db = sqlalchemy.create_engine(
       sqlalchemy.engine.url.URL(
@@ -54,7 +65,7 @@ def insert(request):
     except Exception as e:
         return 'Error: {}'.format(str(e))
     """
-    return 'Hello {}! Your Password is {}'.format(escape(name,password))
+    #return 'Hello {}! Your Password is {}'.format(escape(name,password))
 
 def hello_http(request):
     request_json = request.get_json()
