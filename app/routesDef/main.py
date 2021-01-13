@@ -50,7 +50,6 @@ def insert_test(request):
     request_args = request.args
     stmt = None
     if request.method == 'GET':
-        """
         try:
             if 'name' in request_json:
                 query = None
@@ -61,8 +60,6 @@ def insert_test(request):
         except Exception as e:
             return 'Error with get: {}'.format(str(e))
         return 'okGET'
-        """
-        return 'Hello World!'
     if request.method == 'POST':
         try:
             name = request_json['name']

@@ -146,10 +146,10 @@ class frameRegister(Frame):
         if username != "" and password != "":
             data = {"name":username,"password":password}
             y = json.dumps(data)
-            get = requests.get("https://us-central1-precise-truck-301217.cloudfunctions.net/insert_test",params=y,headers=HEADERS)
-            print(get.text)
+            get = requests.get("https://us-central1-precise-truck-301217.cloudfunctions.net/insert_test",data=y,headers=HEADERS)
+            print(get.request.url)
             x = requests.post("https://us-central1-precise-truck-301217.cloudfunctions.net/insert_test",data=y,headers=HEADERS)
-            print(x.text)
+            print(x.request.url)
             """
             master.establishCursor()
             master.cursor.execute('SELECT * from user_data where username = %s',(username,))
