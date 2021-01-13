@@ -49,7 +49,6 @@ def insert_test(request):
     request_json = request.get_json()
     request_args = request.args
     stmt = None
-    
     if request.method == 'POST':
         try:
             name = request_json['name']
@@ -68,8 +67,6 @@ def insert_test(request):
                 stmt = sqlalchemy.text("SELECT * FROM user_data where username = \'" + name+"\';")
                 with db.connect() as conn:
                     query = conn.execute(stmt)
-                for row in query:
-                    print(row)
         except Exception as e:
-            return 'Error: {}'.format(str(e))
+            return 'Error with get: {}'.format(str(e))
         return 'okGET'

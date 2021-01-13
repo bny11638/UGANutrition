@@ -144,9 +144,8 @@ class frameRegister(Frame):
         username = user.get().lower()
         password = password.get()
         if username != "" and password != "":
-            data = {"name": username,"password": password}
+            data = {"name":username,"password":password}
             y = json.dumps(data)
-            print(y)
             get = requests.get("https://us-central1-precise-truck-301217.cloudfunctions.net/insert_test",params=y,headers=HEADERS)
             print(get.text)
             x = requests.post("https://us-central1-precise-truck-301217.cloudfunctions.net/insert_test",data=y,headers=HEADERS)
