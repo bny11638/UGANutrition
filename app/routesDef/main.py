@@ -22,6 +22,7 @@ query_string = dict({"unix_socket": "/cloudsql/{}".format(connection_name)})
 
 def insert(request):
     request_json = request.get_json(force=True)
+    request_args = request.args
     if request_json and 'name' and 'password' in request_json:
         nameJ = request_json['name']
         passwordJ = request_json['password']
