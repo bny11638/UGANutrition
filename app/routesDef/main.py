@@ -57,6 +57,7 @@ def insert_test(request):
                 stmt = sqlalchemy.text("SELECT * FROM user_data where username = \'" + name+"\';")
                 with db.connect() as conn:
                     query = conn.execute(stmt)
+                return query
         except Exception as e:
             return 'Error with get: {}'.format(str(e))
         return 'okGET'
