@@ -8,6 +8,8 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationTool
 import time
 from datetime import date
 import calendar
+import requests
+import json
 
 #App Class
 class NutritionApp(Tk):
@@ -139,9 +141,18 @@ class frameRegister(Frame):
         password = password.get()
         if username != "" and password != "":
             #Establishing a cursor to execute query
+            data = {
+                "name": username,
+                "password": password
+            }
+            y = json.dumps(data)
+            x = requests.post("https://us-central1-precise-truck-301217.cloudfunctions.net/insert_test",y)
+            print(x.text)
+            """
             master.establishCursor()
             master.cursor.execute('SELECT * from user_data where username = %s',(username,))
             profile = master.cursor.fetchone()
+            """
             if profile is None:
                 master.closeCursor()
                 master.establishCursor()
@@ -197,10 +208,6 @@ class frameHome(Frame):
        #     userFrame.grid_columnconfigure(col, minsize=20)
        # for row in range(row_count):
          #   userFrame.grid_rowconfigure(row, minsize=200)
-
-
-
-
         ####
         bar = ButtonBar(self,master)
         bar.pack(side="bottom",fill=tk.X)

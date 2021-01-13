@@ -34,6 +34,7 @@ def hello_http(request):
 def insert_test(request):
     request_json = request.get_json()
     request_args = request.args
+    print(request_json)
     if request_json and 'name' and 'password' in request_json:
         name = request_json['name']
         password = request_json['password']
