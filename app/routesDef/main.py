@@ -21,7 +21,7 @@ query_string = dict({"unix_socket": "/cloudsql/{}".format(connection_name)})
 # If the type of your table_field value is a string, surround it with double quotes.
 
 def insert(request):
-    request_json = json.dumps(request)
+    request_json = json.loads(request)
     if request_json and 'name' and 'password' in request_json:
         nameJ = request_json['name']
         passwordJ = request_json['password']
