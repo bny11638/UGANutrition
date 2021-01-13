@@ -41,4 +41,4 @@ def insert_test(request):
         name = request_args['name']
     else:
         name = 'World'
-    return 'It worked ! Hello{} your password is {}!'.format(escape(name,password))
+    return 'It worked ! Hello{} your password is {}!'.format(name,password)
