@@ -96,21 +96,22 @@ class frameLogin(Frame):
     def submitLogin(self,user,password,master):
         username = user.get()
         password = password.get()
-        #Establishing a cursor to execute query
-        master.establishCursor()
-        master.cursor.execute('SELECT * from user_data where username = %s',(username,))
-        profile = master.cursor.fetchone()
-        if profile is None:
-            print("Invalid Username")
-            master.closeCursor()
-        elif not profile[1] == password:
-            print("Invalid Password")
-            master.closeCursor()
+        print(username.lower())
+        data = {'name':username.lower(),'password':password}
+        y = json.dumps(data)
+        url = ""
+        loginRequest = requests.post(url,data=y,headers=HEADERS)
+        if loginRequest.text == "False":
+            print("Invalid Login Information")
         else:
-            #need to replace with my profile frame
+            #insert json stuff
+            print("hello")
+
+        """   
             master.Profile = Profile(username,master)
             master.switch_frame(frameHome)
             master.closeCursor()
+        """
 
     def __init__(self,master):
         Frame.__init__(self,master,bg="#6B081F")

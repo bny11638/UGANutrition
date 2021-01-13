@@ -81,3 +81,22 @@ def check_Register(request):
         except Exception as e:
             return 'Error with get: {}'.format(str(e))
     return "Error needs to be post"
+
+def validateLogin(request):
+    request_json = request.get_json()
+    request_args = request.args
+    stmt = None
+    if request.method == 'POST':
+        try:
+            query = None
+            name = request_json['name']
+            password = request_json['password']
+            stmt = sqlalchemy.text("SELECT * FROM user_data where username =\'" + name + "\' AND password=\'" + password + "\';")
+            with db.connect() as conn:
+                query = conn.execute(stmt)
+            tmp = query.fetchone()
+            if tmp is None:
+                return "False"
+            else:
+                return dict(tmp)
+    return "Error request method needs to be POST"

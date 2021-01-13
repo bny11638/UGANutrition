@@ -1,4 +1,5 @@
 import sqlalchemy
+import json
 
 # Uncomment and set the following variables depending on your specific instance and database:
 connection_name = "precise-truck-301217:us-central1:nutrition-uga"
@@ -32,11 +33,16 @@ db = sqlalchemy.create_engine(
             pool_timeout=30,
             pool_recycle=1800
             )
-with db.connect() as connection:
-    query = connection.execute("SELECT * FROM user_data where username=\'test\'")
-    results = query.first()
-    if results is None:
-        print("SUCCESS")
-    else:
-        print("false")
-    
+
+name = input()
+password = input()
+stmt = sqlalchemy.text("SELECT * FROM user_data where username =\'" + name + "\' AND password=\'" + password + "\';")
+with db.connect() as conn:
+    query = conn.execute(stmt)
+    tmp = query.fetchone()
+if tmp is None:
+    print( "False")
+else:
+    print(tmp.items())
+    y = dict(tmp.items())
+    print(y)
