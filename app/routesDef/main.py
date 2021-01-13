@@ -50,8 +50,7 @@ def insert(request):
     return 'Hello {}! Your Password is {}'.format(escape(name,password))
 
 def hello_http(request):
-    request_json = request.get_json(silent=True)
-    request_args = request.args
+    request_json = json.loads(request)
     if request_json and 'name' in request_json:
         name = request_json['name']
     elif request_args and 'name' in request_args:
@@ -61,8 +60,7 @@ def hello_http(request):
     return 'It worked ! Hello {}!'.format(escape(name))
 
 def show_user(request):
-    request_json = request.get_json(silent=True)
-    request_args = request.args
+    request_json = json.loads(request)
     if request_json and 'name' in request_json:
         name = request_json['name']
     elif request_args and 'name' in request_args:
