@@ -1,5 +1,6 @@
 from flask import escape
 import sqlalchemy
+from flask import jsonify
 
 # Uncomment and set the following variables depending on your specific instance and database:
 connection_name = "precise-truck-301217:us-central1:nutrition-uga"
@@ -99,7 +100,7 @@ def validateLogin(request):
                 return "False"
             else:
                 tmp = tmp.items()
-                return tuple(tmp)
+                return jsonify(tmp)
         except Exception as e:
                 return 'Error with get: {}'.format(str(e))
     return "Error request method needs to be POST"

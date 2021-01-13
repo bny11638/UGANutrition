@@ -1,5 +1,6 @@
 import sqlalchemy
 import json
+from flask import jsonify
 
 # Uncomment and set the following variables depending on your specific instance and database:
 connection_name = "precise-truck-301217:us-central1:nutrition-uga"
@@ -44,7 +45,5 @@ if tmp is None:
     print( "False")
 else:
     tmp = tmp.items()
-    tmp = tuple(tmp)
-    if type(tmp) is tuple:
-        print("SUCCESS")
-        print(tmp)
+    tmp = jsonify(tmp)
+    print(tmp)
