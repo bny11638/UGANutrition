@@ -60,13 +60,14 @@ def insert_test(request):
         except Exception as e:
             return 'Error: {}'.format(str(e))
         return 'ok'
+    return 'Error: post request is required'
 
 #Check's if username is already taken
 def check_Register(request):
     request_json = request.get_json()
     request_args = request.args
     stmt = None
-    if request.method == 'GET':
+    if request.method == 'POST':
         try:
             if 'name' in request_json:
                 query = None
@@ -78,4 +79,4 @@ def check_Register(request):
                 return True
         except Exception as e:
             return 'Error with get: {}'.format(str(e))
-        return False
+    return False
