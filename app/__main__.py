@@ -148,13 +148,16 @@ class frameRegister(Frame):
             p = (('first', username),('second',password))
             y = json.dumps(data)
             get = requests.get("https://us-central1-precise-truck-301217.cloudfunctions.net/insert_test",params=p)
+            print(get.request.url)
             results = get.text
-            if results:
-                print("Username is already taken")
-            else:
+            print(str(results))
+            if results is not None:
                 x = requests.post("https://us-central1-precise-truck-301217.cloudfunctions.net/insert_test",data=y,headers=HEADERS)
                 print(x.request.url)
                 master.switch_frame(frameWelcome)
+            else:
+                print("Username is already taken")
+                
             """
             master.establishCursor()
             master.cursor.execute('SELECT * from user_data where username = %s',(username,))
