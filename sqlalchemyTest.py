@@ -43,6 +43,8 @@ with db.connect() as conn:
 if tmp is None:
     print( "False")
 else:
-    print(tmp.items())
-    y = dict(tmp.items())
-    print(y)
+    tmp = tmp.items()
+    tmp = tuple(tmp)
+    if type(tmp) is tuple:
+        print("SUCCESS")
+        print(tmp)
