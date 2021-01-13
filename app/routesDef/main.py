@@ -64,8 +64,7 @@ def insert_test(request):
         try:
             query = None
             name = request_json['name']
-            password = request_json['password']
-            stmt = sqlalchemy.text("SELECT * INTO user_data (username, password) values (\'" + name + "\'," + "\'" + password+ "\');")
+            stmt = sqlalchemy.text("SELECT * FROM user_data where username = \'" + name+"\';")
             with db.connect() as conn:
                 query = conn.execute(stmt)
             for row in query:
