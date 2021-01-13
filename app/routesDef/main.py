@@ -60,6 +60,7 @@ def insert_test(request):
             return 'Error: {}'.format(str(e))
         return 'ok'
     elif request.method == 'GET':
+        """
         try:
             if 'name' in request_json:
                 query = None
@@ -70,3 +71,6 @@ def insert_test(request):
         except Exception as e:
             return 'Error with get: {}'.format(str(e))
         return 'okGET'
+        """
+        return 'Hello World!'
+    
