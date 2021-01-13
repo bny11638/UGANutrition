@@ -147,11 +147,9 @@ class frameRegister(Frame):
             data = {"name":username,"password":password}
             p = (('first', username),('second',password))
             y = json.dumps(data)
-            get = requests.get("https://us-central1-precise-truck-301217.cloudfunctions.net/insert_test",params=p)
-            print(get.request.url)
+            check = requests.post("https://us-central1-precise-truck-301217.cloudfunctions.net/check_Register",data=y,headers=HEADERS)
             results = get.text
-            print(str(results))
-            if results is not None:
+            if results == 'True':
                 x = requests.post("https://us-central1-precise-truck-301217.cloudfunctions.net/insert_test",data=y,headers=HEADERS)
                 print(x.request.url)
                 master.switch_frame(frameWelcome)

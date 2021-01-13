@@ -45,7 +45,24 @@ def hello_http(request):
         name = 'World'
     return 'It worked ! Hello {}!'.format(escape(name))
 
+#Inserts username and password  into db
 def insert_test(request):
+    request_json = request.get_json()
+    request_args = request.args
+    stmt = None
+    if request.method == 'POST':
+        try:
+            name = request_json['name']
+            password = request_json['password']
+            stmt = sqlalchemy.text("INSERT INTO user_data (username, password) values (\'" + name + "\'," + "\'" + password + "\');")
+            with db.connect() as conn:
+                conn.execute(stmt)
+        except Exception as e:
+            return 'Error: {}'.format(str(e))
+        return 'ok'
+
+#Check's if username is already taken
+def check_Register(request):
     request_json = request.get_json()
     request_args = request.args
     stmt = None
@@ -61,14 +78,4 @@ def insert_test(request):
                 return query
         except Exception as e:
             return 'Error with get: {}'.format(str(e))
-        return 'okGET'
-    if request.method == 'POST':
-        try:
-            name = request_json['name']
-            password = request_json['password']
-            stmt = sqlalchemy.text("INSERT INTO user_data (username, password) values (\'" + name + "\'," + "\'" + password + "\');")
-            with db.connect() as conn:
-                conn.execute(stmt)
-        except Exception as e:
-            return 'Error: {}'.format(str(e))
-        return 'ok'
+        return True
