@@ -57,9 +57,3 @@ def insert_test(request):
     except Exception as e:
         return 'Error: {}'.format(str(e))
     return 'ok'
-
-    elif request_args and 'name' in request_args:
-        name = request_args['name']
-    else:
-        name = 'World'
-    return 'It worked ! Hello{} your password is {}!'.format(name,password)
