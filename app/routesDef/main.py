@@ -1,6 +1,6 @@
 from flask import escape
 import sqlalchemy
-import json
+
 # Uncomment and set the following variables depending on your specific instance and database:
 connection_name = "precise-truck-301217:us-central1:nutrition-uga"
 #table_name = ""
@@ -21,7 +21,7 @@ query_string = dict({"unix_socket": "/cloudsql/{}".format(connection_name)})
 # If the type of your table_field value is a string, surround it with double quotes.
 
 def insert(request):
-    request_json = json.loads(request)
+    request_json = request.get_json()
     if request_json and 'name' and 'password' in request_json:
         nameJ = request_json['name']
         passwordJ = request_json['password']
@@ -50,7 +50,7 @@ def insert(request):
     return 'Hello {}! Your Password is {}'.format(escape(name,password))
 
 def hello_http(request):
-    request_json = json.loads(request)
+    request_json = request.get_json()
     if request_json and 'name' in request_json:
         name = request_json['name']
     elif request_args and 'name' in request_args:
@@ -60,7 +60,7 @@ def hello_http(request):
     return 'It worked ! Hello {}!'.format(escape(name))
 
 def show_user(request):
-    request_json = json.loads(request)
+    request_json = request.get_json()
     if request_json and 'name' in request_json:
         name = request_json['name']
     elif request_args and 'name' in request_args:
