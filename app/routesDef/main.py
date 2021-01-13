@@ -69,13 +69,12 @@ def check_Register(request):
     stmt = None
     if request.method == 'POST':
         try:
-            if 'name' in request_json:
-                query = None
-                name = request_json['name']
-                stmt = sqlalchemy.text("SELECT * FROM user_data where username = \'" + name+"\';")
-                with db.connect() as conn:
-                    query = conn.execute(stmt)
-                return query
+            query = None
+            name = request_json['name']
+            stmt = sqlalchemy.text("SELECT * FROM user_data where username = \'" + name+"\';")
+            with db.connect() as conn:
+                query = conn.execute(stmt)
+            return query
         except Exception as e:
             return 'Error with get: {}'.format(str(e))
     return False
