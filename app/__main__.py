@@ -11,6 +11,10 @@ import calendar
 import requests
 import json
 
+
+HEADERS = {
+                'Content-Type': 'application/json'
+            }
 #App Class
 class NutritionApp(Tk):
     def __init__(self):
@@ -146,7 +150,7 @@ class frameRegister(Frame):
                 "password": password
             }
             y = json.dumps(data)
-            x = requests.post("https://us-central1-precise-truck-301217.cloudfunctions.net/insert_test",y)
+            x = requests.post("https://us-central1-precise-truck-301217.cloudfunctions.net/insert_test",data=y,headers=HEADERS)
             print(x.text)
             """
             master.establishCursor()
