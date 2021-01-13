@@ -49,16 +49,6 @@ def insert_test(request):
     request_json = request.get_json()
     request_args = request.args
     stmt = None
-    if request.method == 'POST':
-        try:
-            name = request_json['name']
-            password = request_json['password']
-            stmt = sqlalchemy.text("INSERT INTO user_data (username, password) values (\'" + name + "\'," + "\'" + password + "\');")
-            with db.connect() as conn:
-                conn.execute(stmt)
-        except Exception as e:
-            return 'Error: {}'.format(str(e))
-        return 'ok'
     if request.method == 'GET':
         """
         try:
@@ -73,4 +63,13 @@ def insert_test(request):
         return 'okGET'
         """
         return 'Hello World!'
-    
+    if request.method == 'POST':
+        try:
+            name = request_json['name']
+            password = request_json['password']
+            stmt = sqlalchemy.text("INSERT INTO user_data (username, password) values (\'" + name + "\'," + "\'" + password + "\');")
+            with db.connect() as conn:
+                conn.execute(stmt)
+        except Exception as e:
+            return 'Error: {}'.format(str(e))
+        return 'ok'
