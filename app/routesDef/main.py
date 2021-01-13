@@ -59,7 +59,7 @@ def insert_test(request):
         except Exception as e:
             return 'Error: {}'.format(str(e))
         return 'ok'
-    elif request.method == 'GET':
+    if request.method == 'GET':
         """
         try:
             if 'name' in request_json:
