@@ -98,7 +98,7 @@ def validateLogin(request):
             if tmp is None:
                 return "False"
             else:
-                return tmp
+                return tmp.items()
         except Exception as e:
                 return 'Error with get: {}'.format(str(e))
     return "Error request method needs to be POST"
