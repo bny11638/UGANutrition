@@ -99,4 +99,6 @@ def validateLogin(request):
                 return "False"
             else:
                 return dict(tmp)
+        except Exception as e:
+                return 'Error with get: {}'.format(str(e))
     return "Error request method needs to be POST"
