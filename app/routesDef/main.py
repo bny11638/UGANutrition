@@ -62,13 +62,14 @@ def insert_test(request):
         return 'ok'
     elif request.method == 'GET':
         try:
-            query = None
-            name = request_json['name']
-            stmt = sqlalchemy.text("SELECT * FROM user_data where username = \'" + name+"\';")
-            with db.connect() as conn:
-                query = conn.execute(stmt)
-            for row in query:
-                print(row)
+            if 'name' in request_json:
+                query = None
+                name = request_json['name']
+                stmt = sqlalchemy.text("SELECT * FROM user_data where username = \'" + name+"\';")
+                with db.connect() as conn:
+                    query = conn.execute(stmt)
+                for row in query:
+                    print(row)
         except Exception as e:
             return 'Error: {}'.format(str(e))
         return 'okGET'
