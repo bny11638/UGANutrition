@@ -74,7 +74,7 @@ def check_Register(request):
             stmt = sqlalchemy.text("SELECT * FROM user_data where username = \'" + name+"\';")
             with db.connect() as conn:
                 query = conn.execute(stmt)
-            if query is not None:
+            if query.rowcount != 0:
                 return "False"
             else:
                 return "True"
