@@ -51,6 +51,7 @@ def insert(request):
 
 def hello_http(request):
     request_json = request.get_json()
+    request_args = request.args
     if request_json and 'name' in request_json:
         name = request_json['name']
     elif request_args and 'name' in request_args:
@@ -61,6 +62,7 @@ def hello_http(request):
 
 def show_user(request):
     request_json = request.get_json()
+    request_args = request.args
     if request_json and 'name' in request_json:
         name = request_json['name']
     elif request_args and 'name' in request_args:
