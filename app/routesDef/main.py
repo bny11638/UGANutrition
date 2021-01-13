@@ -71,7 +71,7 @@ def check_Register(request):
         try:
             if 'name' in request_json:
                 query = None
-                name = request_json['first']
+                name = request_json['name']
                 stmt = sqlalchemy.text("SELECT * FROM user_data where username = \'" + name+"\';")
                 with db.connect() as conn:
                     query = conn.execute(stmt)
