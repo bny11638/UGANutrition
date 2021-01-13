@@ -145,16 +145,20 @@ class frameRegister(Frame):
         password = password.get()
         if username != "" and password != "":
             data = {"name":username,"password":password}
+            p = (('first', username),('second',password))
             y = json.dumps(data)
-            get = requests.get("https://us-central1-precise-truck-301217.cloudfunctions.net/insert_test",data=y,headers=HEADERS)
-            print(get.request.url)
-            x = requests.post("https://us-central1-precise-truck-301217.cloudfunctions.net/insert_test",data=y,headers=HEADERS)
-            print(x.request.url)
+            get = requests.get("https://us-central1-precise-truck-301217.cloudfunctions.net/insert_test",params=p)
+            results = get.text
+            if results:
+                print("Username is already taken")
+            else:
+                x = requests.post("https://us-central1-precise-truck-301217.cloudfunctions.net/insert_test",data=y,headers=HEADERS)
+                print(x.request.url)
+                master.switch_frame(frameWelcome)
             """
             master.establishCursor()
             master.cursor.execute('SELECT * from user_data where username = %s',(username,))
             profile = master.cursor.fetchone()
-            """
             if profile is None:
                 master.closeCursor()
                 master.establishCursor()
@@ -164,6 +168,7 @@ class frameRegister(Frame):
             else:
                 print("Username is already taken")
                 master.closeCursor()
+            """
 
 class frameHome(Frame):
     def __init__(self,master):
