@@ -99,13 +99,13 @@ class frameLogin(Frame):
         print(username.lower())
         data = {'name':username.lower(),'password':password}
         y = json.dumps(data)
-        url = ""
+        url = "https://us-central1-precise-truck-301217.cloudfunctions.net/validateLogin"
         loginRequest = requests.post(url,data=y,headers=HEADERS)
         if loginRequest.text == "False":
             print("Invalid Login Information")
         else:
             #insert json stuff
-            print("hello")
+            print(loginRequest.text)
 
         """   
             master.Profile = Profile(username,master)
