@@ -74,7 +74,7 @@ def check_Register(request):
             stmt = sqlalchemy.text("SELECT * FROM user_data where username = \'" + name+"\';")
             with db.connect() as conn:
                 query = conn.execute(stmt)
-            return str(query)
+            return "True"
         except Exception as e:
             return 'Error with get: {}'.format(str(e))
-    return False
+    return "False"
