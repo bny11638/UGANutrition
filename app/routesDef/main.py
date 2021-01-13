@@ -21,6 +21,7 @@ query_string = dict({"unix_socket": "/cloudsql/{}".format(connection_name)})
 # If the type of your table_field value is a string, surround it with double quotes.
 
 def insert(request):
+    print(str(request))
     try:
         request_json = request.get_json(force=True)
         request_args = request.args
