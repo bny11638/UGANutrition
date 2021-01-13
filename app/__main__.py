@@ -148,28 +148,11 @@ class frameRegister(Frame):
             y = json.dumps(data)
             check = requests.post("https://us-central1-precise-truck-301217.cloudfunctions.net/check_Register",data=y,headers=HEADERS)
             results = check.text
-            print(results)
             if results == 'True':
                 x = requests.post("https://us-central1-precise-truck-301217.cloudfunctions.net/insert_test",data=y,headers=HEADERS)
-                print(x.request.url)
                 master.switch_frame(frameWelcome)
             else:
                 print("Username is already taken")
-                
-            """
-            master.establishCursor()
-            master.cursor.execute('SELECT * from user_data where username = %s',(username,))
-            profile = master.cursor.fetchone()
-            if profile is None:
-                master.closeCursor()
-                master.establishCursor()
-                master.cursor.execute('INSERT INTO user_data VALUES (%s,%s,%s,%s)',(username,password,None,2000))
-                master.closeCursor()
-                master.switch_frame(frameWelcome)
-            else:
-                print("Username is already taken")
-                master.closeCursor()
-            """
 
 class frameHome(Frame):
     def __init__(self,master):
