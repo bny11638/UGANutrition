@@ -75,7 +75,7 @@ def check_Register(request):
                 with db.connect() as conn:
                     query = conn.execute(stmt)
                     print(query)
-                return query
+                return True
         except Exception as e:
             return 'Error with get: {}'.format(str(e))
-        return True
+        return False
