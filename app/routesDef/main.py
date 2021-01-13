@@ -34,6 +34,7 @@ def insert(request):
         table_field="username,password"
         table_field_value = nameJ + "," + passwordJ
         stmt = (insert(table_name).values(username=nameJ,password=passwordJ))
+    """
     db = sqlalchemy.create_engine(
       sqlalchemy.engine.url.URL(
         drivername=driver_name,
@@ -52,6 +53,7 @@ def insert(request):
             conn.execute(stmt)
     except Exception as e:
         return 'Error: {}'.format(str(e))
+    """
     return 'Hello {}! Your Password is {}'.format(escape(name,password))
 
 def hello_http(request):
