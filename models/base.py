@@ -1,6 +1,30 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import sqlalchemy
+from sqlalchemy.ext.declarative import DeclarativeMeta
+import json
+
+
+class AlchemyEncoder(json.JSONEncoder):
+
+    def default(self, obj):
+        if isinstance(obj.__class__, DeclarativeMeta):
+            # an SQLAlchemy class
+            fields = {}
+            for field in [x for x in dir(obj) if not x.startswith('_') and x != 'metadata']:
+                data = obj.__getattribute__(field)
+                try:
+                    json.dumps(data) # this will fail on non-encodable values, like other classes
+                    fields[field] = data
+                except TypeError:
+                    fields[field] = None
+            # a json-encodable dict
+            return fields
+
+        return json.JSONEncoder.default(self, obj)
+
+#Creating an encoder object
+encoder = AlchemyEncoder()
 
 # Uncomment and set the following variables depending on your specific instance and database:
 connection_name = "precise-truck-301217:us-central1:nutrition-uga"
@@ -38,3 +62,7 @@ engine = sqlalchemy.create_engine(
 
 Session = sessionmaker(bind=engine)
 Base = declarative_base()
+
+def object_as_dict(obj):
+    return {c.key: getattr(obj, c.key)
+            for c in sqlalchemy.inspect(obj).mapper.column_attrs}

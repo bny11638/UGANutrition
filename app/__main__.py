@@ -101,16 +101,16 @@ class frameLogin(Frame):
         password = password.get()
         data = {'name':username.lower(),'password':password}
         y = json.dumps(data)
-        url = CLOUDURL + "/validateLogin"
+        url = CLOUDURL + "/login"
         loginRequest = requests.post(url,data=y,headers=HEADERS)
         if loginRequest.text == "False":
             print("Invalid Login Information")
         else:
-            #insert json stuff
+            print(loginRequest.text)
             x = json.dumps(loginRequest.json())
             y = json.loads(x)
             y = dict(y)
-            master.Profile = Profile(y['username'],master)
+            master.Profile = Profile(y['name'],master)
             master.switch_frame(frameHome)
             master.closeCursor()
 
@@ -425,13 +425,18 @@ class Profile():
         if user == 'Guest':
             self.calGoal = 2000
         else:
-            master.establishCursor()
-            master.cursor.execute('SELECT goal_calories from user_data where username = %s',(self.user,))
-            results = master.cursor.fetchone()
-            if results[0] is not None:
-                self.calGoal = results[0]
+            data = {'name':self.user}
+            y = json.dumps(data)
+            url = CLOUDURL + "/calorie_goal"
+            loginRequest = requests.post(url,data=y,headers=HEADERS)
+            if loginRequest.text == "False":
+                print("Something Went Very Wrong")
             else:
-                self.calGoal = 2000
+                print(loginRequest.text)
+                x = json.dumps(loginRequest.json())
+                y = json.loads(x)
+                y = dict(y)
+                self.calGoal = y['goal_calories']
     def addFood(self,Food):
         self.foodList.append(Food)
     def getTotProtein(self):

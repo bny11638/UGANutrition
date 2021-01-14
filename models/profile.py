@@ -1,5 +1,6 @@
-from models.base import Base
+from models.base import Base, object_as_dict
 from sqlalchemy import Column, String, Integer, Date
+from dataclasses import dataclass
 
 class Profile(Base):
     __tablename__="profile_data"
