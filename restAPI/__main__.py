@@ -15,6 +15,9 @@ import json
 HEADERS = {
                 'Content-Type': 'application/json'
             }
+#CLOUDURL = "https://us-central1-precise-truck-301217.cloudfunctions.net" 
+CLOUDURL = "http://localhost:5000"
+
 #App Class
 class NutritionApp(Tk):
     def __init__(self):
@@ -96,22 +99,20 @@ class frameLogin(Frame):
     def submitLogin(self,user,password,master):
         username = user.get()
         password = password.get()
-        print(username.lower())
         data = {'name':username.lower(),'password':password}
         y = json.dumps(data)
-        url = "https://us-central1-precise-truck-301217.cloudfunctions.net/validateLogin"
+        url = CLOUDURL + "/validateLogin"
         loginRequest = requests.post(url,data=y,headers=HEADERS)
         if loginRequest.text == "False":
             print("Invalid Login Information")
         else:
             #insert json stuff
-            print(loginRequest.text)
-
-        """   
-            master.Profile = Profile(username,master)
+            x = json.dumps(loginRequest.json())
+            y = json.loads(x)
+            y = dict(y)
+            master.Profile = Profile(y['username'],master)
             master.switch_frame(frameHome)
             master.closeCursor()
-        """
 
     def __init__(self,master):
         Frame.__init__(self,master,bg="#6B081F")
@@ -147,10 +148,10 @@ class frameRegister(Frame):
         if username != "" and password != "":
             data = {"name":username,"password":password}
             y = json.dumps(data)
-            check = requests.post("https://us-central1-precise-truck-301217.cloudfunctions.net/check_Register",data=y,headers=HEADERS)
+            check = requests.post(CLOUDURL +"/check_Register",data=y,headers=HEADERS)
             results = check.text
             if results == 'True':
-                x = requests.post("https://us-central1-precise-truck-301217.cloudfunctions.net/insert_test",data=y,headers=HEADERS)
+                x = requests.post(CLOUDURL + "/insert_test",data=y,headers=HEADERS)
                 master.switch_frame(frameWelcome)
             else:
                 print("Username is already taken")
@@ -193,14 +194,7 @@ class frameHome(Frame):
             calories_remaining.config(fg="red")
         else:
             calories_remaining.config(fg="green")
-
-        # for setting minimum siszes of columns and rows
-       # col_count, row_count = userFrame.grid_size()
-      #  for col in range(col_count):
-       #     userFrame.grid_columnconfigure(col, minsize=20)
-       # for row in range(row_count):
-         #   userFrame.grid_rowconfigure(row, minsize=200)
-        ####
+            
         bar = ButtonBar(self,master)
         bar.pack(side="bottom",fill=tk.X)
         bar.homeButton['state']='disable'
@@ -428,11 +422,10 @@ class Profile():
             master.establishCursor()
             master.cursor.execute('SELECT goal_calories from user_data where username = %s',(self.user,))
             results = master.cursor.fetchone()
-            if results is not None:
+            if results[0] is not None:
                 self.calGoal = results[0]
             else:
                 self.calGoal = 2000
-        print(self.calGoal)
     def addFood(self,Food):
         self.foodList.append(Food)
     def getTotProtein(self):

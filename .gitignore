@@ -1,3 +1,6 @@
 venv
 .vscode
 *.pyc
+__pycache__
+scrape.py
+scrapeInsert.py
