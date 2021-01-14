@@ -42,14 +42,15 @@ def login():
             return "False"    
         return jsonify(object_as_dict(loginLook))
 
-@app.route("/calorieGoal)",methods=['POST'])
+@app.route("/calorie_goal",methods=['POST'])
 def calorie_goal():
     request_json = request.get_json()
     if request.method=='POST':
-        tmp = Profile(request_json['name'],request_json['password'],None,2000)
-        loginLook = session.query(Profile.goal_calories).filter(Profile.name==tmp.name)
+        tmp = Profile(request_json['name'],None,None,None)
+        loginLook = session.query(Profile).filter(Profile.name==tmp.name)
         try:
             loginLook = loginLook.one()
         except:
             return "False"    
         return jsonify(object_as_dict(loginLook))  
+

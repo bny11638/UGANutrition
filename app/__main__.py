@@ -106,13 +106,11 @@ class frameLogin(Frame):
         if loginRequest.text == "False":
             print("Invalid Login Information")
         else:
-            print(loginRequest.text)
             x = json.dumps(loginRequest.json())
             y = json.loads(x)
             y = dict(y)
             master.Profile = Profile(y['name'],master)
             master.switch_frame(frameHome)
-            master.closeCursor()
 
     def __init__(self,master):
         Frame.__init__(self,master,bg="#6B081F")
@@ -432,7 +430,6 @@ class Profile():
             if loginRequest.text == "False":
                 print("Something Went Very Wrong")
             else:
-                print(loginRequest.text)
                 x = json.dumps(loginRequest.json())
                 y = json.loads(x)
                 y = dict(y)
