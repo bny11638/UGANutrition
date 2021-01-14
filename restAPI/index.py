@@ -1,20 +1,32 @@
 from flask import Flask, jsonify, request
+import requests
 
 app = Flask(__name__)
+from models.base import Base, engine, Session
+from models.profile import Profile
 
-incomes = [
-    {'description':'salary', 'amount':500}
-]
+Base.metadata.create_all(engine) #creating database schema
+session = Session() #Creating a session
 
-@app.route("/")
+
+test = Profile('test','password',None,2000)
+@app.route("/", methods=['GET','POST'])
 def hello_world():
+    session.add(test)
+    session.commit()
     return "Hello, World!"
 
-@app.route("/incomes")
-def get_incomes():
-    return jsonify(incomes)
-
-@app.route('/incomes',methods=['POST'])
-def add_income():
-    incomes.append(request.get_json())
-    return '',204
+@app.route("/register",methods=['POST'])
+def register():
+    request_json = request.get_json()
+    if request.method=='POST':
+        user = Profile(request_json['name'],request_json['password'],None,2000)
+        tmp = session.query(Profile).filter(Profile.name==user.name).first()
+        if tmp is None:
+            session.add(user)
+            session.commit()
+            return "True"
+        else:
+            return "False"
+    else:
+        return "not post"

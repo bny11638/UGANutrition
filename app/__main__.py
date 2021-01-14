@@ -148,10 +148,16 @@ class frameRegister(Frame):
         if username != "" and password != "":
             data = {"name":username,"password":password}
             y = json.dumps(data)
-            check = requests.post(CLOUDURL +"/check_Register",data=y,headers=HEADERS)
+            check = requests.post(CLOUDURL +"/register",data=y,headers=HEADERS)
+            """
             results = check.text
             if results == 'True':
                 x = requests.post(CLOUDURL + "/insert_test",data=y,headers=HEADERS)
+                master.switch_frame(frameWelcome)
+            else:
+                print("Username is already taken")
+            """
+            if check.text == 'True':
                 master.switch_frame(frameWelcome)
             else:
                 print("Username is already taken")
