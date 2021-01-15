@@ -156,7 +156,7 @@ class frameRegister(Frame):
 class frameHome(Frame):
     def __init__(self,master):
         if master.Profile is None:
-            master.Profile = Profile("Guest",master)
+            master.Profile = Profile("Guest",master,None)
             guestAcc = True
         Frame.__init__(self,master,bg="white")
         Label(self,text=master.Profile.user.title() + "'s Profile:",font=("Calibri",18),padx=5,pady=5,anchor='w',bg="#6B081F",fg='white').pack(side="top",expand=False,fill=tk.X)
@@ -285,7 +285,7 @@ class frameFoodAdd(Frame):
     def addFoodSQL(self,master,food):
         data = {'food':food}
         y = json.dumps(data)
-        url = CLOUDURL + "/add_food"
+        url = CLOUDURL + "/fill_food"
         foodRequest = requests.post(url,data=y,headers=HEADERS)
         resultQuery = foodRequest.text
         self.clearSearchFrame(master)
