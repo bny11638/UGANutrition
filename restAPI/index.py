@@ -48,19 +48,7 @@ def login():
             return "False"    
         return jsonify(object_as_dict(loginLook))
 
-@app.route("/calorie_goal",methods=['POST'])
-def calorie_goal():
-    request_json = request.get_json()
-    if request.method=='POST':
-        tmp = Profile(request_json['name'],None,None,None)
-        loginLook = session.query(Profile).filter(Profile.name==tmp.name)
-        try:
-            loginLook = loginLook.one()
-        except:
-            return "False"    
-        return jsonify(object_as_dict(loginLook))  
-
-@app.route("/add_food",methods=['POST'])
+@app.route("/fill_food",methods=['POST'])
 def queryFood():
     request_json = request.get_json()
     name = request_json['food']
@@ -75,3 +63,24 @@ def queryFood():
             dictlist = [dict(object_as_dict(row)) for row in query]
             return json.dumps(dictlist)
     return "Not Okay"
+
+@app.route("/edit/goal_calorie",methods = ['POST'])
+def calorieEdit():
+    return
+
+@app.route("/edit/goal_weight",methods = ['POST'])
+def goalWeightEdit():
+    return
+
+@app.route("/edit/add",methods = ['POST'])
+def addFood():
+    return
+
+@app.route("/diary/delete",methods = ['POST'])
+def deleteFood():
+    return
+
+@app.route("/diary/cur_weight",methods = ['POST'])
+def setCurWeight():
+    return
+
