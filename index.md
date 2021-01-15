@@ -1,10 +1,10 @@
-## Welcome to GitHub Pages
+## Welcome to my UGANutrition Website
 
-You can use the [editor on GitHub](https://github.com/bny11638/UGANutrition/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+Below I will be showcasing some features that my application will offer and it's capabilities. This application will only be available for download onto computers, but will be made available for web browsers and mobile phones in the future. I am open to any suggestions just email me at yaudev2601@gmail.com. Thank You!
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Account Management
 
-### Markdown
+With UGANutrition you will be able to create your own account to manage and track your journey. If that's not your cup of tea you can also continue to use the app as a guest.
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
