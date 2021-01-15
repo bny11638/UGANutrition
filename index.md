@@ -20,7 +20,7 @@ At the top it also includes user information as well as those graphs but quantif
 
 ### Customizing Your Plate
 Much like the home page when a user want's to add their food they are met with a visually stunning UI with an explosion of information about the food they want to add. At the top there will be numerical values describing the contents of the food and at the bottom there are 3 graphs, 2 of which are very similar to those of the home page except for the fact that when a user selects a food there will be highlighted portions of the graphs to emphasize what they are adding onto there diet. Then there is a pie graph which visualizes the distribution of macronutrients for the food.
-![addFoodTest](addFoodTest.png)
+![addFoodTest](addFoodTest.PNG)
 
 ### Support or Contact
 
