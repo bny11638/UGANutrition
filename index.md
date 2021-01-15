@@ -15,12 +15,12 @@ Markdown is a lightweight and easy-to-use syntax for styling your writing. It in
 ### The Home Page
 UGANutrition's home page features a variety of graphs that helps visualize a user's goals and current nutrition standings. These graphs include a Calorie Bar to show how many calories have been consumed and a line to denote the calorie goal, A macronutrient vertical bar graph to visualize the distribution of macronutrients of that day's diet.
 At the top it also includes user information as well as those graphs but quantified into a list. Of course for each different food added the graph's will update automatically and reflect the changes.
-
+*Note the weight progress graph has not been implemented yet and is only there for visual
 ![homeScreenTest](homeScreenTest.png)
 
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/bny11638/UGANutrition/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+### Customizing Your Plate
+Much like the home page when a user want's to add their food they are met with a visually stunning UI with an explosion of information about the food they want to add. At the top there will be numerical values describing the contents of the food and at the bottom there are 3 graphs, 2 of which are very similar to those of the home page except for the fact that when a user selects a food there will be highlighted portions of the graphs to emphasize what they are adding onto there diet. Then there is a pie graph which visualizes the distribution of macronutrients for the food.
+![addFoodTest](addFoodTest.png)
 
 ### Support or Contact
 
