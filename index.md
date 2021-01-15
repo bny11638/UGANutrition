@@ -1,5 +1,8 @@
 ## Welcome to my UGANutrition Website
 
+**NOTICE I WAS NOT ENDORSED OR SPONSORED BY UGA TO MAKE THIS APP.
+I saw something that needed improving so I wanted to do it myself
+
 Below I will be showcasing some features that my application will offer and it's capabilities. This application will only be available for download onto computers, but will be made available for web browsers and mobile phones in the future. I am open to any suggestions just email me at yaudev2601@gmail.com. Thank You!
 
 Some features have not been implemented those will be mentioned at the bottom of the page.
