@@ -109,7 +109,7 @@ class frameLogin(Frame):
             x = json.dumps(loginRequest.json())
             y = json.loads(x)
             y = dict(y)
-            master.Profile = Profile(y['name'],master)
+            master.Profile = Profile(y['name'],master,y['goal_calories'])
             master.switch_frame(frameHome)
 
     def __init__(self,master):
@@ -283,11 +283,6 @@ class frameFoodAdd(Frame):
         
 
     def addFoodSQL(self,master,food):
-        """
-        master.establishCursor()
-        master.cursor.execute("SELECT * FROM food_table WHERE name LIKE \'%" + food + "%\'")
-        results = master.cursor.fetchall()
-        """
         data = {'food':food}
         y = json.dumps(data)
         url = CLOUDURL + "/add_food"
@@ -414,24 +409,16 @@ class frameFoodAdd(Frame):
             canvas.get_tk_widget().delete(item)
 
 class Profile():
-    def __init__(self,user,master):
+    def __init__(self,user,master,calGoal):
         self.user = user.lower()
         self.foodList = []
         self.calGoal = None
         if user == 'Guest':
             self.calGoal = 2000
+        elif calGoal is not None:
+            self.calGoal = calGoal
         else:
-            data = {'name':self.user}
-            y = json.dumps(data)
-            url = CLOUDURL + "/calorie_goal"
-            loginRequest = requests.post(url,data=y,headers=HEADERS)
-            if loginRequest.text == "False":
-                print("Something Went Very Wrong")
-            else:
-                x = json.dumps(loginRequest.json())
-                y = json.loads(x)
-                y = dict(y)
-                self.calGoal = y['goal_calories']
+            self.calGoal = 2000
     def addFood(self,Food):
         self.foodList.append(Food)
     def getTotProtein(self):

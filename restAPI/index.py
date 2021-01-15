@@ -25,7 +25,7 @@ def hello_world():
 def register():
     request_json = request.get_json()
     if request.method=='POST':
-        user = Profile(request_json['name'],request_json['password'],None,2000)
+        user = Profile(request_json['name'],request_json['password'],None,2000,None)
         tmp = session.query(Profile).filter(Profile.name==user.name).first()
         if tmp is None:
             session.add(user)
@@ -40,7 +40,7 @@ def register():
 def login():
     request_json = request.get_json()
     if request.method=='POST':
-        tmp = Profile(request_json['name'],request_json['password'],None,2000)
+        tmp = Profile(request_json['name'],request_json['password'],None,None,None)
         loginLook = session.query(Profile).filter(Profile.name==tmp.name).filter(Profile.password==tmp.password)
         try:
             loginLook = loginLook.one()
