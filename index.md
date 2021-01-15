@@ -16,6 +16,7 @@ Markdown is a lightweight and easy-to-use syntax for styling your writing. It in
 UGANutrition's home page features a variety of graphs that helps visualize a user's goals and current nutrition standings. These graphs include a Calorie Bar to show how many calories have been consumed and a line to denote the calorie goal, A macronutrient vertical bar graph to visualize the distribution of macronutrients of that day's diet.
 At the top it also includes user information as well as those graphs but quantified into a list. Of course for each different food added the graph's will update automatically and reflect the changes.
 
+![homeScreenTest](homeScreenTest.png)
 
 ### Jekyll Themes
 
