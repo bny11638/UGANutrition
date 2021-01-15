@@ -1,19 +1,19 @@
 from flask import Flask, jsonify, request
 import requests
-
-
 app = Flask(__name__)
 from models.base import Base, engine, Session, encoder, AlchemyEncoder, object_as_dict
 from models.profile import Profile, ProfileFood
 from models.food import Food
 import json
 
-
+session = Session()
+"""
 @app.route("/intialize")
 def initialize():
     Base.metadata.create_all(engine) #creating database schema
     session = Session() #Creating a session
     return("Hello World")
+"""
 
 @app.route("/", methods=['GET','POST'])
 def hello_world():
@@ -60,3 +60,18 @@ def calorie_goal():
             return "False"    
         return jsonify(object_as_dict(loginLook))  
 
+@app.route("/add_food",methods=['POST'])
+def queryFood():
+    request_json = request.get_json()
+    name = request_json['food']
+    if request.method=='POST':
+        tmp = Food(name,None,None,None,None)
+        search = "%{}%".format(name)
+        query = session.query(Food).filter(Food.food_name.like(search))
+        if query is None:
+            return "False"
+        else:
+            query = query.all()
+            dictlist = [dict(object_as_dict(row)) for row in query]
+            return json.dumps(dictlist)
+    return "Not Okay"

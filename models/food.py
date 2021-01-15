@@ -5,8 +5,7 @@ from dataclasses import dataclass
 
 class Food(Base):
     __tablename__="food_data"
-    id = Column(Integer, primary_key=True)
-    food_name = Column(String(255))
+    food_name = Column(String(255), primary_key=True)
     calories = Column(Integer)
     protein = Column(Integer)
     fat = Column(Integer)
@@ -18,7 +17,5 @@ class Food(Base):
         self.protein = protein
         self.fat = fat
         self.carb = carb
-        self.insert_date = insert_date
     
-
 

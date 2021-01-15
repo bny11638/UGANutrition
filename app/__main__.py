@@ -283,19 +283,26 @@ class frameFoodAdd(Frame):
         
 
     def addFoodSQL(self,master,food):
+        """
         master.establishCursor()
         master.cursor.execute("SELECT * FROM food_table WHERE name LIKE \'%" + food + "%\'")
         results = master.cursor.fetchall()
+        """
+        data = {'food':food}
+        y = json.dumps(data)
+        url = CLOUDURL + "/add_food"
+        foodRequest = requests.post(url,data=y,headers=HEADERS)
+        resultQuery = foodRequest.text
         self.clearSearchFrame(master)
-        self.initSearchFrame(master,results)
+        self.initSearchFrame(master,json.loads(resultQuery))
     def clearSearchFrame(self,master):
         buttonCount = 0
         for button in self.buttonList:
             button.destroy()
         self.buttonList.clear()
     def initSearchFrame(self,master,results):
-        for line in results:
-            x = Button(self.resultFrame,text=line[0].title(),anchor='w',width=4,command=lambda food=line:self.clickFood(Food(food),master),font=('century gothic',8))
+        for dictionary in results:
+            x = Button(self.resultFrame,text=dictionary['food_name'].title(),anchor='w',width=4,command=lambda food=dictionary:self.clickFood(Food(dictionary),master),font=('century gothic',8))
             self.buttonList.append(x)
         for button in self.buttonList:
             button.pack(fill=tk.X)
@@ -314,6 +321,7 @@ class frameFoodAdd(Frame):
             Label(self.topFrame,text=food.getFoodID(),font=('century gothic', '18'),bg='white').pack(side=TOP,fill=tk.BOTH,expand=1)
             Label(self.topFrame,text="Calories: " + str(food.getCal()) + "\tProtein: " + str(food.getProtein()) + "\tCarbs: " + str(food.getCarb()) + "\tFat: " + str(food.getFat()),font=('century gothic', '18'),bg='white').pack(fill=X,side=TOP)
 
+    #NEED TO IMPLEMENT API CALLS FOR ADDING FOOD
     def addFood(self,food,master):
         master.Profile.addFood(food)
         #clears top frame after you add food
@@ -448,12 +456,12 @@ class Profile():
         return count
 
 class Food():
-    def __init__(self,list):
-        self.name = list[0]
-        self.cal = int(list[1])
-        self.fat = int(list[2])
-        self.carb = int(list[3])
-        self.protein = int(list[4])
+    def __init__(self,dictionary):
+        self.name = dictionary['food_name']
+        self.cal = int(dictionary['calories'])
+        self.fat = int(dictionary['fat'])
+        self.carb = int(dictionary['carb'])
+        self.protein = int(dictionary['protein'])
     def getProtein(self):
         return self.protein
     def getCarb(self):
@@ -490,8 +498,18 @@ class frameEditGoals(Frame):
         bar = ButtonBar(self,master)
         bar.pack(side='bottom',fill=tk.X)
         bar.goals['state'] = 'disabled'
-
+        Message(self,text="Edit Weight Goal").pack()
+        weightGoal = Entry(self,width=30)
+        weightGoal.pack()
+        weightSaveButton = Button(self,text="Save",command=lambda:self.setWeightGoal(weightGoal.get(),master)).pack()
+        
     def setCalorieGoal(self,calorie,master):
+        master.Profile.calGoal = int(calorie)
+        master.establishCursor()
+        master.cursor.execute("UPDATE user_data \n SET goal_calories = %s \n WHERE username = %s",(master.Profile.calGoal,master.Profile.user))
+        master.closeCursor()
+
+    def setWeightGoal(self,calorie,master):
         master.Profile.calGoal = int(calorie)
         master.establishCursor()
         master.cursor.execute("UPDATE user_data \n SET goal_calories = %s \n WHERE username = %s",(master.Profile.calGoal,master.Profile.user))
