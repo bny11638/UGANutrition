@@ -491,16 +491,21 @@ class frameEditGoals(Frame):
         weightSaveButton = Button(self,text="Save",command=lambda:self.setWeightGoal(weightGoal.get(),master)).pack()
         
     def setCalorieGoal(self,calorie,master):
-        master.Profile.calGoal = int(calorie)
-        master.establishCursor()
-        master.cursor.execute("UPDATE user_data \n SET goal_calories = %s \n WHERE username = %s",(master.Profile.calGoal,master.Profile.user))
-        master.closeCursor()
+        if master.Profile != 'Guest':
+            data = {'name':master.Profile.user,'goal_calorie':calorie}
+            y = json.dumps(data)
+            url = CLOUDURL + "/edit/goal_calorie"
+            foodRequest = requests.post(url,data=y,headers=HEADERS)
+        master.goal_calorie = calorie
 
+    ##implement guest weight goal LATER
     def setWeightGoal(self,calorie,master):
-        master.Profile.calGoal = int(calorie)
-        master.establishCursor()
-        master.cursor.execute("UPDATE user_data \n SET goal_calories = %s \n WHERE username = %s",(master.Profile.calGoal,master.Profile.user))
-        master.closeCursor()
+        if master.Profile != 'Guest':
+            data = {'name':master.Profile.user,'goal_weight':calorie}
+            y = json.dumps(data)
+            url = CLOUDURL + "/edit/goal_weight"
+            foodRequest = requests.post(url,data=y,headers=HEADERS)
+
 
     
  #:) starting the app

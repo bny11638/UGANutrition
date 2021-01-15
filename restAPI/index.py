@@ -66,11 +66,27 @@ def queryFood():
 
 @app.route("/edit/goal_calorie",methods = ['POST'])
 def calorieEdit():
-    return
+    request_json = request.get_json()
+    username = request_json['name']
+    new_goal = request_json['goal_calorie']
+    if request.method=='POST':
+        try:
+            session.query(Profile).filter(Profile.name == username).update({Profile.goal_calories:new_goal})
+            return "Success"
+        except Exception as e:
+            return str(e)  
 
 @app.route("/edit/goal_weight",methods = ['POST'])
 def goalWeightEdit():
-    return
+    request_json = request.get_json()
+    username = request_json['name']
+    new_goal = request_json['goal_weight']
+    if request.method=='POST':
+        try:
+            session.query(Profile).filter(Profile.name == username).update({Profile.goal_weight:new_goal})
+            return "Success"
+        except Exception as e:
+            return str(e)  
 
 @app.route("/edit/add",methods = ['POST'])
 def addFood():
