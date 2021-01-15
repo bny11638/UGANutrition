@@ -147,14 +147,7 @@ class frameRegister(Frame):
             data = {"name":username,"password":password}
             y = json.dumps(data)
             check = requests.post(CLOUDURL +"/register",data=y,headers=HEADERS)
-            """
-            results = check.text
-            if results == 'True':
-                x = requests.post(CLOUDURL + "/insert_test",data=y,headers=HEADERS)
-                master.switch_frame(frameWelcome)
-            else:
-                print("Username is already taken")
-            """
+
             if check.text == 'True':
                 master.switch_frame(frameWelcome)
             else:
@@ -320,10 +313,7 @@ class frameFoodAdd(Frame):
             Button(self.topFrame,text="Add Food",command=lambda x=food:self.addFood(x,master)).pack(side=BOTTOM)
             Label(self.topFrame,text=food.getFoodID(),font=('century gothic', '18'),bg='white').pack(side=TOP,fill=tk.BOTH,expand=1)
             Label(self.topFrame,text="Calories: " + str(food.getCal()) + "\tProtein: " + str(food.getProtein()) + "\tCarbs: " + str(food.getCarb()) + "\tFat: " + str(food.getFat()),font=('century gothic', '18'),bg='white').pack(fill=X,side=TOP)
-        """
-        self.topFrame.winfo_children()[1].destroy()
-        Button(self.topFrame,text="Add Food",command=lambda:self.addFood(food,master)).pack(side=BOTTOM)
-        """
+
     def addFood(self,food,master):
         master.Profile.addFood(food)
         #clears top frame after you add food

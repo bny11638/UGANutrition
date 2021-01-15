@@ -1,14 +1,20 @@
 from flask import Flask, jsonify, request
 import requests
+
+
 app = Flask(__name__)
 from models.base import Base, engine, Session, encoder, AlchemyEncoder, object_as_dict
-from models.profile import Profile
+from models.profile import Profile, ProfileFood
+from models.food import Food
 import json
 
-Base.metadata.create_all(engine) #creating database schema
-session = Session() #Creating a session
 
-test = Profile('test','password',None,2000)
+@app.route("/intialize")
+def initialize():
+    Base.metadata.create_all(engine) #creating database schema
+    session = Session() #Creating a session
+    return("Hello World")
+
 @app.route("/", methods=['GET','POST'])
 def hello_world():
     session.add(test)
