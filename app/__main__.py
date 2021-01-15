@@ -478,14 +478,14 @@ class ButtonBar(Frame):
 class frameEditGoals(Frame):
     def __init__(self,master):
         Frame.__init__(self,master)
-        Message(self,text="Edit Calorie Goal").pack()
+        Message(self,text="Edit Calorie Goal",font=('century gothic', '18'),width = 350).pack()
         calorieGoal = Entry(self,width=30)
         calorieGoal.pack()
         calorieButton = Button(self,text="Save",command=lambda:self.setCalorieGoal(calorieGoal.get(),master)).pack()
         bar = ButtonBar(self,master)
         bar.pack(side='bottom',fill=tk.X)
         bar.goals['state'] = 'disabled'
-        Message(self,text="Edit Weight Goal").pack()
+        Message(self,text="Edit Weight Goal",font=('century gothic', '18'),width = 350).pack()
         weightGoal = Entry(self,width=30)
         weightGoal.pack()
         weightSaveButton = Button(self,text="Save",command=lambda:self.setWeightGoal(weightGoal.get(),master)).pack()
