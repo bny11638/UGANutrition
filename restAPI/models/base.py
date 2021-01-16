@@ -53,6 +53,7 @@ engine = sqlalchemy.create_engine(
                 username=db_user,
                 password=db_password,
                 database=db_name,
+                query=query_string
             ),
             pool_size=5,
             max_overflow=2,

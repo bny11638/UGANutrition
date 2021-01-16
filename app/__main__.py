@@ -15,8 +15,8 @@ import json
 HEADERS = {
                 'Content-Type': 'application/json'
             }
-#CLOUDURL = "https://us-central1-precise-truck-301217.cloudfunctions.net" 
-CLOUDURL = "http://localhost:5000"
+CLOUDURL = "https://precise-truck-301217.ue.r.appspot.com" 
+#CLOUDURL = "http://localhost:5000"
 
 #App Class
 class NutritionApp(Tk):
