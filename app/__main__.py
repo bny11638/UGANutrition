@@ -420,6 +420,7 @@ class Profile():
         self.user = user.lower()
         self.foodList = []
         self.calGoal = None
+        self.weightGoal = None
         if user == 'Guest':
             self.calGoal = 2000
         elif calGoal is not None:
@@ -525,7 +526,7 @@ class frameEditGoals(Frame):
             y = json.dumps(data)
             url = CLOUDURL + "/edit/goal_weight"
             foodRequest = requests.post(url,data=y,headers=HEADERS)
-
+        master.Profile.weightGoal = int(calorie)
 
     
  #:) starting the app
