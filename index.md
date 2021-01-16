@@ -23,17 +23,22 @@ At the top it also includes user information as well as those graphs but quantif
 Much like the home page when a user want's to add their food they are met with a visually stunning UI with an explosion of information about the food they want to add. At the top there will be numerical values describing the contents of the food and at the bottom there are 3 graphs, 2 of which are very similar to those of the home page except for the fact that when a user selects a food there will be highlighted portions of the graphs to emphasize what they are adding onto there diet. Then there is a pie graph which visualizes the distribution of macronutrients for the food.
 ![addFoodTest](addFoodTest.PNG)
 
+## Food Diary
+A user's diary tab will keep list on everything the user has consumed for the day and will give them the option to remove something if added by mistake. With this tab the user can log out, come back and have their food saved into this diary and at some point I will be implementing a way to change the date so a user can review what he/she has eaten on a certain date. At the top there is also a place where you can enter your weight for the day so you can track your progress across a certain amount of time (Not fully implemented yet)
+![diary](diary.png)
+
 ## To Be Implemented
-### Food Diary
-The Food Diary is going to be an important part of this app. It will allow the user to save the food they ate for the day -- they can log out and log back in and still have the same food saved, EDIT their currently consumed food list which is not a feature yet, and allow the user to CHANGE THE DAY to previous days. Of course I am extremely excited to provide this update but I am going to need some time to make sure everything is perfect.
 ### Edit Goals
-The Edit Goals tab will be a simple page where you can configure your goal weight, and how many calories you want to eat in a day.
+The Edit Goals tab will be a simple page where you can configure your goal weight, and how many calories you want to eat in a day. There is functionality for edit calories but the page is still under design.
 
 ## How to Download
-Currently there is no download support available for people who dont want to have to install python and the dependencies. There will be one out soon
+The first release of UGANutrition app came out on 01/16/2020. So far it is compatible with windows and you can download it by clicking the link below.
+##Windows
+https://github.com/bny11638/UGANutrition/raw/main/app/dist/UGANutrition-1.0-amd64.msi
+
 
 ## Timeline
-Right now I am working on a backend API for my application to communicate with my database, and after that I will release a first version for download, and then I am going to implement Food Diary.
+I just released the app's first downloadable, and I am going to implement date changing and an updated edit goals frame at some point.
 
 ## Support or Contact
 If you have any questions so far you can email me at yaudev2601@gmail.com
