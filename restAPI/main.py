@@ -25,10 +25,8 @@ def rollback():
     session.rollback()
     return "ok"
 
-@app.route("/", methods=['GET','POST'])
+@app.route("/", methods=['GET'])
 def hello_world():
-    session.add(test)
-    session.commit()
     return "Hello, World!"
 
 @app.route("/register",methods=['POST'])
