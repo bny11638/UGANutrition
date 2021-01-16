@@ -478,17 +478,17 @@ class ButtonBar(Frame):
 class frameEditGoals(Frame):
     def __init__(self,master):
         Frame.__init__(self,master)
-        Message(self,text="Edit Calorie Goal",font=('century gothic', '18'),width = 350).pack()
-        calorieGoal = Entry(self,width=30)
-        calorieGoal.pack()
-        calorieButton = Button(self,text="Save",command=lambda:self.setCalorieGoal(calorieGoal.get(),master)).pack()
+        Message(self,text="Edit Calorie Goal",font=('century gothic', '18'),width = 350).place(relx=0.5, rely=0.25, anchor=CENTER)
+        calorieGoal = Entry(self,width=30,font=('century gothic', '18'))
+        calorieGoal.place(relx=0.5, rely=0.30, anchor=CENTER)
+        calorieButton = Button(self,text="Save",command=lambda:self.setCalorieGoal(calorieGoal.get(),master)).place(relx=0.5, rely=0.35, anchor=CENTER)
         bar = ButtonBar(self,master)
         bar.pack(side='bottom',fill=tk.X)
         bar.goals['state'] = 'disabled'
-        Message(self,text="Edit Weight Goal",font=('century gothic', '18'),width = 350).pack()
-        weightGoal = Entry(self,width=30)
-        weightGoal.pack()
-        weightSaveButton = Button(self,text="Save",command=lambda:self.setWeightGoal(weightGoal.get(),master)).pack()
+        Message(self,text="Edit Weight Goal",font=('century gothic', '18'),width = 350).place(relx=0.5, rely=0.40, anchor=CENTER)
+        weightGoal = Entry(self,width=30,font=('century gothic', '18'))
+        weightGoal.place(relx=0.5, rely=0.45, anchor=CENTER)
+        weightSaveButton = Button(self,text="Save",command=lambda:self.setWeightGoal(weightGoal.get(),master)).place(relx=0.5, rely=0.50, anchor=CENTER)
         
     def setCalorieGoal(self,calorie,master):
         master.Profile.calGoal = int(calorie)
