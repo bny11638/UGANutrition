@@ -10,6 +10,9 @@ from datetime import date
 import calendar
 import requests
 import json
+import sys
+import os
+import resources
 
 
 HEADERS = {
@@ -17,6 +20,16 @@ HEADERS = {
             }
 CLOUDURL = "https://precise-truck-301217.ue.r.appspot.com" 
 #CLOUDURL = "http://localhost:5000"
+
+def find_data_file(filename):
+    if getattr(sys, "frozen", False):
+        # The application is frozen
+        datadir = os.path.dirname(sys.executable)
+    else:
+        # The application is not frozen
+        # Change this bit to match where you store your data files:
+        datadir = os.path.dirname(__file__)
+    return os.path.join(datadir, 'lib', 'resources', filename)
 
 #App Class
 class NutritionApp(Tk):
@@ -55,28 +68,27 @@ class NutritionApp(Tk):
         self.connection.close()
     #initializes all images
     def initImage(self):
-        imguh = Image.open("resources/login.png")
+        imguh = Image.open(find_data_file("login.png"))
         imguh = imguh.resize((250, 60), Image.ANTIALIAS) ## The (250, 250) is (height, width
         im_login = ImageTk.PhotoImage(imguh)
         self.loginButtonImg = im_login
-        self.logo = ImageTk.PhotoImage(file="resources/logosmall.png")
-        register = Image.open("resources/register.png")
+        self.logo = ImageTk.PhotoImage(file=find_data_file("logosmall.png"))
+        register = Image.open(find_data_file("register.png"))
         register = register.resize((250, 60), Image.ANTIALIAS)
         im_register = ImageTk.PhotoImage(register)
         self.registerButtonImg = im_register
-        use_guest = Image.open("resources/guest.png")
+        use_guest = Image.open(find_data_file("guest.png"))
         use_guest = use_guest.resize((250, 60), Image.ANTIALIAS)
         im_guest = ImageTk.PhotoImage(use_guest)
         self.guestButtonImg = im_guest
-        back = Image.open("resources/back.png")
+        back = Image.open(find_data_file("back.png"))
         back = back.resize((80, 25), Image.ANTIALIAS)
         im_back = ImageTk.PhotoImage(back)
         self.backButtomImg = im_back
-        submit = Image.open("resources/submit.png")
+        submit = Image.open(find_data_file("submit.png"))
         submit = submit.resize((80, 25), Image.ANTIALIAS)
         im_submit = ImageTk.PhotoImage(submit)
         self.submitButtomImg = im_submit
-        self.addButtonPhoto = PhotoImage(file='resources/redPlusButton.png')
     #selected date of session
         self.today = date.today()
         self.dt_string = self.today.strftime('%B %d')
