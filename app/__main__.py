@@ -315,7 +315,6 @@ class frameFoodAdd(Frame):
             Label(self.topFrame,text=food['food_name'],font=('century gothic', '18'),bg='white').pack(side=TOP,fill=tk.BOTH,expand=1)
             Label(self.topFrame,text="Calories: " + str(food['calories']) + "\tProtein: " + str(food['protein']) + "\tCarbs: " + str(food['carb']) + "\tFat: " + str(food['fat']),font=('century gothic', '18'),bg='white').pack(fill=X,side=TOP)
 
-    #NEED TO IMPLEMENT API CALLS FOR ADDING FOOD
     def addFood(self,food,master):
         tmpFood = Food(food) #Convert food dict into Food Object
         if master.Profile.user != 'guest':
@@ -323,13 +322,10 @@ class frameFoodAdd(Frame):
             y = json.dumps(data)
             url = CLOUDURL + "/edit/add"
             addRequest = requests.post(url,data=y,headers=HEADERS)
-            if addRequest.text == 'True':
-                master.Profile.addFood(tmpFood)
-        else:
-            master.Profile.addFood(tmpFood)
-            for x in self.topFrame.winfo_children():
+        master.Profile.addFood(tmpFood)
+        for x in self.topFrame.winfo_children():
                 x.destroy()
-            self.clearGraph(master)
+        self.clearGraph(master)
     def clearGraph(self,master):
         self.clear(self.figMacroCanvas)
         self.clear(self.figPieCanvas)
@@ -417,9 +413,9 @@ class frameFoodAdd(Frame):
 
 class Profile():
     def __init__(self,user,master,calGoal):
-        self.user = user.lower()
-        self.foodList = []
-        self.calGoal = None
+        self.user = user.lower() #Username
+        self.foodList = [] #Food List containing food from the sessions insert_date
+        self.calGoal = None 
         self.weightGoal = None
         if user == 'Guest':
             self.calGoal = 2000
@@ -427,14 +423,15 @@ class Profile():
             self.calGoal = calGoal
         else:
             self.calGoal = 2000
-        self.loadFood(master)
+        self.loadFood(master) 
 
+    #Loads in food if user has already put in food
     def loadFood(self,master):
+        self.clearFood()
         data = {"name":self.user,"instance_date":master.instance_date}
         y = json.dumps(data)
         url = CLOUDURL + "/diary/food"
         request = requests.post(url,data=y,headers=HEADERS)
-        print(request.text)
         request = request.json()
         for dictionary in request:
             self.foodList.append(Food(dictionary))
@@ -490,7 +487,7 @@ class ButtonBar(Frame):
         self.homeButton.pack(side="left",expand=True,fill=tk.X)
         self.goals = Button(self,text="Edit Goals",height=3,bg="gray",fg="white",command=lambda:master.switch_frame(frameEditGoals))
         self.goals.pack(side="left",expand=True,fill=tk.X)
-        self.diaryButton = Button(self,text="Food Diary",height=3,bg="gray",fg="white")
+        self.diaryButton = Button(self,text="Food Diary",height=3,bg="gray",fg="white",command=lambda:master.switch_frame(frameDiary))
         self.diaryButton.pack(side="left",expand=True,fill=tk.X)
         if master.Profile.user == 'Guest':
             self.goals['state'] = 'disabled'
@@ -528,7 +525,67 @@ class frameEditGoals(Frame):
             foodRequest = requests.post(url,data=y,headers=HEADERS)
         master.Profile.weightGoal = int(calorie)
 
-    
+class frameDiary(Frame):
+    def __init__(self,master):
+        Frame.__init__(self,master)
+        self.buttonList = [] #contains the buttons for the food
+        self.FoodList = [] #contains the food user has eaten for day
+        self.LabelList = [] #Contains the labels for food consumed
+        ###TOP ENTER CURRENT WEIGHT EDIT FRAME#
+        Label(self,text="Your Diary:",bg="#6B081F",font=("Calibri",26),fg='white',anchor='w').pack(side='top',fill=tk.X)
+        self.currentWeightFrame = Frame(self,bg="#6B081F")
+        self.currentWeightFrame.pack(fill=tk.X,side='top')
+        Label(self.currentWeightFrame,text="Enter Today's Weight:",bg="#6B081F",font=("Calibri",18),fg='white').pack(side='left',fill=tk.X,pady=(10,30))
+        Entry(self.currentWeightFrame,width=10,justify='center',bg="white",font=("Calibri",15)).pack(side='left',pady=(10,30),padx=20)
+        ###FOODLISTED FRAME BELOW
+        self.foodListFrame = Frame(self,bg='white')
+        self.foodListFrame.pack(fill=BOTH,expand=1,side='top')
+        self.initSearchFrame(master,master.Profile.foodList)
+        ###BOTTOM BAR 
+        bar = ButtonBar(self,master)
+        bar.pack(side="bottom",fill=tk.X)
+        bar.diaryButton['state']='disable'
+    def clearSearchFrame(self,master,frame):
+        buttonCount = 0
+        for button in self.buttonList:
+            button.destroy()
+        for label in self.LabelList:
+            label.destroy()
+        self.buttonList.clear()
+        self.LabelList.clear()
+        for widget in frame.winfo_children():
+            widget.destroy()
+    ##fills the foodListFrame with tmpFrames holding labels and buttons for food
+    def initSearchFrame(self,master,foodList):
+        Label(self.foodListFrame,text="Food Log:",fg="#6B081F",font=("Calibri",24,'bold','underline'),bg='white').pack(fill=tk.X,pady=(5,15))
+        for food in foodList:
+            tmpFrame = Frame(self.foodListFrame,bg='white')
+            #buttonString = dictionary['food_name'].title() + "\tCalories: " + str(dictionary['calories']) + "\tProtein: " +  str(dictionary['protein']) + "g\t Fat: " + str(dictionary['fat']) + "g\t\tCarbohydrates: " + str(dictionary['carb']) + "g"
+            buttonString = food.name.title() + "\t\tCalories: " + str(food.cal) + "\t\tProtein: " +  str(food.protein) + "g\t\t Fat: " + str(food.fat) + "g\t\tCarbohydrates: " + str(food.carb) + "g"         
+            foodLabel = Label(tmpFrame,text=buttonString,anchor='w',font=('century gothic',10,'bold'),bg="white",fg="#6B081F")
+            removeButton = Button(tmpFrame,text="Remove",bg="#6B081F",fg="white",command=lambda food=food.name:self.remove(food,master))
+            self.buttonList.append(removeButton)
+            self.LabelList.append(foodLabel)
+            foodLabel.pack(side='left',fill=tk.X)
+            removeButton.pack(side='right',fill=tk.X)
+            tmpFrame.pack(fill=tk.X)
+    def remove(self,food,master):
+        if master.Profile.user != 'guest':
+            data = {"name":master.Profile.user,"food_name":food,"insert_date":master.instance_date}
+            y = json.dumps(data)
+            url = CLOUDURL + "/diary/delete"
+            request = requests.post(url,data=y,headers=HEADERS)
+        self.removeFromList(food,master.Profile.foodList)
+        self.reload(master,self.master.Profile.foodList)
+    def removeFromList(self,food_name,food_list):
+        for i in range(len(food_list)): 
+            if food_list[i].name == food_name: 
+                del food_list[i] 
+                break
+    def reload(self,master,foodList):
+        self.clearSearchFrame(master,self.foodListFrame)
+        self.initSearchFrame(master,foodList)
+        
  #:) starting the app
 if __name__ == "__main__":
     app = NutritionApp()

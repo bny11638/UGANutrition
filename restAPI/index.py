@@ -115,6 +115,18 @@ def addFood():
 
 @app.route("/diary/delete",methods = ['POST'])
 def deleteFood():
+    request_json = request.get_json()
+    username = request_json['name']
+    food_name = request_json['food_name']
+    insert_date = request_json['insert_date']
+    if request.method=='POST':
+        try:
+            record_obj = session.query(ProfileFood).filter(ProfileFood.profile_id==username).filter(ProfileFood.food_name==food_name).filter(ProfileFood.insert_date==insert_date).first()
+            session.delete(record_obj)
+            session.commit()
+            return "ok"
+        except Exception as e:
+            return str(e)  
     return
 
 @app.route("/diary/cur_weight",methods = ['POST'])
