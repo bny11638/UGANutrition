@@ -33,7 +33,7 @@ The Edit Goals tab will be a simple page where you can configure your goal weigh
 
 ## How to Download
 The first release of UGANutrition app came out on 01/16/2020. So far it is compatible with windows and you can download it by clicking the link below.
-##Windows
+## Windows
 https://github.com/bny11638/UGANutrition/raw/main/app/dist/UGANutrition-1.0-amd64.msi
 
 
