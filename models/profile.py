@@ -42,3 +42,5 @@ class ProfileFood(Base):
         self.carb = carb
         self.insert_date = insert_date
     
+    def asDict(self):
+        return {"profile_id":self.profile_id,"food_name":self.food_name,"calories":self.calories,"protein":self.protein,"fat":self.fat,"carb":self.carb,"insert_date":self.insert_date}

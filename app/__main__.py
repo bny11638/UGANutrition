@@ -60,29 +60,29 @@ class NutritionApp(Tk):
         im_login = ImageTk.PhotoImage(imguh)
         self.loginButtonImg = im_login
         self.logo = ImageTk.PhotoImage(file="resources/logosmall.png")
-
         register = Image.open("resources/register.png")
         register = register.resize((250, 60), Image.ANTIALIAS)
         im_register = ImageTk.PhotoImage(register)
         self.registerButtonImg = im_register
-
         use_guest = Image.open("resources/guest.png")
         use_guest = use_guest.resize((250, 60), Image.ANTIALIAS)
         im_guest = ImageTk.PhotoImage(use_guest)
         self.guestButtonImg = im_guest
-
         back = Image.open("resources/back.png")
         back = back.resize((80, 25), Image.ANTIALIAS)
         im_back = ImageTk.PhotoImage(back)
         self.backButtomImg = im_back
-
         submit = Image.open("resources/submit.png")
         submit = submit.resize((80, 25), Image.ANTIALIAS)
         im_submit = ImageTk.PhotoImage(submit)
         self.submitButtomImg = im_submit
-
         self.addButtonPhoto = PhotoImage(file='resources/redPlusButton.png')
-        
+    #selected date of session
+        self.today = date.today()
+        self.dt_string = self.today.strftime('%B %d')
+        #self.instance_date = self.today.strftime("%Y/%m/%d %H:%M:%S")
+        self.instance_date = self.today.isoformat()
+        self.weekday = calendar.day_name[self.today.weekday()]
             
 #Welcome Screen DESIGN IS FOR MATTHEW
 class frameWelcome(Frame):
@@ -103,7 +103,8 @@ class frameLogin(Frame):
         y = json.dumps(data)
         url = CLOUDURL + "/login"
         loginRequest = requests.post(url,data=y,headers=HEADERS)
-        if loginRequest.text == "False":
+        tmp = loginRequest.text
+        if tmp.find("False") > -1:
             print("Invalid Login Information")
         else:
             x = json.dumps(loginRequest.json())
@@ -167,11 +168,8 @@ class frameHome(Frame):
         userFrame.pack(side="top",expand=1,fill=BOTH)
         rows, columns = userFrame.grid_size()
         #Put your code in this blank spot
-        today = date.today()
-        the_date = today.strftime('%B %d')
-        weekday = calendar.day_name[today.weekday()]
         userFrame.columnconfigure(1, weight=1)
-        Label(date_frame,text=weekday + ", " + the_date,font=("century gothic",18),bg='white').grid(column=1)
+        Label(date_frame,text=master.weekday + ", " + master.dt_string,font=("century gothic",18),bg='white').grid(column=1)
         Label(userFrame,text="Calories Consumed:",font=("century gothic",18),anchor='w',bg='white').grid(row=1,sticky='w')
         # Calories consumed will be red if exceeding requirement needed by goal; green otherwise
         Label(userFrame,text=master.Profile.getTotCal(),font=("century gothic",18),anchor='e',bg='white').grid(row=1,column=1,sticky='e')
@@ -297,32 +295,41 @@ class frameFoodAdd(Frame):
         self.buttonList.clear()
     def initSearchFrame(self,master,results):
         for dictionary in results:
-            x = Button(self.resultFrame,text=dictionary['food_name'].title(),anchor='w',width=4,command=lambda food=dictionary:self.clickFood(Food(dictionary),master),font=('century gothic',8))
+            x = Button(self.resultFrame,text=dictionary['food_name'].title(),anchor='w',width=4,command=lambda food=dictionary:self.clickFood(food,master),font=('century gothic',8))
             self.buttonList.append(x)
         for button in self.buttonList:
             button.pack(fill=tk.X)
     def clickFood(self,food,master):
-        self.refreshGraphs(food,master)
+        tmpFood = Food(food) # need to convert dict into Food object
+        self.refreshGraphs(tmpFood,master)
         #Tries to clear top frame before initializing food stats
         try:
             for x in self.topFrame.winfo_children():
                 x.destroy()
         except: 
             Button(self.topFrame,text="Add Food",command=lambda x=food:self.addFood(x,master)).pack(side=BOTTOM)
-            Label(self.topFrame,text=food.getFoodID(),font=('century gothic', '18'),bg='white').pack(side=TOP,fill=tk.BOTH,expand=1)
-            Label(self.topFrame,text="Calories: " + str(food.getCal()) + "\tProtein: " + str(food.getProtein()) + "\tCarbs: " + str(food.getCarb()) + "\tFat: " + str(food.getFat()),font=('century gothic', '18'),bg='white').pack(fill=X,side=TOP)
+            Label(self.topFrame,text=food['food_name'],font=('century gothic', '18'),bg='white').pack(side=TOP,fill=tk.BOTH,expand=1)
+            Label(self.topFrame,text="Calories: " + str(food['calories']) + "\tProtein: " + str(food['protein']) + "\tCarbs: " + str(food['carb']) + "\tFat: " + str(food['fat']),font=('century gothic', '18'),bg='white').pack(fill=X,side=TOP)
         else:
             Button(self.topFrame,text="Add Food",command=lambda x=food:self.addFood(x,master)).pack(side=BOTTOM)
-            Label(self.topFrame,text=food.getFoodID(),font=('century gothic', '18'),bg='white').pack(side=TOP,fill=tk.BOTH,expand=1)
-            Label(self.topFrame,text="Calories: " + str(food.getCal()) + "\tProtein: " + str(food.getProtein()) + "\tCarbs: " + str(food.getCarb()) + "\tFat: " + str(food.getFat()),font=('century gothic', '18'),bg='white').pack(fill=X,side=TOP)
+            Label(self.topFrame,text=food['food_name'],font=('century gothic', '18'),bg='white').pack(side=TOP,fill=tk.BOTH,expand=1)
+            Label(self.topFrame,text="Calories: " + str(food['calories']) + "\tProtein: " + str(food['protein']) + "\tCarbs: " + str(food['carb']) + "\tFat: " + str(food['fat']),font=('century gothic', '18'),bg='white').pack(fill=X,side=TOP)
 
     #NEED TO IMPLEMENT API CALLS FOR ADDING FOOD
     def addFood(self,food,master):
-        master.Profile.addFood(food)
-        #clears top frame after you add food
-        for x in self.topFrame.winfo_children():
-            x.destroy()
-        self.clearGraph(master)
+        tmpFood = Food(food) #Convert food dict into Food Object
+        if master.Profile.user != 'guest':
+            data = {'name':master.Profile.user, 'food_name':food['food_name'], 'calories':food['calories'],'protein':food['protein'],'fat':food['fat'],'carb':food['carb'],'insert_date':master.instance_date} 
+            y = json.dumps(data)
+            url = CLOUDURL + "/edit/add"
+            addRequest = requests.post(url,data=y,headers=HEADERS)
+            if addRequest.text == 'True':
+                master.Profile.addFood(tmpFood)
+        else:
+            master.Profile.addFood(tmpFood)
+            for x in self.topFrame.winfo_children():
+                x.destroy()
+            self.clearGraph(master)
     def clearGraph(self,master):
         self.clear(self.figMacroCanvas)
         self.clear(self.figPieCanvas)
@@ -419,6 +426,19 @@ class Profile():
             self.calGoal = calGoal
         else:
             self.calGoal = 2000
+        self.loadFood(master)
+
+    def loadFood(self,master):
+        data = {"name":self.user,"instance_date":master.instance_date}
+        y = json.dumps(data)
+        url = CLOUDURL + "/diary/food"
+        request = requests.post(url,data=y,headers=HEADERS)
+        print(request.text)
+        request = request.json()
+        for dictionary in request:
+            self.foodList.append(Food(dictionary))
+    def clearFood(self):
+        self.foodList.clear()
     def addFood(self,Food):
         self.foodList.append(Food)
     def getTotProtein(self):
@@ -491,16 +511,16 @@ class frameEditGoals(Frame):
         weightSaveButton = Button(self,text="Save",command=lambda:self.setWeightGoal(weightGoal.get(),master)).pack()
         
     def setCalorieGoal(self,calorie,master):
-        if master.Profile != 'Guest':
+        if master.Profile.user != 'guest':
             data = {'name':master.Profile.user,'goal_calorie':calorie}
             y = json.dumps(data)
             url = CLOUDURL + "/edit/goal_calorie"
             foodRequest = requests.post(url,data=y,headers=HEADERS)
-        master.goal_calorie = calorie
+        master.Profile.calGoal = int(calorie)
 
     ##implement guest weight goal LATER
     def setWeightGoal(self,calorie,master):
-        if master.Profile != 'Guest':
+        if master.Profile.user != 'guest':
             data = {'name':master.Profile.user,'goal_weight':calorie}
             y = json.dumps(data)
             url = CLOUDURL + "/edit/goal_weight"
