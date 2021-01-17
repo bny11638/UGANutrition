@@ -6,3 +6,5 @@ scrape.py
 scrapeInsert.py
 build
 *.spec
+dist
+*.zip
