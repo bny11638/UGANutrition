@@ -105,6 +105,7 @@ class frameLogin(Frame):
         tmp = loginRequest.text
         if tmp.find("False") > -1:
             #invalid login information Matthew
+            self.invalid_login.pack()
             print("Invalid Login Information")
         else:
             x = json.dumps(loginRequest.json())
@@ -125,6 +126,7 @@ class frameLogin(Frame):
         passInput.pack()
         Button(self,text="Submit",image=master.submitButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:self.submitLogin(userInput,passInput,master)).pack(pady=(20,10))
         Button(self,text="Back",image=master.backButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameWelcome)).pack()
+        self.invalid_login = Label(self,text="Invalid Login Information",bg="#6B081F",fg="white", font=('century gothic', '12', 'bold'))
 
 #Register Screen #make sure both arent empty
 #password in asterisks
