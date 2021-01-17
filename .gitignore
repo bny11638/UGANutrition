@@ -5,3 +5,4 @@ __pycache__
 scrape.py
 scrapeInsert.py
 build
+*.spec

@@ -1,3 +1,0 @@
-include resources/*.png 
-recursive-include resources/*.png
-include resources
