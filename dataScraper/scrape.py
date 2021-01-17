@@ -24,6 +24,7 @@ def loadFood(diningHall):
     #count = 0
     #fileHandle = open("csvData/" + diningHall + ".csv", "a+")
     #fileHandle.write("Name,Calories,Protein,Carbs,Fat\n")
+    #schema is food_name,calories,protein,fat,carbs
     for item in soup.findAll('li'):
         for a in item.findAll('a'):
             print("\n")
@@ -36,9 +37,9 @@ def loadFood(diningHall):
                 protein = re.sub("g","",names['protein'])
                 carb = re.sub("g","",names['total-carb'])
                 fat = re.sub("g","",names['total-fat'])
-                val = [food_id,calories,fat,carb,protein]
+                val = [food_id,calories,protein,fat,carb]
                 print(val)
-                cursor.execute('INSERT IGNORE INTO food_table VALUES (%s,%s,%s,%s,%s)',val)
+                cursor.execute('INSERT IGNORE INTO food_data VALUES (%s,%s,%s,%s,%s)',val)
                 cursor.close() #NEED THIS TO CLEAR CURSOR
                 connection.commit() #NEED THIS LINE TO SAVE DATABASE
                 #fileHandle.write(food_id + "," + names['calories'] + "," + protein + "," + carb + "," + fat + "\n")

@@ -1,106 +1,152 @@
-from flask import escape
-import sqlalchemy
-from flask import jsonify
+from flask import Flask, jsonify, request
+import requests
+app = Flask(__name__)
+from models.base import Base, engine, Session, encoder, AlchemyEncoder, object_as_dict
+from models.profile import Profile, ProfileFood
+from models.food import Food
+import json
+from datetime import date
 
-# Uncomment and set the following variables depending on your specific instance and database:
-connection_name = "precise-truck-301217:us-central1:nutrition-uga"
-#table_name = ""
-#table_field = ""
-#table_field_value = ""
-db_name = "nutrition_app"
-db_user = "guest"
-db_password = "password"
+session = Session()
+"""
+@app.route("/intialize")
+def initialize():
+    Base.metadata.create_all(engine) #creating database schema
+    session = Session() #Creating a session
+    return("Hello World")
+"""
+#convert's date json to string json
+def dateConvert(o):
+    if isinstance(o, date):
+        return o.__str__()
 
-# If your database is MySQL, uncomment the following two lines:
-driver_name = 'mysql+pymysql'
-query_string = dict({"unix_socket": "/cloudsql/{}".format(connection_name)})
+@app.route("/rollback")
+def rollback():
+    session.rollback()
+    return "ok"
 
-# If your database is PostgreSQL, uncomment the following two lines:
-#driver_name = 'postgres+pg8000'
-#query_string =  dict({"unix_sock": "/cloudsql/{}/.s.PGSQL.5432".format(connection_name)})
+@app.route("/", methods=['GET'])
+def hello_world():
+    return "Hello, World!"
 
-# If the type of your table_field value is a string, surround it with double quotes.
-
-db = sqlalchemy.create_engine(
-            sqlalchemy.engine.url.URL(
-                drivername=driver_name,
-                username=db_user,
-                password=db_password,
-                database=db_name,
-                query=query_string,
-            ),
-            pool_size=5,
-            max_overflow=2,
-            pool_timeout=30,
-            pool_recycle=1800
-            )
-
-def hello_http(request):
+@app.route("/register",methods=['POST'])
+def register():
     request_json = request.get_json()
-    request_args = request.args
-    if request_json and 'name' in request_json:
-        name = request_json['name']
-    elif request_args and 'name' in request_args:
-        name = request_args['name']
+    if request.method=='POST':
+        user = Profile(request_json['name'],request_json['password'],None,2000,None)
+        tmp = session.query(Profile).filter(Profile.name==user.name).first()
+        if tmp is None:
+            session.add(user)
+            session.commit()
+            return "True"
+        else:
+            return "False"
     else:
-        name = 'World'
-    return 'It worked ! Hello {}!'.format(escape(name))
+        return "not post"
 
-#Inserts username and password  into db
-def insert_test(request):
+@app.route("/login",methods=['POST'])
+def login():
     request_json = request.get_json()
-    request_args = request.args
-    stmt = None
-    if request.method == 'POST':
+    if request.method=='POST':
+        tmp = Profile(request_json['name'],request_json['password'],None,None,None)
+        loginLook = session.query(Profile).filter(Profile.name==tmp.name).filter(Profile.password==tmp.password)
         try:
-            name = request_json['name']
-            password = request_json['password']
-            stmt = sqlalchemy.text("INSERT INTO user_data (username, password) values (\'" + name + "\'," + "\'" + password + "\');")
-            with db.connect() as conn:
-                conn.execute(stmt)
+            loginLook = loginLook.one()
         except Exception as e:
-            return 'Error: {}'.format(str(e))
-        return 'ok'
-    return 'Error: post request is required'
+            return "False" + str(e)   
+        return jsonify(object_as_dict(loginLook))
 
-#Check's if username is already taken
-def check_Register(request):
+@app.route("/fill_food",methods=['POST'])
+def queryFood():
     request_json = request.get_json()
-    request_args = request.args
-    stmt = None
-    if request.method == 'POST':
-        try:
-            query = None
-            name = request_json['name']
-            stmt = sqlalchemy.text("SELECT * FROM user_data where username = \'" + name+"\';")
-            with db.connect() as conn:
-                query = conn.execute(stmt)
-            if query.fetchone() is None:
-                return "True"
-            else:
-                return "False"
-        except Exception as e:
-            return 'Error with get: {}'.format(str(e))
-    return "Error needs to be post"
+    name = request_json['food']
+    if request.method=='POST':
+        tmp = Food(name,None,None,None,None)
+        search = "%{}%".format(name)
+        query = session.query(Food).filter(Food.food_name.like(search))
+        if query is None:
+            return "False"
+        else:
+            query = query.all()
+            dictlist = []
+            for food in query:
+                dictlist.append(dict(food.asDict()))
+            return json.dumps(dictlist)
+    return "Not Okay"
 
-def validateLogin(request):
+
+@app.route("/edit/goal_calorie",methods = ['POST'])
+def calorieEdit():
     request_json = request.get_json()
-    request_args = request.args
-    stmt = None
-    if request.method == 'POST':
+    username = request_json['name']
+    new_goal = request_json['goal_calorie']
+    if request.method=='POST':
         try:
-            query = None
-            name = request_json['name']
-            password = request_json['password']
-            stmt = sqlalchemy.text("SELECT * FROM user_data where username =\'" + name + "\' AND password=\'" + password + "\';")
-            with db.connect() as conn:
-                query = conn.execute(stmt)
-            tmp = query.fetchone()
-            if tmp is None:
-                return "False"
-            else:
-                tmp = tmp.items()
-                return jsonify(tmp)
+            session.query(Profile).filter(Profile.name == username).update({Profile.goal_calories:new_goal})
+            return "Success"
         except Exception as e:
-                return 'Error with get: {}'.format(str(e))
-    return "Error request method needs to be POST"
+            return str(e)  
+
+@app.route("/edit/goal_weight",methods = ['POST'])
+def goalWeightEdit():
+    request_json = request.get_json()
+    username = request_json['name']
+    new_goal = request_json['goal_weight']
+    if request.method=='POST':
+        try:
+            session.query(Profile).filter(Profile.name == username).update({Profile.goal_weight:new_goal})
+            return "Success"
+        except Exception as e:
+            return str(e)  
+
+@app.route("/edit/add",methods = ['POST'])
+def addFood():
+    request_json = request.get_json()
+    username = request_json['name']
+    target = ProfileFood(username,request_json['food_name'],request_json['calories'],request_json['protein'],request_json['fat'],request_json['carb'],request_json['insert_date'])
+    if request.method=='POST':
+        try:
+            session.add(target)
+            session.commit()
+            return "True"
+        except Exception as e:
+            return str(e)  
+    return
+
+@app.route("/diary/delete",methods = ['POST'])
+def deleteFood():
+    request_json = request.get_json()
+    username = request_json['name']
+    food_name = request_json['food_name']
+    insert_date = request_json['insert_date']
+    if request.method=='POST':
+        try:
+            record_obj = session.query(ProfileFood).filter(ProfileFood.profile_id==username).filter(ProfileFood.food_name==food_name).filter(ProfileFood.insert_date==insert_date).first()
+            session.delete(record_obj)
+            session.commit()
+            return "ok"
+        except Exception as e:
+            return str(e)  
+    return
+
+@app.route("/diary/cur_weight",methods = ['POST'])
+def setCurWeight():
+    return
+
+@app.route("/diary/food", methods=['POST'])
+def foodList():
+    request_json = request.get_json()
+    username = request_json['name']
+    insert_date = request_json['instance_date']
+    if request.method=='POST':
+        query = session.query(ProfileFood).filter(ProfileFood.profile_id==username).filter(ProfileFood.insert_date==insert_date)
+        if query is None:
+            return "False"
+        else:
+            query = query.all()
+            dictlist = []
+            for profileFood in query:
+                dictlist.append(dict(profileFood.asDict()))
+            return json.dumps(dictlist,default = dateConvert)
+    return "Not Okay"
+
