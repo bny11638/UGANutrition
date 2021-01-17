@@ -122,7 +122,7 @@ class frameLogin(Frame):
         userInput = Entry(self,width=30)
         userInput.pack()
         Label(self,text="Password",pady=10,bg="#6B081F", fg="white", font=('century gothic', '12', 'bold')).pack(pady=2)
-        passInput = Entry(self,width=30)
+        passInput = Entry(self,width=30,show='*')
         passInput.pack()
         Button(self,text="Submit",image=master.submitButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:self.submitLogin(userInput,passInput,master)).pack(pady=(20,10))
         Button(self,text="Back",image=master.backButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameWelcome)).pack()
@@ -139,10 +139,11 @@ class frameRegister(Frame):
         userInput = Entry(self,width=30)
         userInput.pack()
         Label(self,text="Create Password",pady=10,bg="#6B081F", fg="white", font=('century gothic', '12', 'bold')).pack(pady=2)
-        passInput = Entry(self,width=30)
+        passInput = Entry(self,width=30,show='*')
         passInput.pack()
         Button(self,text="Submit",image=master.submitButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:self.submitRegister(userInput,passInput,master)).pack(pady=(20,10))
         Button(self,text="Back",image=master.backButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameWelcome)).pack()
+        self.takenUsername = Label(self,text="Username is already taken.",bg="#6B081F",fg="white", font=('century gothic', '12', 'bold'))
 
     def submitRegister(self,user,password,master):
         username = user.get().lower()
@@ -154,8 +155,7 @@ class frameRegister(Frame):
             if check.text == 'True':
                 master.switch_frame(frameWelcome)
             else:
-                ###Add in a message here MATTHEW
-                print("Username is already taken")
+                self.takenUsername.pack()
 
 class frameHome(Frame):
     def __init__(self,master):
