@@ -1,8 +1,5 @@
 # UGANutrition
-Calorie Counter based off of UGA's cafeteria menu developed with the tkinter library in python
+Calorie Counter based off of UGA's cafeteria menu developed with the tkinter library in Python. It is intended to be downloaded onto your computer and act as a replacement for build your plate.
 
-To run type in py __main__.py
-Dependencies:
--PIL
--mysql.connector
--matplotlib
+##Collaborators
+Matthew Tzou - Helped designed the application.
