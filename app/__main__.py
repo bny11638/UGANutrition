@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import *
 from PIL import ImageTk, Image
 import threading
-import mysql.connector
 from matplotlib.figure import Figure 
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 import time
@@ -53,19 +52,6 @@ class NutritionApp(Tk):
         self.frame = newFrame
         self.frame.pack(fill=BOTH, expand=True)
         
-    #Sets up DB Stuff
-    def establishCursor(self):
-        self.connection = mysql.connector.connect (
-        host="35.224.143.155",
-        user="guest",
-        password="password",
-        database="nutrition_app",
-        )
-        self.cursor = self.connection.cursor(buffered=True)
-    def closeCursor(self):
-        self.cursor.close()
-        self.connection.commit()
-        self.connection.close()
     #initializes all images
     def initImage(self):
         imguh = Image.open("resources/login.png")
@@ -106,7 +92,8 @@ class frameWelcome(Frame):
         Button(self, image=master.registerButtonImg, bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameRegister)).pack(pady=10)
         Button(self, image=master.guestButtonImg, bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameHome)).pack(pady=10)
 
-#Login Screen
+#Login Screen #ERROR HANDLE MAKE SURE USERNAME IS NOT EMPTY
+#password in asterisks
 class frameLogin(Frame):
     def submitLogin(self,user,password,master):
         username = user.get()
@@ -117,6 +104,7 @@ class frameLogin(Frame):
         loginRequest = requests.post(url,data=y,headers=HEADERS)
         tmp = loginRequest.text
         if tmp.find("False") > -1:
+            #invalid login information Matthew
             print("Invalid Login Information")
         else:
             x = json.dumps(loginRequest.json())
@@ -138,7 +126,8 @@ class frameLogin(Frame):
         Button(self,text="Submit",image=master.submitButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:self.submitLogin(userInput,passInput,master)).pack(pady=(20,10))
         Button(self,text="Back",image=master.backButtomImg,bg="#6B081F", borderwidth=0, activebackground="#6B081F",command=lambda:master.switch_frame(frameWelcome)).pack()
 
-#Register Screen
+#Register Screen #make sure both arent empty
+#password in asterisks
 class frameRegister(Frame):
     def __init__(self,master):
         Frame.__init__(self,master,bg="#6B081F")
@@ -160,10 +149,10 @@ class frameRegister(Frame):
             data = {"name":username,"password":password}
             y = json.dumps(data)
             check = requests.post(CLOUDURL +"/register",data=y,headers=HEADERS)
-
             if check.text == 'True':
                 master.switch_frame(frameWelcome)
             else:
+                ###Add in a message here MATTHEW
                 print("Username is already taken")
 
 class frameHome(Frame):
