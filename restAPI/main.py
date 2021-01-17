@@ -68,7 +68,9 @@ def queryFood():
             return "False"
         else:
             query = query.all()
-            dictlist = [dict(object_as_dict(row)) for row in query]
+            dictlist = []
+            for food in query:
+                dictlist.append(dict(food.asDict()))
             return json.dumps(dictlist)
     return "Not Okay"
 

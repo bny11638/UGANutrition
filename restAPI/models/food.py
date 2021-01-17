@@ -18,4 +18,7 @@ class Food(Base):
         self.fat = fat
         self.carb = carb
     
+    def asDict(self):
+                return {"food_name":self.food_name,"calories":self.calories,"protein":self.protein,"fat":self.fat,"carb":self.carb}
+    
 
