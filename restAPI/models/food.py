@@ -11,7 +11,7 @@ class Food(Base):
     fat = Column(Integer)
     carb = Column(Integer)
 
-    def __init__(self, food_name, calories, protein, fat, carb):
+    def __init__(self, food_name, calories, fat, carb,protein):
         self.food_name = food_name
         self.calories = calories
         self.protein = protein
