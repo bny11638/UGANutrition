@@ -43,6 +43,7 @@ class NutritionApp(Tk):
         self.cursor = None #MySql stuff
         self.Profile = None
         self.switch_frame(frameWelcome)
+        self.iconbitmap('resources/logosmall.ico')
     #Switches frame on window
     def switch_frame(self, frameClass):
         newFrame = frameClass(self)
