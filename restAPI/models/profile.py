@@ -10,7 +10,7 @@ class Profile(Base):
     goal_weight = Column(Integer)
     goal_calories = Column(Integer)
     food = relationship("ProfileFood")
-    cur_weight = Column(Integer)
+    cur_weight = relationship("Profile_Weight")
 
     def __init__(self, name, password, goal_weight, goal_calories,cur_weight):
         self.name = name
@@ -44,3 +44,18 @@ class ProfileFood(Base):
     
     def asDict(self):
         return {"profile_id":self.profile_id,"food_name":self.food_name,"calories":self.calories,"protein":self.protein,"fat":self.fat,"carb":self.carb,"insert_date":self.insert_date}
+
+class Profile_Weight(Base):
+    __tablename__="weight_data"
+    id = Column(Integer, primary_key=True)
+    profile_id = Column(String(255), ForeignKey('profile_data.name'))
+    weight = Column(Integer)
+    insert_date = Column(Date)
+
+    def __init__(self, profile_id, weight, insert_date):
+        self.profile_id = profile_id
+        self.weight = weight
+        self.insert_date = insert_date
+
+    def asDict(self):
+        return {"profile_id":self.profile_id,"weight":self.weight,"insert_date":self.insert_date}

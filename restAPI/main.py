@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 import requests
 app = Flask(__name__)
 from models.base import Base, engine, Session, encoder, AlchemyEncoder, object_as_dict
-from models.profile import Profile, ProfileFood
+from models.profile import Profile, ProfileFood, Profile_Weight
 from models.food import Food
 import json
 from datetime import date
@@ -15,6 +15,7 @@ def initialize():
     session = Session() #Creating a session
     return("Hello World")
 """
+
 #convert's date json to string json
 def dateConvert(o):
     if isinstance(o, date):
@@ -150,3 +151,38 @@ def foodList():
             return json.dumps(dictlist,default = dateConvert)
     return "Not Okay"
 
+@app.route("/diary/get_weight", methods=['POST'])
+def getWeight():
+    request_json = request.get_json()
+    username = request_json['name']
+    insert_date = request_json['instance_date']
+    if request.method=='POST':
+        query = session.query(Profile_Weight).filter(Profile_Weight.profile_id==username).filter(Profile_Weight.insert_date==insert_date)
+        if query.first() is None:
+            return "False"
+        else:
+            query = query.first()
+            return json.dumps(query.asDict(), default = dateConvert)
+    return "Oof"
+
+#Two step query
+@app.route("/diary/insert_weight",methods=['POST'])
+def insertWeight():
+    request_json = request.get_json()
+    username = request_json['name']
+    weight = request_json['weight']
+    insert_date = request_json['instance_date']
+    if request.method=='POST':
+        query = session.query(Profile_Weight).filter(Profile_Weight.profile_id==username).filter(Profile_Weight.insert_date==insert_date)
+        if query.first() is None:
+            session.add(Profile_Weight(username,weight,insert_date))
+            session.commit()
+            return "True"
+        else:
+            ## update block
+            query.delete(synchronize_session=False)
+            session.commit()
+            session.add(Profile_Weight(username,weight,insert_date))
+            session.commit()
+            return "True"
+    return "Oof"
