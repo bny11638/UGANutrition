@@ -12,7 +12,7 @@ class Profile(Base):
     food = relationship("ProfileFood")
     cur_weight = relationship("Profile_Weight")
 
-    def __init__(self, name, password, goal_weight, goal_calories,cur_weight):
+    def __init__(self, name, password, goal_weight, goal_calories):
         self.name = name
         self.password = password
         self.goal_weight = goal_weight
