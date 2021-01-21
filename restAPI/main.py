@@ -34,7 +34,7 @@ def hello_world():
 def register():
     request_json = request.get_json()
     if request.method=='POST':
-        user = Profile(request_json['name'],request_json['password'],None,2000,None)
+        user = Profile(request_json['name'],request_json['password'],None,2000)
         tmp = session.query(Profile).filter(Profile.name==user.name).first()
         if tmp is None:
             session.add(user)
