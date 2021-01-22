@@ -49,13 +49,12 @@ def register():
 def login():
     request_json = request.get_json()
     if request.method=='POST':
-        tmp = Profile(request_json['name'],request_json['password'],None,None,None)
-        loginLook = session.query(Profile).filter(Profile.name==tmp.name).filter(Profile.password==tmp.password)
+        loginLook = session.query(Profile).filter(Profile.name==request_json['name']).filter(Profile.password==request_json['password'])
         try:
             loginLook = loginLook.one()
         except Exception as e:
             return "False" + str(e)   
-        return jsonify(object_as_dict(loginLook))
+        return jsonify(loginLook.asDict())
 
 @app.route("/fill_food",methods=['POST'])
 def queryFood():

@@ -17,10 +17,11 @@ class Profile(Base):
         self.password = password
         self.goal_weight = goal_weight
         self.goal_calories = goal_calories
-        self.cur_weight = cur_weight
 
     def __repr__(self):
         return "<Profile(%s,%s,%s,%s)>" % (self.name, self.password, self.goal_weight, self.goal_calories)
+    def asDict(self):
+        return {"name":self.name,"goal_calories":self.goal_calories,"goal_weight":self.goal_weight}
 
 class ProfileFood(Base):
     __tablename__="profile_food"
