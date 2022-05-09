@@ -32,7 +32,7 @@ connection_name = "precise-truck-301217:us-central1:nutrition-uga"
 #table_field = ""
 #table_field_value = ""
 db_name = "nutrition_app"
-db_user = "guest"
+db_user = "root"
 db_password = "password"
 
 # If your database is MySQL, uncomment the following two lines:
@@ -49,11 +49,11 @@ query_string = dict({"unix_socket": "/cloudsql/{}".format(connection_name)})
 engine = sqlalchemy.create_engine(
             sqlalchemy.engine.url.URL(
                 drivername=driver_name,
-                host="35.224.143.155",
+                host="127.0.0.1",
                 username=db_user,
-                password=db_password,
+                #password=db_password,
                 database=db_name,
-                query=query_string
+                #query=query_string
             ),
             pool_size=5,
             max_overflow=2,

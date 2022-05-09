@@ -5,7 +5,8 @@ from dataclasses import dataclass
 
 class Profile(Base):
     __tablename__="profile_data"
-    name = Column(String(255), primary_key=True)
+    pid = Column(Integer, primary_key=True)
+    name = Column(String(255))
     password = Column(String(255))
     goal_weight = Column(Integer)
     goal_calories = Column(Integer)
@@ -19,14 +20,14 @@ class Profile(Base):
         self.goal_calories = goal_calories
 
     def __repr__(self):
-        return "<Profile(%s,%s,%s,%s)>" % (self.name, self.password, self.goal_weight, self.goal_calories)
+        return "<Profile(%s,%s,%s,%s,%s)>" % (self.pid, self.name, self.password, self.goal_weight, self.goal_calories)
     def asDict(self):
-        return {"name":self.name,"goal_calories":self.goal_calories,"goal_weight":self.goal_weight}
+        return {"pid": self.pid, "name":self.name,"goal_calories":self.goal_calories,"goal_weight":self.goal_weight}
 
 class ProfileFood(Base):
     __tablename__="profile_food"
     id = Column(Integer, primary_key=True)
-    profile_id = Column(String(255), ForeignKey('profile_data.name'))
+    pid = Column(Integer, ForeignKey('profile_data.pid'))
     food_name = Column(String(255))
     calories = Column(Integer)
     protein = Column(Integer)
@@ -35,7 +36,7 @@ class ProfileFood(Base):
     insert_date = Column(Date)
 
     def __init__(self, profile_id, food_name, calories, protein, fat, carb, insert_date):
-        self.profile_id = profile_id
+        self.pid= profile_id
         self.food_name = food_name
         self.calories = calories
         self.protein = protein
@@ -44,19 +45,19 @@ class ProfileFood(Base):
         self.insert_date = insert_date
     
     def asDict(self):
-        return {"profile_id":self.profile_id,"food_name":self.food_name,"calories":self.calories,"protein":self.protein,"fat":self.fat,"carb":self.carb,"insert_date":self.insert_date}
+        return {"profile_id":self.pid,"food_name":self.food_name,"calories":self.calories,"protein":self.protein,"fat":self.fat,"carb":self.carb,"insert_date":self.insert_date}
 
 class Profile_Weight(Base):
     __tablename__="weight_data"
     id = Column(Integer, primary_key=True)
-    profile_id = Column(String(255), ForeignKey('profile_data.name'))
+    pid = Column(Integer, ForeignKey('profile_data.pid'))
     weight = Column(Integer)
     insert_date = Column(Date)
 
     def __init__(self, profile_id, weight, insert_date):
-        self.profile_id = profile_id
+        self.pid = profile_id
         self.weight = weight
         self.insert_date = insert_date
 
     def asDict(self):
-        return {"profile_id":self.profile_id,"weight":self.weight,"insert_date":self.insert_date}
+        return {"profile_id":self.pid,"weight":self.weight,"insert_date":self.insert_date}

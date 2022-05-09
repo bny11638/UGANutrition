@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request
-import requests
 app = Flask(__name__)
 from models.base import Base, engine, Session, encoder, AlchemyEncoder, object_as_dict
 from models.profile import Profile, ProfileFood, Profile_Weight
@@ -8,29 +7,31 @@ import json
 from datetime import date
 
 session = Session()
-"""
-@app.route("/intialize")
+url = "/api"
+@app.route(url + "/initialize")
 def initialize():
     Base.metadata.create_all(engine) #creating database schema
-    session = Session() #Creating a session
     return("Hello World")
-"""
+@app.route(url + "/dropAll")
+def dropAll():
+    Base.metadata.drop_all(engine) #creating database schema
+    return("Hello World")
 
 #convert's date json to string json
 def dateConvert(o):
     if isinstance(o, date):
         return o.__str__()
 
-@app.route("/rollback")
+@app.route(url + "/rollback")
 def rollback():
     session.rollback()
     return "ok"
 
-@app.route("/", methods=['GET'])
+@app.route(url + "/", methods=['GET'])
 def hello_world():
     return "Hello, World!"
 
-@app.route("/register",methods=['POST'])
+@app.route(url + "/register",methods=['POST'])
 def register():
     request_json = request.get_json()
     if request.method=='POST':
@@ -45,7 +46,7 @@ def register():
     else:
         return "not post"
 
-@app.route("/login",methods=['POST'])
+@app.route(url + "/login",methods=['POST'])
 def login():
     request_json = request.get_json()
     if request.method=='POST':
@@ -53,10 +54,10 @@ def login():
         try:
             loginLook = loginLook.one()
         except Exception as e:
-            return "False" + str(e)   
+            return jsonify({"pid": -1})
         return jsonify(loginLook.asDict())
 
-@app.route("/fill_food",methods=['POST'])
+@app.route(url + "/fill_food",methods=['POST'])
 def queryFood():
     request_json = request.get_json()
     name = request_json['food']
@@ -75,7 +76,7 @@ def queryFood():
     return "Not Okay"
 
 
-@app.route("/edit/goal_calorie",methods = ['POST'])
+@app.route(url + "/edit/goal_calorie",methods = ['POST'])
 def calorieEdit():
     request_json = request.get_json()
     username = request_json['name']
@@ -87,7 +88,7 @@ def calorieEdit():
         except Exception as e:
             return str(e)  
 
-@app.route("/edit/goal_weight",methods = ['POST'])
+@app.route(url + "/edit/goal_weight",methods = ['POST'])
 def goalWeightEdit():
     request_json = request.get_json()
     username = request_json['name']
@@ -99,7 +100,7 @@ def goalWeightEdit():
         except Exception as e:
             return str(e)  
 
-@app.route("/edit/add",methods = ['POST'])
+@app.route(url + "/edit/add",methods = ['POST'])
 def addFood():
     request_json = request.get_json()
     username = request_json['name']
@@ -113,7 +114,7 @@ def addFood():
             return str(e)  
     return
 
-@app.route("/diary/delete",methods = ['POST'])
+@app.route(url + "/diary/delete",methods = ['POST'])
 def deleteFood():
     request_json = request.get_json()
     username = request_json['name']
@@ -129,11 +130,11 @@ def deleteFood():
             return str(e)  
     return
 
-@app.route("/diary/cur_weight",methods = ['POST'])
+@app.route(url + "/diary/cur_weight",methods = ['POST'])
 def setCurWeight():
     return
 
-@app.route("/diary/food", methods=['POST'])
+@app.route(url + "/diary/food", methods=['POST'])
 def foodList():
     request_json = request.get_json()
     username = request_json['name']
@@ -150,7 +151,7 @@ def foodList():
             return json.dumps(dictlist,default = dateConvert)
     return "Not Okay"
 
-@app.route("/diary/get_weight", methods=['POST'])
+@app.route(url + "/diary/get_weight", methods=['POST'])
 def getWeight():
     request_json = request.get_json()
     username = request_json['name']
@@ -165,7 +166,7 @@ def getWeight():
     return "Oof"
 
 #Two step query
-@app.route("/diary/insert_weight",methods=['POST'])
+@app.route(url + "/diary/insert_weight",methods=['POST'])
 def insertWeight():
     request_json = request.get_json()
     username = request_json['name']

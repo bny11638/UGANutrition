@@ -1,0 +1,67 @@
+
+.verticalForm {
+    border-radius:40px;
+    margin-top: 50px;
+}
+.vFormLabel { 
+    color: #FF4141;
+    font-family: 'Monoton', cursive;
+    font-size: 200%;
+    padding-left: 20px;
+    margin-right: 20px;
+    margin-bottom: -5px;
+}
+.textInput {
+    width: 80%;
+    background-color:white;
+    margin-left:20px;
+    border-radius: 50px;
+    line-height: 25px;
+}
+.vFormHead {
+    color: white;
+    font-family: Marvel;
+    font-size: 150%;
+    padding-left: 20px;
+    text-align: left;
+}
+.bg1 {
+  float:left;
+}
+.fg {
+    float:right;
+    margin-right: 41px;
+}
+.start {
+  border: 1px solid white;
+  font-size: 150%;
+  font-family: 'Monoton', cursive;
+  border-radius: 60px;
+  text-decoration: none;
+  background-color: rgb(162, 2, 2);
+  color: white;
+  padding: 30px 60px 30px 60px;
+}
+#butt1 {
+    border-radius:40px;
+    margin-left:20px;
+    font-size:125%;
+    padding: 8px 20px 8px 20px;
+    float:left;
+    background-color: rgb(162, 2, 2);
+    text-decoration: none;
+    color: white;
+    font-family: "Monoton";
+}
+#butt2 {
+    float:right;
+    border-radius:40px;
+    margin-left:20px;
+    font-size:125%;
+    padding: 8px 20px 8px 20px;
+    background-color: rgb(162, 2, 2);
+    text-decoration: none;
+    color: white;
+    font-family: "Monoton";
+
+}

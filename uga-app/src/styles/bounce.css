@@ -1,0 +1,67 @@
+.bouncing-text {
+    font-family: 'Monoton';
+    color:white;
+    font-size:500%;
+    display: flex;
+    background-color: #1F1F1F;
+    padding-top: 40px;
+    padding-bottom: 20px;
+    padding-right: 15px;
+    padding-left: 15px;
+    width: '400px';
+    border: 1px solid white;    
+  }
+
+  .U, .G, .A, .N, .U, .T, .R, .I, .O, .U2 {
+    color: whitesmoke;
+    text-shadow: 0 3px rgb(62, 3, 3), 0 5px rgb(105, 4, 4), 0 7px #5f0101;
+    text-align: center;
+  }
+  .U, .G, .A {
+      color: maroon
+  }
+  @keyframes bounce {
+    0%   { transform: scale(1,1) translateY(0); }
+    10%  { transform: scale(1.1,.9) translateY(0); }
+    30%  { transform: scale(.9,1.1)   translateY(-55px);}
+    50%  { transform: scale(1.05,.95) translateY(0); }
+    58%  { transform: scale(1,1) translateY(-7px); }
+    65%  { transform: scale(1,1) translateY(0);}
+    100% { transform: scale(1,1) translateY(0);}
+}
+
+.U {
+animation: bounce 2s ease infinite;
+}
+.U2 {
+animation: bounce 2s ease infinite .15s;
+}
+
+.G {
+animation: bounce 2s ease infinite .24s;
+}
+
+.A {
+animation: bounce 2s ease infinite .36s;
+}
+
+.N {
+animation: bounce 2s ease infinite .12s;
+}
+
+.U {
+animation: bounce 2s ease infinite .4s;
+}
+
+.T {
+animation: bounce 2s ease infinite .5s;
+}
+.R {
+animation: bounce 2s ease infinite .1s;
+}
+.I {
+animation: bounce 2s ease infinite .2s;
+}
+.O {
+animation: bounce 2s ease infinite .4s;
+}

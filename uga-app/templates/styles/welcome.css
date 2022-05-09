@@ -1,0 +1,61 @@
+.welcomeBanner {
+    width: 350px;
+    margin:auto;
+    margin-top:80px;
+}
+
+.welcomeBanner .first {
+    padding-bottom: 0px !important;
+}
+
+.welcomeBanner h1 {
+    margin:auto;
+    text-align: left;
+    font-family: 'Monoton', cursive;
+    font-size: 45px;
+    font-weight: 400;
+    letter-spacing: 5px;
+    color:whitesmoke;
+    background-color: #1F1F1F;
+    padding-bottom:30px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.verticalForm {
+    margin-top: -18px;
+}
+.vFormLabel { 
+    color: #FF4141;
+    font-family: 'Monoton', cursive;
+    font-size: 200%;
+    padding-left: 20px;
+    margin-right: 20px;
+    margin-bottom: -5px;
+}
+.textInput {
+    width: 80%;
+    background-color:white;
+    margin-left:20px;
+}
+.vFormHead {
+    color: white;
+    font-family: Marvel;
+    padding-left: 20px;
+}
+.buttonGroup {
+    margin-top:40px;
+}
+#butt1 {
+    border-radius:40px;
+    margin-left:20px;
+    font-size:150%;
+    padding: 8px 20px 8px 20px;
+    float:left;
+}
+#butt2 {
+    float:right;
+    margin-right: 45px;
+    border-radius:40px;
+    font-size:150%;
+    padding: 5px 20px 5px 20px;
+}

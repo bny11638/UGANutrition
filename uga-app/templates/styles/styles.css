@@ -1,0 +1,14 @@
+body {
+    background-image: url("./images/background.png");
+    background-repeat:repeat;
+    background-size:contain;
+}
+
+.verticalForm {
+    margin: auto;
+    height: 450px;
+    width: 350px;
+    background-color: #3C3C3C;
+    display:flex;
+    flex-direction: column;
+}

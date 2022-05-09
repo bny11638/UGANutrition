@@ -8,3 +8,7 @@ build
 *.spec
 dist
 *.zip
+node_modules
+node_modules/*
+.venv
+uga-app/node_modules/*

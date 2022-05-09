@@ -1,0 +1,30 @@
+h1 {
+    font-family: 'Monoton';
+    color:white;
+    font-size:800%;
+    text-align: center;
+}
+.bg {
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content:center;
+  margin-top: 250px;
+  animation: vibe 2s ease infinite;
+}
+.start {
+  border: 1px solid white;
+  font-size: 200%;
+  font-family: 'Monoton', cursive;
+  border-radius: 60px;
+  text-decoration: none;
+  background-color: rgb(162, 2, 2);
+  color: white;
+  padding: 30px 60px 30px 60px;
+}
+
+@keyframes vibe {
+  0%   { transform: scale(1,1)}
+  50%  { transform: scale(1.1,1.1)}
+  100% { transform: scale(1,1)}
+}
